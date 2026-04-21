@@ -1,6 +1,8 @@
 Attribute VB_Name = "IktszMenuCallbacks"
 Option Explicit
 
+Private Const IDOPONT_KIADVA_MARKER As String = "x"
+
 ' Iktsz menü callbackek:
 ' - intézményi: lista.iktsz kitöltés isk_nev csoportosítással
 ' - határozat: lista.iktsz egyedi, szekvenciális (csak nem üres hatarozat sorokra)
@@ -128,7 +130,7 @@ Private Sub FillIktsz_Sequential_Diakadat(ByVal tableName As String, ByVal iktsz
         idopontKiadvaVal = LCase$(Trim$(CStr(lr.Range.Cells(1, idopontKiadvaCol).Value & "")))
         currentIkt = Trim$(CStr(lr.Range.Cells(1, iktszCol).Value & ""))
 
-        If bizottsagVal <> "" And datumVal <> "" And mailVal <> "" And idopontKiadvaVal <> "x" And currentIkt = "" Then
+        If bizottsagVal <> "" And datumVal <> "" And mailVal <> "" And idopontKiadvaVal <> IDOPONT_KIADVA_MARKER And currentIkt = "" Then
             lr.Range.Cells(1, iktszCol).Value = startNum
             startNum = startNum + 1
             filled = filled + 1
@@ -143,17 +145,15 @@ Private Function PromptForStartNumber(ByVal prompt As String, ByVal defaultValue
     inputText = Trim$(InputBox(prompt, "Kezdő iktsz", CStr(defaultValue)))
 
     If inputText = "" Then
+        PromptForStartNumber = 0
         cancelled = True
         Exit Function
     End If
 
-    If Not IsNumeric(inputText) Then
-        MsgBox "A megadott érték nem szám.", vbExclamation
+    If Not TryParseLongInput(inputText, PromptForStartNumber) Then
         cancelled = True
         Exit Function
     End If
-
-    PromptForStartNumber = CLng(inputText)
 End Function
 
 Private Function PromptForStartOrContinue(ByVal prompt As String, ByVal lo As ListObject, ByVal iktszCol As Long) As Long
@@ -165,13 +165,22 @@ Private Function PromptForStartOrContinue(ByVal prompt As String, ByVal lo As Li
         Exit Function
     End If
 
-    If Not IsNumeric(inputText) Then
-        MsgBox "A megadott érték nem szám.", vbExclamation
+    If Not TryParseLongInput(inputText, PromptForStartOrContinue) Then
         PromptForStartOrContinue = -1
         Exit Function
     End If
+End Function
 
-    PromptForStartOrContinue = CLng(inputText)
+Private Function TryParseLongInput(ByVal inputText As String, ByRef outParsedValue As Long) As Boolean
+    TryParseLongInput = False
+
+    If Not IsNumeric(inputText) Then
+        MsgBox "A megadott érték nem szám.", vbExclamation
+        Exit Function
+    End If
+
+    outParsedValue = CLng(inputText)
+    TryParseLongInput = True
 End Function
 
 Private Function MaxIktszValue(ByVal lo As ListObject, ByVal iktszCol As Long) As Long
