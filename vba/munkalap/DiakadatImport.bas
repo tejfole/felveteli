@@ -2,11 +2,11 @@ Attribute VB_Name = "DiakadatImport"
 Option Explicit
 
 ' =========================
-' FÕ MAKRO
+' Fï¿½ MAKRO
 ' =========================
 Public Sub Import_Export_Into_ThisWorkbook_Diakadat(Optional control As IRibbonControl)
     Dim srcPath As String
-    srcPath = PickExcelFile("Válaszd ki a FORRÁS Excel fájlt")
+    srcPath = PickExcelFile("Vï¿½laszd ki a FORRï¿½S Excel fï¿½jlt")
     If srcPath = "" Then Exit Sub
 
     Application.ScreenUpdating = False
@@ -26,25 +26,25 @@ Public Sub Import_Export_Into_ThisWorkbook_Diakadat(Optional control As IRibbonC
     If wsS Is Nothing Then Set wsS = wbS.Worksheets(1)
 
     Dim headerRowS As Long: headerRowS = 1
-    Dim mapS As Object: Set mapS = BuildHeaderMapNorm(wsS, headerRowS) ' normalizált
-    Dim mapD As Object: Set mapD = BuildListObjectHeaderMapNorm(loD)   ' normalizált
+    Dim mapS As Object: Set mapS = BuildHeaderMapNorm(wsS, headerRowS) ' normalizï¿½lt
+    Dim mapD As Object: Set mapD = BuildListObjectHeaderMapNorm(loD)   ' normalizï¿½lt
 
     Dim srcKeyHeader As String
-    srcKeyHeader = InputBox("Forrás kulcs oszlop fejléce:", "Kulcs kiválasztás", "Oktatási azonosító")
+    srcKeyHeader = InputBox("Forrï¿½s kulcs oszlop fejlï¿½ce:", "Kulcs kivï¿½lasztï¿½s", "Oktatï¿½si azonosï¿½tï¿½")
     If Trim$(srcKeyHeader) = "" Then GoTo CleanExit
 
     Dim dstKeyHeader As String: dstKeyHeader = "oktazon"
 
     If Not mapS.Exists(NKey(srcKeyHeader)) Then
-        MsgBox "A forrásban nem találom ezt a kulcs fejléct: " & srcKeyHeader, vbExclamation
+        MsgBox "A forrï¿½sban nem talï¿½lom ezt a kulcs fejlï¿½ct: " & srcKeyHeader, vbExclamation
         GoTo CleanExit
     End If
     If Not mapD.Exists(NKey(dstKeyHeader)) Then
-        MsgBox "A cél táblában nincs '" & dstKeyHeader & "' oszlop.", vbExclamation
+        MsgBox "A cï¿½l tï¿½blï¿½ban nincs '" & dstKeyHeader & "' oszlop.", vbExclamation
         GoTo CleanExit
     End If
     If Not mapD.Exists(NKey("I_ker_irsz")) Then
-        MsgBox "A cél táblában nincs 'I_ker_irsz' oszlop.", vbExclamation
+        MsgBox "A cï¿½l tï¿½blï¿½ban nincs 'I_ker_irsz' oszlop.", vbExclamation
         GoTo CleanExit
     End If
 
@@ -56,43 +56,43 @@ Public Sub Import_Export_Into_ThisWorkbook_Diakadat(Optional control As IRibbonC
     dupMode = PickDupMode()
     If dupMode = 0 Then GoTo CleanExit
 
-    ' --- Mapping: NKey(forrás fejléc) -> cél oszlopnév ---
+    ' --- Mapping: NKey(forrï¿½s fejlï¿½c) -> cï¿½l oszlopnï¿½v ---
     Dim m As Object: Set m = CreateObject("Scripting.Dictionary")
-    m(NKey("Oktatási azonosító")) = "oktazon"
-    m(NKey("Név")) = "f_nev"
-    m(NKey("Születési hely")) = "f_szul_hely"
-    m(NKey("Születési dátum")) = "f_szul_ido"
-    m(NKey("Anyja születéskori neve")) = "f_a_nev"
+    m(NKey("Oktatï¿½si azonosï¿½tï¿½")) = "oktazon"
+    m(NKey("Nï¿½v")) = "f_nev"
+    m(NKey("Szï¿½letï¿½si hely")) = "f_szul_hely"
+    m(NKey("Szï¿½letï¿½si dï¿½tum")) = "f_szul_ido"
+    m(NKey("Anyja szï¿½letï¿½skori neve")) = "f_a_nev"
 
     ' EMAIL aliasok -> mail
-    m(NKey("Értesítési e-mail")) = "mail"
-    m(NKey("Értesítési e-mail cím")) = "mail"
-    m(NKey("Értesítési e-mail címek")) = "mail"
-    m(NKey("Értesítési email")) = "mail"
-    m(NKey("Értesítési email cím")) = "mail"
-    m(NKey("Értesítési email címek")) = "mail"
+    m(NKey("ï¿½rtesï¿½tï¿½si e-mail")) = "mail"
+    m(NKey("ï¿½rtesï¿½tï¿½si e-mail cï¿½m")) = "mail"
+    m(NKey("ï¿½rtesï¿½tï¿½si e-mail cï¿½mek")) = "mail"
+    m(NKey("ï¿½rtesï¿½tï¿½si email")) = "mail"
+    m(NKey("ï¿½rtesï¿½tï¿½si email cï¿½m")) = "mail"
+    m(NKey("ï¿½rtesï¿½tï¿½si email cï¿½mek")) = "mail"
     m(NKey("E-mail")) = "mail"
     m(NKey("Email")) = "mail"
-    m(NKey("Kapcsolattartó e-mail")) = "mail"
-    m(NKey("Kapcsolattartó email")) = "mail"
+    m(NKey("Kapcsolattartï¿½ e-mail")) = "mail"
+    m(NKey("Kapcsolattartï¿½ email")) = "mail"
 
-    m(NKey("Állandó lakcím")) = "a_cim"
+    m(NKey("ï¿½llandï¿½ lakcï¿½m")) = "a_cim"
 
     ' TEL aliasok -> tel
-    m(NKey("Értesítési telefonszámok")) = "tel"
-    m(NKey("Telefonszám")) = "tel"
+    m(NKey("ï¿½rtesï¿½tï¿½si telefonszï¿½mok")) = "tel"
+    m(NKey("Telefonszï¿½m")) = "tel"
     m(NKey("Telefon")) = "tel"
-    m(NKey("Mobilszám")) = "tel"
+    m(NKey("Mobilszï¿½m")) = "tel"
     m(NKey("Mobil")) = "tel"
-    m(NKey("Kapcsolattartó telefonszám")) = "tel"
-    m(NKey("Kapcsolattartó telefon")) = "tel"
+    m(NKey("Kapcsolattartï¿½ telefonszï¿½m")) = "tel"
+    m(NKey("Kapcsolattartï¿½ telefon")) = "tel"
 
-    m(NKey("Értesítési név")) = "ert_nev"
-    m(NKey("Értesítési cím")) = "ert_cim"
+    m(NKey("ï¿½rtesï¿½tï¿½si nï¿½v")) = "ert_nev"
+    m(NKey("ï¿½rtesï¿½tï¿½si cï¿½m")) = "ert_cim"
 
-    ' >>> Itt a változás: OM helyett iskolanév
-    m(NKey("Általános iskola neve")) = "isknev"
-    m(NKey("Általános iskola")) = "isknev"
+    ' >>> Itt a vï¿½ltozï¿½s: OM helyett iskolanï¿½v
+    m(NKey("ï¿½ltalï¿½nos iskola neve")) = "isknev"
+    m(NKey("ï¿½ltalï¿½nos iskola")) = "isknev"
     m(NKey("Iskola neve")) = "isknev"
 
     m(NKey("SNI")) = "f_SNI2"
@@ -102,18 +102,18 @@ Public Sub Import_Export_Into_ThisWorkbook_Diakadat(Optional control As IRibbonC
     m(NKey("001/2000")) = "j_2000"
     m(NKey("001/3000")) = "j_3000"
     m(NKey("001/4000")) = "j_4000"
-    m(NKey("Megjegyzés")) = "megjegyzes"
+    m(NKey("Megjegyzï¿½s")) = "megjegyzes"
 
-    ' Cél index
+    ' Cï¿½l index
     Dim idxD As Object: Set idxD = CreateObject("Scripting.Dictionary")
     BuildDestIndex loD, colKeyD, idxD
 
-    ' Forrás pick + duplariport
+    ' Forrï¿½s pick + duplariport
     Dim srcPick As Object: Set srcPick = CreateObject("Scripting.Dictionary")
     Dim srcDupReport As String
     srcDupReport = BuildSourcePickedRowIndex(wsS, headerRowS, colKeyS, dupMode, srcPick)
     If srcDupReport <> "" Then
-        MsgBox "Forrás duplikáció riport:" & vbCrLf & vbCrLf & srcDupReport, vbExclamation
+        MsgBox "Forrï¿½s duplikï¿½ciï¿½ riport:" & vbCrLf & vbCrLf & srcDupReport, vbExclamation
     End If
 
     Dim key As Variant, newCount As Long, updCount As Long
@@ -135,6 +135,7 @@ Public Sub Import_Export_Into_ThisWorkbook_Diakadat(Optional control As IRibbonC
         End If
 
         Dim wroteMail As Boolean: wroteMail = False
+        Dim wroteMail2 As Boolean: wroteMail2 = False
         Dim wroteTel As Boolean: wroteTel = False
 
         Dim srcH As Variant, dstColName As String
@@ -149,17 +150,17 @@ Public Sub Import_Export_Into_ThisWorkbook_Diakadat(Optional control As IRibbonC
             cD = mapD(NKey(dstColName))
             v = wsS.Cells(r, cS).value
 
-            ' dátum
+            ' dï¿½tum
             If NKey(dstColName) = NKey("f_szul_ido") Then
                 v = CoerceToDateOrKeep(v)
             End If
 
-            ' SNI/BTMN: igen -> x, különben üres
+            ' SNI/BTMN: igen -> x, kï¿½lï¿½nben ï¿½res
             If NKey(dstColName) = NKey("f_sni2") Or NKey(dstColName) = NKey("f_btnn") Then
                 v = YesToX(v)
             End If
 
-            ' MAIL: preferált elsõ érvényes
+            ' MAIL: preferï¿½lt elsï¿½ ï¿½rvï¿½nyes
             If NKey(dstColName) = NKey("mail") Then
                 If Not wroteMail Then
                     Dim em As String
@@ -169,10 +170,22 @@ Public Sub Import_Export_Into_ThisWorkbook_Diakadat(Optional control As IRibbonC
                         wroteMail = True
                     End If
                 End If
+                ' Mï¿½sodik email -> mail_2 (csak ha ï¿½res a mezï¿½)
+                If Not wroteMail2 And mapD.Exists(NKey("mail_2")) Then
+                    Dim cD2 As Long: cD2 = mapD(NKey("mail_2"))
+                    Dim em2 As String
+                    em2 = EmailFirstValid(CStr(v), 2)
+                    If em2 <> "" Then
+                        wroteMail2 = True
+                        If Trim$(CStr(lr.Range.Cells(1, cD2).value)) = "" Then
+                            lr.Range.Cells(1, cD2).value = em2
+                        End If
+                    End If
+                End If
                 GoTo ContinueField
             End If
 
-            ' TEL: preferált elsõ érvényes
+            ' TEL: preferï¿½lt elsï¿½ ï¿½rvï¿½nyes
             If NKey(dstColName) = NKey("tel") Then
                 If Not wroteTel Then
                     Dim tel1 As String
@@ -185,7 +198,7 @@ Public Sub Import_Export_Into_ThisWorkbook_Diakadat(Optional control As IRibbonC
                 GoTo ContinueField
             End If
 
-            ' minden más simán
+            ' minden mï¿½s simï¿½n
             lr.Range.Cells(1, cD).value = v
 
 ContinueField:
@@ -193,7 +206,7 @@ ContinueField:
 
         ' I_ker_irsz: 1010..1019 az a_cim-ben
         Dim addr As String
-        addr = CStr(GetValueFromRowIfExistsNorm(wsS, r, mapS, "Állandó lakcím"))
+        addr = CStr(GetValueFromRowIfExistsNorm(wsS, r, mapS, "ï¿½llandï¿½ lakcï¿½m"))
         If IsBudapest101x(addr) Then
             lr.Range.Cells(1, colIKer).value = "x"
         Else
@@ -204,7 +217,7 @@ NextKey:
     Next key
 
     wbD.Save
-    MsgBox "Import kész." & vbCrLf & "Új: " & newCount & " | Frissített: " & updCount, vbInformation
+    MsgBox "Import kï¿½sz." & vbCrLf & "ï¿½j: " & newCount & " | Frissï¿½tett: " & updCount, vbInformation
 
 CleanExit:
     On Error Resume Next
@@ -329,7 +342,7 @@ Private Function MultiReplace(ByVal s As String, ByVal findArr As Variant, ByVal
 End Function
 
 ' =========================
-' NORMALIZÁLT HEADER MAP
+' NORMALIZï¿½LT HEADER MAP
 ' =========================
 Private Function BuildHeaderMapNorm(ws As Worksheet, headerRow As Long) As Object
     Dim d As Object: Set d = CreateObject("Scripting.Dictionary")
@@ -369,31 +382,31 @@ Private Function NKey(ByVal s As String) As String
     t = Replace(t, ChrW(160), " ")
     Do While InStr(t, "  ") > 0: t = Replace(t, "  ", " "): Loop
     t = Replace(t, "-", " ")
-    t = Replace(t, "—", " ")
-    t = Replace(t, "–", " ")
+    t = Replace(t, "ï¿½", " ")
+    t = Replace(t, "ï¿½", " ")
 
-    t = Replace(t, "á", "a")
-    t = Replace(t, "é", "e")
-    t = Replace(t, "í", "i")
-    t = Replace(t, "ó", "o")
-    t = Replace(t, "ö", "o")
-    t = Replace(t, "õ", "o")
-    t = Replace(t, "ú", "u")
-    t = Replace(t, "ü", "u")
-    t = Replace(t, "û", "u")
+    t = Replace(t, "ï¿½", "a")
+    t = Replace(t, "ï¿½", "e")
+    t = Replace(t, "ï¿½", "i")
+    t = Replace(t, "ï¿½", "o")
+    t = Replace(t, "ï¿½", "o")
+    t = Replace(t, "ï¿½", "o")
+    t = Replace(t, "ï¿½", "u")
+    t = Replace(t, "ï¿½", "u")
+    t = Replace(t, "ï¿½", "u")
 
     NKey = t
 End Function
 
 ' =========================
-' DUPLIKÁCIÓ / PICK
+' DUPLIKï¿½CIï¿½ / PICK
 ' =========================
 Private Function PickDupMode() As Long
     Dim inp As String
-    inp = InputBox("Forrás duplakulcs esetén:" & vbCrLf & _
-                   "1 = elsõ (ajánlott)" & vbCrLf & _
-                   "2 = utolsó" & vbCrLf & _
-                   "3 = kérdez", "Duplakulcs kezelés", "1")
+    inp = InputBox("Forrï¿½s duplakulcs esetï¿½n:" & vbCrLf & _
+                   "1 = elsï¿½ (ajï¿½nlott)" & vbCrLf & _
+                   "2 = utolsï¿½" & vbCrLf & _
+                   "3 = kï¿½rdez", "Duplakulcs kezelï¿½s", "1")
     If Trim$(inp) = "" Then
         PickDupMode = 0
     ElseIf IsNumeric(inp) Then
@@ -436,7 +449,7 @@ Private Function BuildSourcePickedRowIndex(ws As Worksheet, headerRow As Long, k
             chosenRow = CLng(rowsCol(1))
         Else
             shown = shown + 1
-            report = report & "• " & key & " : sorok = " & JoinCollection(rowsCol, ", ") & vbCrLf
+            report = report & "ï¿½ " & key & " : sorok = " & JoinCollection(rowsCol, ", ") & vbCrLf
             Select Case dupMode
                 Case 1: chosenRow = CLng(rowsCol(1))
                 Case 2: chosenRow = CLng(rowsCol(rowsCol.Count))
@@ -444,7 +457,7 @@ Private Function BuildSourcePickedRowIndex(ws As Worksheet, headerRow As Long, k
                     chosenRow = AskPickRowForKey(CStr(key), rowsCol)
                     If chosenRow = 0 Then chosenRow = CLng(rowsCol(1))
             End Select
-            If shown >= 25 Then report = report & "… (továbbiak elrejtve)" & vbCrLf: Exit For
+            If shown >= 25 Then report = report & "ï¿½ (tovï¿½bbiak elrejtve)" & vbCrLf: Exit For
         End If
 
         picked(CStr(key)) = chosenRow
@@ -455,9 +468,9 @@ End Function
 
 Private Function AskPickRowForKey(ByVal key As String, rowsCol As Collection) As Long
     Dim inp As String
-    inp = InputBox("Duplikált kulcs: " & key & vbCrLf & _
+    inp = InputBox("Duplikï¿½lt kulcs: " & key & vbCrLf & _
                    "Sorok: " & JoinCollection(rowsCol, ", ") & vbCrLf & _
-                   "Írd be, melyik sort vegyem (üres = elsõ).", "Duplakulcs kiválasztása")
+                   "ï¿½rd be, melyik sort vegyem (ï¿½res = elsï¿½).", "Duplakulcs kivï¿½lasztï¿½sa")
     If Trim$(inp) = "" Then AskPickRowForKey = 0 Else AskPickRowForKey = CLng(inp)
 End Function
 
@@ -471,7 +484,7 @@ Private Function JoinCollection(col As Collection, ByVal sep As String) As Strin
 End Function
 
 ' =========================
-' CÉL INDEX
+' Cï¿½L INDEX
 ' =========================
 Private Sub BuildDestIndex(lo As ListObject, keyColIndex As Long, idx As Object)
     idx.RemoveAll
@@ -484,7 +497,7 @@ Private Sub BuildDestIndex(lo As ListObject, keyColIndex As Long, idx As Object)
 End Sub
 
 ' =========================
-' EGYÉB SZABÁLYOK
+' EGYï¿½B SZABï¿½LYOK
 ' =========================
 Private Function CoerceToDateOrKeep(v As Variant) As Variant
     On Error GoTo Fail
@@ -523,7 +536,7 @@ Private Function PickExcelFile(ByVal title As String) As String
     With fd
         .title = title
         .Filters.clear
-        .Filters.add "Excel fájlok", "*.xlsx;*.xlsm;*.xls"
+        .Filters.add "Excel fï¿½jlok", "*.xlsx;*.xlsm;*.xls"
         .AllowMultiSelect = False
         If .Show <> -1 Then PickExcelFile = "" Else PickExcelFile = .SelectedItems(1)
     End With
