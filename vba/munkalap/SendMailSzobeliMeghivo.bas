@@ -18,7 +18,7 @@ Sub PrepareIktatoAndSendBatch()
     Dim wsName As String: wsName = "diakadat"
     Dim loName As String: loName = "diakadat"
     Dim templatePath As String
-    templatePath = "\\NS2\Felvételi\outlooksablon\szobeli-behivo.oft" ' <-- állítsd be
+    templatePath = GetConfiguredSzobeliTemplatePath()
     
     Dim sendAutomatically As Boolean: sendAutomatically = True
     Dim batchSize As Long: batchSize = DEFAULT_BATCH_SIZE

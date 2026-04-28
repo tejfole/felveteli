@@ -1,7 +1,6 @@
 Attribute VB_Name = "VerziokAutoMentese"
 Option Explicit
 
-Public Const BACKUP_ROOT As String = "\\NS2\Felvételi\Backup\"
 Public Const BACKUP_SUBFOLDER_PREFIX As String = "FELVETELI_"
 
 Public Sub SaveVersionedCopy_Logged(Optional control As IRibbonControl)
@@ -13,7 +12,7 @@ Public Sub SaveVersionedCopy_Logged(Optional control As IRibbonControl)
     Dim subFolder As String
     subFolder = BACKUP_SUBFOLDER_PREFIX & CStr(y)
 
-    SaveVersionedCopy_Core_Logged ThisWorkbook, BACKUP_ROOT, subFolder, True
+    SaveVersionedCopy_Core_Logged ThisWorkbook, GetConfiguredBackupRoot(), subFolder, True
 End Sub
 
 Public Sub SaveVersionedCopy_Core_Logged( _

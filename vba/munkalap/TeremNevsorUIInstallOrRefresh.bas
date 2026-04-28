@@ -42,7 +42,6 @@ Private Const STD_FONT_NAME As String = "Calibri"
 Private Const STD_FONT_SIZE As Long = 11
 
 ' Hálózati alapértelmezett mentési útvonal és log fájl neve
-Private Const DEFAULT_PDF_FOLDER As String = "\\NS2\Felvételi\Data\Nevsor"
 Private Const EXPORT_LOG_NAME As String = "export_log.csv"
 
 ' ============================================================
@@ -186,7 +185,10 @@ NextRow:
         ws.PrintOut
     End If
 
-    If MsgBox("Készítsek PDF-et a névsorból és mentsem ide: " & DEFAULT_PDF_FOLDER & " ?", vbYesNo + vbQuestion, "PDF export") = vbYes Then
+    Dim pdfFolder As String
+    pdfFolder = GetConfiguredNevsorPdfFolder()
+
+    If MsgBox("Készítsek PDF-et a névsorból és mentsem ide: " & pdfFolder & " ?", vbYesNo + vbQuestion, "PDF export") = vbYes Then
         ExportRosterToPdf ws, printLastRow, committeeSel, daySel, roomSel
     End If
 
@@ -202,7 +204,7 @@ End Sub
 Private Sub ExportRosterToPdf(ws As Worksheet, printLastRow As Long, committee As String, dayKey As String, room As String)
     On Error GoTo ErrHandler
 
-    Dim basePath As String: basePath = DEFAULT_PDF_FOLDER
+    Dim basePath As String: basePath = GetConfiguredNevsorPdfFolder()
 
     If Not FolderExists(basePath) Then
         On Error Resume Next
@@ -243,7 +245,7 @@ End Sub
 Private Sub AppendExportLog(fullPath As String, committee As String, dayKey As String, room As String)
     On Error GoTo ErrHandler
 
-    Dim logFolder As String: logFolder = DEFAULT_PDF_FOLDER
+    Dim logFolder As String: logFolder = GetConfiguredNevsorPdfFolder()
     If Not FolderExists(logFolder) Then
         If ThisWorkbook.path <> "" Then
             logFolder = ThisWorkbook.path
