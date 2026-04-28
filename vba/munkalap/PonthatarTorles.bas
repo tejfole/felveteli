@@ -8,13 +8,13 @@ Sub TorolPonthatarA14(Optional control As IRibbonControl)
     On Error GoTo 0
 
     If wsAdatok Is Nothing Then
-        MsgBox "? A 'adatok' nevû munkalap nem található!", vbCritical
+        MsgBox "? A 'adatok' nevÅ± munkalap nem talÃ¡lhatÃ³!", vbCritical
         Exit Sub
     End If
 
     wsAdatok.Range("A14").ClearContents
 
-    MsgBox "? Ponthatár törölve az adatok!A14 cellából.", vbInformation
+    MsgBox "? PonthatÃ¡r tÃ¶rÃ¶lve az adatok!A14 cellÃ¡bÃ³l.", vbInformation
 
 End Sub
 

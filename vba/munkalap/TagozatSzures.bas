@@ -2,39 +2,39 @@ Attribute VB_Name = "TagozatSzures"
 Option Explicit
 
 ' ============================================================
-' TAGOZAT SZÛRÉS – EGYBEN (az elgondolás szerint)
+' TAGOZAT SZÅ°RÃ‰S â€“ EGYBEN (az elgondolÃ¡s szerint)
 '
-' Forrás táblák / lapok:
-' - diakadat lap / diakadat tábla
-' - rangsor lap / rangsor tábla  -> CSAK az "elut" oszlop számít ("x" = dolgozunk vele)
-' - Szabályok lap / tbl_szabalyok tábla -> ezt a meglévõ rangsor-makród használja
+' ForrÃ¡s tÃ¡blÃ¡k / lapok:
+' - diakadat lap / diakadat tÃ¡bla
+' - rangsor lap / rangsor tÃ¡bla  -> CSAK az "elut" oszlop szÃ¡mÃ­t ("x" = dolgozunk vele)
+' - SzabÃ¡lyok lap / tbl_szabalyok tÃ¡bla -> ezt a meglÃ©vÅ‘ rangsor-makrÃ³d hasznÃ¡lja
 '
 ' Kimenet:
-' - tagozat lap / tagozatokszures tábla
-'   fejlécek: nev | oktazon | osszpont | szamitott_rang
+' - tagozat lap / tagozatokszures tÃ¡bla
+'   fejlÃ©cek: nev | oktazon | osszpont | szamitott_rang
 '
-' Vezérlés:
-' - A tagozat lap B1 cellája tartalmazza a tagozat kódot (1000/2000/3000/4000)
-' - Szûrés feltétele: diakadat["j_" & B1] = "x"
+' VezÃ©rlÃ©s:
+' - A tagozat lap B1 cellÃ¡ja tartalmazza a tagozat kÃ³dot (1000/2000/3000/4000)
+' - SzÅ±rÃ©s feltÃ©tele: diakadat["j_" & B1] = "x"
 '
 ' Rangsor:
-' - A meglévõ (jól mûködõ) makró számolja: RangsorTolt_Klasszikus_SorrendDontos
-' - Ez feltölti a diakadat[rangsor] oszlopot
+' - A meglÃ©vÅ‘ (jÃ³l mÅ±kÃ¶dÅ‘) makrÃ³ szÃ¡molja: RangsorTolt_Klasszikus_SorrendDontos
+' - Ez feltÃ¶lti a diakadat[rangsor] oszlopot
 ' - A kimeneti szamitott_rang = diakadat[rangsor]
 '
-' Megjegyzés:
-' - Ez a modul NEM tartalmaz OnTime/autorefresh kódot.
-' - A B1-re reagáló automatikus futtatás a tagozat munkalap (sheet) moduljába kerül.
+' MegjegyzÃ©s:
+' - Ez a modul NEM tartalmaz OnTime/autorefresh kÃ³dot.
+' - A B1-re reagÃ¡lÃ³ automatikus futtatÃ¡s a tagozat munkalap (sheet) moduljÃ¡ba kerÃ¼l.
 ' ============================================================
 
-' Ezt hívd (sheet eventbõl vagy gombból): rangsor újra + output újratölt
+' Ezt hÃ­vd (sheet eventbÅ‘l vagy gombbÃ³l): rangsor Ãºjra + output ÃºjratÃ¶lt
 Public Sub Tagozat_Refresh(Optional ByVal silent As Boolean = True)
     On Error GoTo EH
 
-    ' 1) Rangsor frissítés (diakadat[rangsor]) – a te bevált modulodból
+    ' 1) Rangsor frissÃ­tÃ©s (diakadat[rangsor]) â€“ a te bevÃ¡lt modulodbÃ³l
     RangsorTolt_Klasszikus_SorrendDontos
 
-    ' 2) Tagozat output újratöltés
+    ' 2) Tagozat output ÃºjratÃ¶ltÃ©s
     TagozatSzures_Elutasitottakbol
 
     Exit Sub
@@ -45,9 +45,9 @@ EH:
     End If
 End Sub
 
-' Újratölti a tagozat/tagozatokszures táblát:
+' ÃšjratÃ¶lti a tagozat/tagozatokszures tÃ¡blÃ¡t:
 ' - csak rangsor[elut]="x"
-' - és diakadat["j_" & B1]="x"
+' - Ã©s diakadat["j_" & B1]="x"
 Public Sub TagozatSzures_Elutasitottakbol()
     On Error GoTo EH
 
@@ -60,10 +60,10 @@ Public Sub TagozatSzures_Elutasitottakbol()
 
     If loD Is Nothing Or loR Is Nothing Or loOut Is Nothing Then
         Err.Raise vbObjectError + 2000, "TagozatSzures_Elutasitottakbol", _
-                  "Hiányzik valamelyik tábla: diakadat / rangsor / tagozatokszures."
+                  "HiÃ¡nyzik valamelyik tÃ¡bla: diakadat / rangsor / tagozatokszures."
     End If
 
-    ' ---- B1 -> tagozat kód ----
+    ' ---- B1 -> tagozat kÃ³d ----
     Dim tagKod As String, szuresColName As String
     tagKod = NormalizeTagKod(wb.Worksheets("tagozat").Range("B1").value)
     If tagKod = "" Then Exit Sub
@@ -80,11 +80,11 @@ Public Sub TagozatSzures_Elutasitottakbol()
 
     If cNev = 0 Or cOkt = 0 Or cPont = 0 Or cRang = 0 Then
         Err.Raise vbObjectError + 2001, "TagozatSzures_Elutasitottakbol", _
-                  "Hiányzó oszlop a diakadat táblában (f_nev/i_nev, oktazon, p_mindossz, rangsor)."
+                  "HiÃ¡nyzÃ³ oszlop a diakadat tÃ¡blÃ¡ban (f_nev/i_nev, oktazon, p_mindossz, rangsor)."
     End If
     If cSzures = 0 Then
         Err.Raise vbObjectError + 2002, "TagozatSzures_Elutasitottakbol", _
-                  "Hiányzó szûrõ oszlop a diakadat táblában: " & szuresColName
+                  "HiÃ¡nyzÃ³ szÅ±rÅ‘ oszlop a diakadat tÃ¡blÃ¡ban: " & szuresColName
     End If
 
     ' ---- rangsor oszlopok (CSAK elut kell) ----
@@ -93,7 +93,7 @@ Public Sub TagozatSzures_Elutasitottakbol()
     rElut = LoCol(loR, "elut")
     If rOkt = 0 Or rElut = 0 Then
         Err.Raise vbObjectError + 2003, "TagozatSzures_Elutasitottakbol", _
-                  "Hiányzó oszlop a rangsor táblában (oktazon, elut)."
+                  "HiÃ¡nyzÃ³ oszlop a rangsor tÃ¡blÃ¡ban (oktazon, elut)."
     End If
 
     ' ---- output oszlopok ----
@@ -104,10 +104,10 @@ Public Sub TagozatSzures_Elutasitottakbol()
     oRang = LoCol(loOut, "szamitott_rang")
     If oNev = 0 Or oOkt = 0 Or oPont = 0 Or oRang = 0 Then
         Err.Raise vbObjectError + 2004, "TagozatSzures_Elutasitottakbol", _
-                  "Hiányzó fejléc a tagozatokszures táblában (nev, oktazon, osszpont, szamitott_rang)."
+                  "HiÃ¡nyzÃ³ fejlÃ©c a tagozatokszures tÃ¡blÃ¡ban (nev, oktazon, osszpont, szamitott_rang)."
     End If
 
-    ' ---- Elutasítottak set (oktazon alapján) ----
+    ' ---- ElutasÃ­tottak set (oktazon alapjÃ¡n) ----
     Dim elut As Object: Set elut = CreateObject("Scripting.Dictionary")
     elut.CompareMode = 1
 
@@ -122,7 +122,7 @@ Public Sub TagozatSzures_Elutasitottakbol()
         Next i
     End If
 
-    ' ---- Output ürítés ----
+    ' ---- Output Ã¼rÃ­tÃ©s ----
     Do While loOut.ListRows.Count > 0
         loOut.ListRows(1).Delete
     Loop
@@ -149,7 +149,7 @@ Public Sub TagozatSzures_Elutasitottakbol()
         Next i2
     End If
 
-    ' ---- Rendezés: osszpont DESC, szamitott_rang ASC ----
+    ' ---- RendezÃ©s: osszpont DESC, szamitott_rang ASC ----
     On Error Resume Next
     loOut.Sort.SortFields.clear
     loOut.Sort.SortFields.add key:=loOut.ListColumns("osszpont").DataBodyRange, _

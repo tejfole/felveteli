@@ -2,46 +2,46 @@ Attribute VB_Name = "TeremNevsorUIInstallOrRefresh"
 Option Explicit
 
 ' ============================================================
-' Teljes, ˆn·llÛ VBA modul ó NÈvsor gener·l·s + Ribbon callback +
-' PDF mentÈs h·lÛzatra + export log
+' Teljes, √∂n√°ll√≥ VBA modul ‚Äî N√©vsor gener√°l√°s + Ribbon callback +
+' PDF ment√©s h√°l√≥zatra + export log
 '
 ' Ribbon:
 ' - customUI.xml onAction="Ribbon_TeremNevsor_Refresh"
 ' - customUI.xml onAction="Ribbon_TeremNevsor_Generate"
 '
-' Haszn·lat:
+' Haszn√°lat:
 ' 1) Illeszd be ezt a modult (Insert -> Module).
-' 2) Futtasd egyszer: TeremNevsor_UI_InstallOrRefresh (vagy Ribbon FrissÌtÈs)
-' 3) V·laszd: B1=Bizotts·g, B2=Nap, B3=Tanterem
-' 4) Ribbon Gener·l·s -> lista + nyomtat·s/PDF kÈrdÈs
+' 2) Futtasd egyszer: TeremNevsor_UI_InstallOrRefresh (vagy Ribbon Friss√≠t√©s)
+' 3) V√°laszd: B1=Bizotts√°g, B2=Nap, B3=Tanterem
+' 4) Ribbon Gener√°l√°s -> lista + nyomtat√°s/PDF k√©rd√©s
 ' ============================================================
 
-' Lap/t·bla nevek ó igazÌtsd, ha sz¸ksÈges
+' Lap/t√°bla nevek ‚Äî igaz√≠tsd, ha sz√ºks√©ges
 Private Const SHEET_DATA As String = "diakadat"
 Private Const TABLE_DATA As String = "diakadat"
 
-Private Const SHEET_ROSTER As String = "NÈvsor"
+Private Const SHEET_ROSTER As String = "N√©vsor"
 Private Const SHEET_ROOMLIST As String = "TanteremLista"
 
 Private Const SHEET_SLOTS As String = "idopontok"
 Private Const TABLE_SLOTS As String = "tbl_idopontok"
 
-' UI cell·k (f¸ggıleges elrendezÈs)
-Private Const CELL_COMMITTEE As String = "B1"  ' Bizotts·g dropdown
+' UI cell√°k (f√ºgg≈ëleges elrendez√©s)
+Private Const CELL_COMMITTEE As String = "B1"  ' Bizotts√°g dropdown
 Private Const CELL_DAY As String = "B2"        ' Nap dropdown
 Private Const CELL_ROOM As String = "B3"       ' Tanterem dropdown
 
 ' Layout sorok
-Private Const HEADER_TITLE_ROW As Long = 5     ' A5:C5 - cÌmek (nyomtat·s kezdete)
-Private Const HEADER_VALUE_ROW As Long = 6     ' A6:C6 - ÈrtÈkek
-Private Const LIST_HEADER_ROW As Long = 8      ' A8:C8 - lista fejlÈc
+Private Const HEADER_TITLE_ROW As Long = 5     ' A5:C5 - c√≠mek (nyomtat√°s kezdete)
+Private Const HEADER_VALUE_ROW As Long = 6     ' A6:C6 - √©rt√©kek
+Private Const LIST_HEADER_ROW As Long = 8      ' A8:C8 - lista fejl√©c
 Private Const LIST_START_ROW As Long = 9       ' A9 - adatok kezdete
 
-' Standard nyomtat·si bet˚tÌpus
+' Standard nyomtat√°si bet≈±t√≠pus
 Private Const STD_FONT_NAME As String = "Calibri"
 Private Const STD_FONT_SIZE As Long = 11
 
-' H·lÛzati alapÈrtelmezett mentÈsi ˙tvonal Ès log f·jl neve
+' H√°l√≥zati alap√©rtelmezett ment√©si √∫tvonal √©s log f√°jl neve
 Private Const EXPORT_LOG_NAME As String = "export_log.csv"
 
 ' ============================================================
@@ -55,7 +55,7 @@ Public Sub Ribbon_TeremNevsor_Generate(control As IRibbonControl)
     TeremNevsor_Generalas
 End Sub
 
-' (Opcion·lis) ha a Ribbon XML mÈgis m·s nÈvre hivatkozik:
+' (Opcion√°lis) ha a Ribbon XML m√©gis m√°s n√©vre hivatkozik:
 Public Sub Ribbon_TeremNevsor_UI_InstallOrRefresh(control As IRibbonControl)
     TeremNevsor_UI_InstallOrRefresh
 End Sub
@@ -65,18 +65,18 @@ Public Sub Ribbon_TeremNevsor_Generalas(control As IRibbonControl)
 End Sub
 
 ' ============================================================
-' UI telepÌtÈs / frissÌtÈs (futtasd egyszer)
+' UI telep√≠t√©s / friss√≠t√©s (futtasd egyszer)
 ' ============================================================
 Public Sub TeremNevsor_UI_InstallOrRefresh()
     On Error GoTo ErrHandler
 
     Dim ws As Worksheet: Set ws = GetOrCreateSheet(SHEET_ROSTER, False)
 
-    ' TisztÌtjuk a felsı ter¸letet (A1:C4)
+    ' Tiszt√≠tjuk a fels≈ë ter√ºletet (A1:C4)
     ws.Range("A1:C4").clear
 
-    ' Label-ek (f¸ggılegesen)
-    ws.Range("A1").value = "Bizotts·g"
+    ' Label-ek (f√ºgg≈ëlegesen)
+    ws.Range("A1").value = "Bizotts√°g"
     ws.Range("A2").value = "Nap (yyyy. mm. dd)"
     ws.Range("A3").value = "Tanterem"
     ws.Range("A1:A3").Font.Bold = True
@@ -89,26 +89,26 @@ Public Sub TeremNevsor_UI_InstallOrRefresh()
     ApplyDayDropdown_FromIdopontokElseDiakadat ws.Range(CELL_DAY)
     ApplyRoomDropdown ws.Range(CELL_ROOM)
 
-    ' Nyomtat·si fejlÈc cÌmei (A5:C5) Ès ÈrtÈkek sora (A6:C6)
-    ws.Range("A" & HEADER_TITLE_ROW & ":C" & HEADER_TITLE_ROW).value = Array("Bizotts·g", "Nap", "Tanterem")
+    ' Nyomtat√°si fejl√©c c√≠mei (A5:C5) √©s √©rt√©kek sora (A6:C6)
+    ws.Range("A" & HEADER_TITLE_ROW & ":C" & HEADER_TITLE_ROW).value = Array("Bizotts√°g", "Nap", "Tanterem")
     ws.Range("A" & HEADER_VALUE_ROW & ":C" & HEADER_VALUE_ROW).ClearContents
     ws.rows(HEADER_TITLE_ROW).Font.Bold = True
 
-    ' Lista fejlÈc (Sorsz·m | NÈv | Megjelent)
-    ws.Range("A" & LIST_HEADER_ROW & ":C" & LIST_HEADER_ROW).value = Array("Sorsz·m", "NÈv", "Megjelent")
+    ' Lista fejl√©c (Sorsz√°m | N√©v | Megjelent)
+    ws.Range("A" & LIST_HEADER_ROW & ":C" & LIST_HEADER_ROW).value = Array("Sorsz√°m", "N√©v", "Megjelent")
     ws.rows(LIST_HEADER_ROW).Font.Bold = True
 
     ws.Columns("A:C").AutoFit
 
-    MsgBox "UI kÈszen. V·laszd ki: B1 = Bizotts·g, B2 = Nap, B3 = Tanterem. Majd kattints Gener·l.", vbInformation
+    MsgBox "UI k√©szen. V√°laszd ki: B1 = Bizotts√°g, B2 = Nap, B3 = Tanterem. Majd kattints Gener√°l.", vbInformation
     Exit Sub
 
 ErrHandler:
-    MsgBox "UI telepÌtÈsi hiba: " & Err.Number & " - " & Err.Description, vbCritical
+    MsgBox "UI telep√≠t√©si hiba: " & Err.Number & " - " & Err.Description, vbCritical
 End Sub
 
 ' ============================================================
-' Gener·l·s (1 gomb)
+' Gener√°l√°s (1 gomb)
 ' ============================================================
 Public Sub TeremNevsor_Generalas()
     On Error GoTo ErrHandler
@@ -119,15 +119,15 @@ Public Sub TeremNevsor_Generalas()
     Dim daySel As String: daySel = NormalizeDayForUI(ws.Range(CELL_DAY).value)
     Dim roomSel As String: roomSel = Trim(CStr(ws.Range(CELL_ROOM).value & ""))
 
-    If committeeSel = "" Then MsgBox "V·lassz bizotts·got (B1).", vbExclamation: Exit Sub
-    If daySel = "" Then MsgBox "V·lassz napot (B2).", vbExclamation: Exit Sub
-    If roomSel = "" Then MsgBox "V·lassz tantermet (B3).", vbExclamation: Exit Sub
+    If committeeSel = "" Then MsgBox "V√°lassz bizotts√°got (B1).", vbExclamation: Exit Sub
+    If daySel = "" Then MsgBox "V√°lassz napot (B2).", vbExclamation: Exit Sub
+    If roomSel = "" Then MsgBox "V√°lassz tantermet (B3).", vbExclamation: Exit Sub
 
-    ' Tˆrˆlj¸k az elızı lista rÈgiÛt (A9:C...)
+    ' T√∂r√∂lj√ºk az el≈ëz≈ë lista r√©gi√≥t (A9:C...)
     ws.Range(ws.Cells(LIST_START_ROW, 1), ws.Cells(ws.rows.Count, 3)).ClearContents
 
-    ' FejlÈc ÈrtÈkek beÌr·sa A5:C6 (nyomtat·s kezdete: 5. sor)
-    ws.Range("A" & HEADER_TITLE_ROW & ":C" & HEADER_TITLE_ROW).value = Array("Bizotts·g", "Nap", "Tanterem")
+    ' Fejl√©c √©rt√©kek be√≠r√°sa A5:C6 (nyomtat√°s kezdete: 5. sor)
+    ws.Range("A" & HEADER_TITLE_ROW & ":C" & HEADER_TITLE_ROW).value = Array("Bizotts√°g", "Nap", "Tanterem")
     ws.Range("A" & HEADER_VALUE_ROW).value = committeeSel
     ws.Range("B" & HEADER_VALUE_ROW).value = daySel
     ws.Range("C" & HEADER_VALUE_ROW).value = roomSel
@@ -137,7 +137,7 @@ Public Sub TeremNevsor_Generalas()
         .HorizontalAlignment = xlLeft
     End With
 
-    ' Adatforr·s beolvas·sa
+    ' Adatforr√°s beolvas√°sa
     Dim wsData As Worksheet: Set wsData = ThisWorkbook.Worksheets(SHEET_DATA)
     Dim loData As ListObject: Set loData = wsData.ListObjects(TABLE_DATA)
     Dim dictCols As Object: Set dictCols = GetColumnIndexMap(loData)
@@ -167,7 +167,7 @@ NextRow:
 
     ws.Columns("A:C").AutoFit
 
-    ' Nyomtat·si ter¸let: 5. sortÛl a lista vÈgÈig
+    ' Nyomtat√°si ter√ºlet: 5. sort√≥l a lista v√©g√©ig
     Dim printLastRow As Long
     If outRow > LIST_START_ROW Then
         printLastRow = outRow - 1
@@ -181,21 +181,21 @@ NextRow:
         .Size = STD_FONT_SIZE
     End With
 
-    If MsgBox("Nyomtassam most a nÈvsort?", vbYesNo + vbQuestion, "Nyomtat·s") = vbYes Then
+    If MsgBox("Nyomtassam most a n√©vsort?", vbYesNo + vbQuestion, "Nyomtat√°s") = vbYes Then
         ws.PrintOut
     End If
 
     Dim pdfFolder As String
     pdfFolder = GetConfiguredNevsorPdfFolder()
 
-    If MsgBox("KÈszÌtsek PDF-et a nÈvsorbÛl Ès mentsem ide: " & pdfFolder & " ?", vbYesNo + vbQuestion, "PDF export") = vbYes Then
+    If MsgBox("K√©sz√≠tsek PDF-et a n√©vsorb√≥l √©s mentsem ide: " & pdfFolder & " ?", vbYesNo + vbQuestion, "PDF export") = vbYes Then
         ExportRosterToPdf ws, printLastRow, committeeSel, daySel, roomSel
     End If
 
     Exit Sub
 
 ErrHandler:
-    MsgBox "Gener·l·s hiba: " & Err.Number & " - " & Err.Description, vbCritical
+    MsgBox "Gener√°l√°s hiba: " & Err.Number & " - " & Err.Description, vbCritical
 End Sub
 
 ' ============================================================
@@ -218,7 +218,7 @@ Private Sub ExportRosterToPdf(ws As Worksheet, printLastRow As Long, committee A
         Else
             basePath = Environ$("USERPROFILE") & "\Desktop"
         End If
-        MsgBox "A h·lÛzati mappa nem elÈrhetı. PDF ide ker¸l: " & basePath, vbExclamation, "MentÈsi hely"
+        MsgBox "A h√°l√≥zati mappa nem el√©rhet≈ë. PDF ide ker√ºl: " & basePath, vbExclamation, "Ment√©si hely"
         If Not FolderExists(basePath) Then MkDirPath basePath
     End If
 
@@ -235,7 +235,7 @@ Private Sub ExportRosterToPdf(ws As Worksheet, printLastRow As Long, committee A
 
     AppendExportLog fullPath, committee, dayKey, room
 
-    MsgBox "PDF elmentve: " & fullPath, vbInformation, "PDF mentÈs"
+    MsgBox "PDF elmentve: " & fullPath, vbInformation, "PDF ment√©s"
     Exit Sub
 
 ErrHandler:
@@ -274,7 +274,7 @@ ErrHandler:
 End Sub
 
 ' ============================================================
-' Dropdown segÈdek
+' Dropdown seg√©dek
 ' ============================================================
 Private Sub ApplyRoomDropdown(Target As Range)
     On Error GoTo ErrHandler
@@ -337,7 +337,7 @@ ErrHandler:
 End Sub
 
 ' ============================================================
-' Idıpontok: tbl_idopontok(datum_nap, aktiv)
+' Id≈ëpontok: tbl_idopontok(datum_nap, aktiv)
 ' ============================================================
 Private Function GetActiveDaysFromIdopontok() As Variant
     On Error GoTo ErrHandler
@@ -394,7 +394,7 @@ Private Function GetDaysFromDiakadat() As Variant
 End Function
 
 ' ============================================================
-' Normaliz·l·s (yyyy. mm. dd)
+' Normaliz√°l√°s (yyyy. mm. dd)
 ' ============================================================
 Private Function NormalizeText(v As Variant) As String
     NormalizeText = Trim(CStr(v & ""))
@@ -490,7 +490,7 @@ Private Sub RequireCols(dictCols As Object, required As Variant)
     Dim i As Long, k As String
     For i = LBound(required) To UBound(required)
         k = LCase(CStr(required(i)))
-        If Not dictCols.Exists(k) Then Err.Raise vbObjectError + 2500, , "Hi·nyzÛ oszlop: " & k
+        If Not dictCols.Exists(k) Then Err.Raise vbObjectError + 2500, , "Hi√°nyz√≥ oszlop: " & k
     Next i
 End Sub
 

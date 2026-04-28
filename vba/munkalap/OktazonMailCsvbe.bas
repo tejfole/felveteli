@@ -16,43 +16,43 @@ Sub ExportCSVFromActiveSheetTable_UniqueOktazon(Optional control As IRibbonContr
     Dim oktazonValue As String
     Dim dict As Object
 
-    ' --- SzÛt·r az egyedisÈghez ---
+    ' --- Sz√≥t√°r az egyedis√©ghez ---
     Set dict = CreateObject("Scripting.Dictionary")
 
-    ' --- AktÌv munkalap
+    ' --- Akt√≠v munkalap
     Set ws = ActiveSheet
 
-    ' --- T·bla be·llÌt·sa
+    ' --- T√°bla be√°ll√≠t√°sa
     If ws.ListObjects.Count = 0 Then
-        MsgBox "? Nincs t·bla az aktÌv munkalapon!", vbCritical
+        MsgBox "? Nincs t√°bla az akt√≠v munkalapon!", vbCritical
         Exit Sub
     End If
 
-    Set tbl = ws.ListObjects(1) ' Az elsı t·bla
+    Set tbl = ws.ListObjects(1) ' Az els≈ë t√°bla
 
-    ' --- Oktazon Ès Email oszlopok keresÈse ---
+    ' --- Oktazon √©s Email oszlopok keres√©se ---
     For i = 1 To tbl.ListColumns.Count
         If LCase(tbl.ListColumns(i).Name) = "oktazon" Then oktazonCol = i
         If LCase(tbl.ListColumns(i).Name) = "email" Then emailCol = i
     Next i
 
     If oktazonCol = 0 Or emailCol = 0 Then
-        MsgBox "Hiba: Nem tal·lhatÛ 'oktazon' vagy 'email' oszlop a t·bl·ban!", vbCritical
+        MsgBox "Hiba: Nem tal√°lhat√≥ 'oktazon' vagy 'email' oszlop a t√°bl√°ban!", vbCritical
         Exit Sub
     End If
 
-    ' --- Mappa kiv·laszt·sa ---
+    ' --- Mappa kiv√°laszt√°sa ---
     With Application.FileDialog(msoFileDialogFolderPicker)
-        .title = "V·laszd ki a CSV mentÈsi mapp·t"
+        .title = "V√°laszd ki a CSV ment√©si mapp√°t"
         If .Show = -1 Then
             folderPath = .SelectedItems(1)
         Else
-            MsgBox "Nincs mappa kiv·lasztva!", vbCritical
+            MsgBox "Nincs mappa kiv√°lasztva!", vbCritical
             Exit Sub
         End If
     End With
 
-    ' --- F·jlok elÈrÈsi ˙tjai ---
+    ' --- F√°jlok el√©r√©si √∫tjai ---
     csvFile = folderPath & "\cimzettek.csv"
     logFile = folderPath & "\hibas_cimek_log.txt"
 
@@ -62,18 +62,18 @@ Sub ExportCSVFromActiveSheetTable_UniqueOktazon(Optional control As IRibbonContr
     logOutput = FreeFile
     Open logFile For Output As #logOutput
 
-    ' --- FejlÈc a CSV-ben ---
+    ' --- Fejl√©c a CSV-ben ---
     Print #outputFile, "fajlnev;email"
 
-    ' --- Adatok feldolgoz·sa ---
+    ' --- Adatok feldolgoz√°sa ---
     For i = 1 To tbl.ListRows.Count
         oktazonValue = Trim(tbl.DataBodyRange(i, oktazonCol).value)
         emailValue = Trim(tbl.DataBodyRange(i, emailCol).value)
 
-        ' Ha nincs oktazon (¸res sor), kihagyjuk
+        ' Ha nincs oktazon (√ºres sor), kihagyjuk
         If oktazonValue = "" Then GoTo SkipNext
 
-        ' Ha m·r volt ilyen oktazon, kihagyjuk
+        ' Ha m√°r volt ilyen oktazon, kihagyjuk
         If dict.Exists(oktazonValue) Then GoTo SkipNext
 
         ' Ha az email helyes
@@ -82,8 +82,8 @@ Sub ExportCSVFromActiveSheetTable_UniqueOktazon(Optional control As IRibbonContr
             Print #outputFile, rowValues
             dict.add oktazonValue, True
         Else
-            ' Hib·s email logol·sa
-            Print #logOutput, "Hib·s e-mail: " & emailValue & " (sor: " & i + 1 & ")"
+            ' Hib√°s email logol√°sa
+            Print #logOutput, "Hib√°s e-mail: " & emailValue & " (sor: " & i + 1 & ")"
         End If
 
 SkipNext:
@@ -92,11 +92,11 @@ SkipNext:
     Close #outputFile
     Close #logOutput
 
-    MsgBox "? CSV Ès hib·s e-mail log sikeresen elkÈsz¸lt!", vbInformation
+    MsgBox "? CSV √©s hib√°s e-mail log sikeresen elk√©sz√ºlt!", vbInformation
 
 End Sub
 
-' --- Email cÌm valid·ciÛ ---
+' --- Email c√≠m valid√°ci√≥ ---
 Function IsValidEmail(ByVal email As String) As Boolean
     Dim re As Object
     Set re = CreateObject("VBScript.RegExp")

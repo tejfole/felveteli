@@ -11,23 +11,23 @@ Sub SzamoljEgyediPrioritasosRangsor(Optional control As IRibbonControl)
     
     startTime = Timer
     
-    ' KÈpernyıfrissÌtÈs kikapcsol·sa (KRITIKUS 400 di·kn·l!)
+    ' K√©perny≈ëfriss√≠t√©s kikapcsol√°sa (KRITIKUS 400 di√°kn√°l!)
     Application.ScreenUpdating = False
     Application.Calculation = xlCalculationManual
     
-    ' T·bla keresÈse
+    ' T√°bla keres√©se
     Set tbl = FindTable("diakadat")
     If tbl Is Nothing Then
-        MsgBox "?? A 'diakadat' t·bla nem tal·lhatÛ!", vbCritical
+        MsgBox "?? A 'diakadat' t√°bla nem tal√°lhat√≥!", vbCritical
         GoTo Cleanup
     End If
     
     If tbl.ListRows.Count = 0 Then
-        MsgBox "?? A t·bl·zat ¸res!", vbExclamation
+        MsgBox "?? A t√°bl√°zat √ºres!", vbExclamation
         GoTo Cleanup
     End If
 
-    ' Oszlop indexek (hibakezelÈssel)
+    ' Oszlop indexek (hibakezel√©ssel)
     On Error Resume Next
     colPont = tbl.ListColumns("p_mindossz").Index
     colHatranyos = tbl.ListColumns("f_hatranyos").Index
@@ -36,25 +36,25 @@ Sub SzamoljEgyediPrioritasosRangsor(Optional control As IRibbonControl)
     colRangsor = tbl.ListColumns("rangsor").Index
     
     If Err.Number <> 0 Then
-        MsgBox "? Hi·nyzÛ oszlop(ok) a t·bl·zatban!" & vbCrLf & Err.Description, vbCritical
+        MsgBox "? Hi√°nyz√≥ oszlop(ok) a t√°bl√°zatban!" & vbCrLf & Err.Description, vbCritical
         GoTo Cleanup
     End If
     On Error GoTo ErrorHandler
 
-    ' Adatok beolvas·sa
+    ' Adatok beolvas√°sa
     dataArr = tbl.DataBodyRange.value
     n = UBound(dataArr, 1)
 
-    ' Ideiglenes rendezÈsi lista: sorIndex, pont, priorit·s
+    ' Ideiglenes rendez√©si lista: sorIndex, pont, priorit√°s
     Dim rangLista() As Variant
     ReDim rangLista(1 To n, 1 To 3)
 
-    ' Priorit·sok kisz·mÌt·sa
+    ' Priorit√°sok kisz√°m√≠t√°sa
     For i = 1 To n
         rangLista(i, 1) = i ' Eredeti sorindex
-        rangLista(i, 2) = SafeVal(dataArr(i, colPont)) ' Pontsz·m
+        rangLista(i, 2) = SafeVal(dataArr(i, colPont)) ' Pontsz√°m
         
-        ' Priorit·s s˙lyoz·sa
+        ' Priorit√°s s√∫lyoz√°sa
         Dim prior As Long
         prior = 0
         If IsChecked(dataArr(i, colHatranyos)) Then prior = prior + 4
@@ -64,20 +64,20 @@ Sub SzamoljEgyediPrioritasosRangsor(Optional control As IRibbonControl)
         rangLista(i, 3) = prior
     Next i
 
-    ' QUICKSORT RENDEZ…S (10-30x gyorsabb 400 di·kn·l!)
+    ' QUICKSORT RENDEZ√âS (10-30x gyorsabb 400 di√°kn√°l!)
     Call QuickSortRangLista(rangLista, 1, n)
 
-    ' Rangsor visszaÌr·sa
+    ' Rangsor vissza√≠r√°sa
     For i = 1 To n
         Dim eredetiSorIndex As Long
         eredetiSorIndex = rangLista(i, 1)
         dataArr(eredetiSorIndex, colRangsor) = i
     Next i
 
-    ' VisszaÌr·s t·bl·ba
+    ' Vissza√≠r√°s t√°bl√°ba
     tbl.DataBodyRange.value = dataArr
 
-    ' SzÌnezÈs
+    ' Sz√≠nez√©s
     Call SzinezzTopEsKevesPontokatRangsorban
     
 Cleanup:
@@ -87,9 +87,9 @@ Cleanup:
     If Err.Number = 0 Then
         Dim elapsed As Double
         elapsed = Round(Timer - startTime, 2)
-        MsgBox "? Egyedi priorit·sos rangsor kisz·mÌtva!" & vbCrLf & _
-               "Feldolgozott di·kok: " & n & vbCrLf & _
-               "Fut·si idı: " & elapsed & " mp", vbInformation
+        MsgBox "? Egyedi priorit√°sos rangsor kisz√°m√≠tva!" & vbCrLf & _
+               "Feldolgozott di√°kok: " & n & vbCrLf & _
+               "Fut√°si id≈ë: " & elapsed & " mp", vbInformation
     End If
     
     Exit Sub
@@ -97,14 +97,14 @@ Cleanup:
 ErrorHandler:
     Application.ScreenUpdating = True
     Application.Calculation = xlCalculationAutomatic
-    MsgBox "? Hiba tˆrtÈnt: " & Err.Description & vbCrLf & _
-           "HibakÛd: " & Err.Number, vbCritical
+    MsgBox "? Hiba t√∂rt√©nt: " & Err.Description & vbCrLf & _
+           "Hibak√≥d: " & Err.Number, vbCritical
 End Sub
 
-' ========== SEG…DF‹GGV…NYEK ==========
+' ========== SEG√âDF√úGGV√âNYEK ==========
 
 Private Function FindTable(tableName As String) As ListObject
-    ' T·bla keresÈse
+    ' T√°bla keres√©se
     Dim ws As Worksheet
     Dim tbl As ListObject
     
@@ -121,7 +121,7 @@ Private Function FindTable(tableName As String) As ListObject
 End Function
 
 Private Function SafeVal(ByVal value As Variant) As Double
-    ' Biztons·gos sz·mÈrtÈk olvas·s
+    ' Biztons√°gos sz√°m√©rt√©k olvas√°s
     If IsEmpty(value) Then
         SafeVal = 0
     ElseIf IsError(value) Then
@@ -134,7 +134,7 @@ Private Function SafeVal(ByVal value As Variant) As Double
 End Function
 
 Private Function IsChecked(ByVal value As Variant) As Boolean
-    ' Ellenırzi, hogy a cella "x"-et tartalmaz-e
+    ' Ellen≈ërzi, hogy a cella "x"-et tartalmaz-e
     If IsEmpty(value) Then
         IsChecked = False
     ElseIf IsError(value) Then
@@ -146,38 +146,38 @@ Private Function IsChecked(ByVal value As Variant) As Boolean
     End If
 End Function
 
-' ========== QUICKSORT RENDEZ…S (400 di·khoz optimaliz·lt!) ==========
+' ========== QUICKSORT RENDEZ√âS (400 di√°khoz optimaliz√°lt!) ==========
 
 Private Sub QuickSortRangLista(ByRef rangLista() As Variant, ByVal low As Long, ByVal high As Long)
-    ' QuickSort algoritmus - O(n log n) komplexit·s
-    ' 400 di·kn·l ~5000 ˆsszehasonlÌt·s vs buborÈk ~160,000!
+    ' QuickSort algoritmus - O(n log n) komplexit√°s
+    ' 400 di√°kn√°l ~5000 √∂sszehasonl√≠t√°s vs bubor√©k ~160,000!
     
     If low < high Then
         Dim pivot As Long
         pivot = Partition(rangLista, low, high)
         
-        ' RekurzÌv rendezÈs
+        ' Rekurz√≠v rendez√©s
         QuickSortRangLista rangLista, low, pivot - 1
         QuickSortRangLista rangLista, pivot + 1, high
     End If
 End Sub
 
 Private Function Partition(ByRef rangLista() As Variant, ByVal low As Long, ByVal high As Long) As Long
-    ' PartÌciÛk lÈtrehoz·sa a pivot elem kˆr¸l
+    ' Part√≠ci√≥k l√©trehoz√°sa a pivot elem k√∂r√ºl
     Dim pivotPont As Double
     Dim pivotPrior As Long
     Dim i As Long, j As Long
     
-    ' Pivot elem kiv·laszt·sa (utolsÛ elem)
+    ' Pivot elem kiv√°laszt√°sa (utols√≥ elem)
     pivotPont = rangLista(high, 2)
     pivotPrior = rangLista(high, 3)
     i = low - 1
     
-    ' Elemek ·trendezÈse a pivot kˆr¸l
+    ' Elemek √°trendez√©se a pivot k√∂r√ºl
     For j = low To high - 1
-        ' RENDEZ…SI LOGIKA:
-        ' 1. Nagyobb pontsz·m elırÈbb
-        ' 2. Azonos pont esetÈn nagyobb priorit·s elırÈbb
+        ' RENDEZ√âSI LOGIKA:
+        ' 1. Nagyobb pontsz√°m el≈ër√©bb
+        ' 2. Azonos pont eset√©n nagyobb priorit√°s el≈ër√©bb
         If rangLista(j, 2) > pivotPont Or _
            (rangLista(j, 2) = pivotPont And rangLista(j, 3) > pivotPrior) Then
             i = i + 1
@@ -185,13 +185,13 @@ Private Function Partition(ByRef rangLista() As Variant, ByVal low As Long, ByVa
         End If
     Next j
     
-    ' Pivot elem helyÈre rak·sa
+    ' Pivot elem hely√©re rak√°sa
     SwapRows rangLista, i + 1, high
     Partition = i + 1
 End Function
 
 Private Sub SwapRows(ByRef rangLista() As Variant, ByVal i As Long, ByVal j As Long)
-    ' KÈt sor cserÈje a tˆmbben
+    ' K√©t sor cser√©je a t√∂mbben
     Dim temp1 As Variant, temp2 As Variant, temp3 As Variant
     
     temp1 = rangLista(i, 1)

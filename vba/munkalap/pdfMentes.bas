@@ -12,38 +12,38 @@ Sub ListaSorokPDFMentesSablonrol()
     Dim filePath As String
     Dim folderPicker As FileDialog
     
-    ' Lapok be·llÌt·sa
+    ' Lapok be√°ll√≠t√°sa
     Set wsLista = ThisWorkbook.Sheets("lista")
     Set wsSablon = ThisWorkbook.Sheets("sablon")
     Set listaT = wsLista.ListObjects("lista")
     
-    ' Mappav·lasztÛ ablak
+    ' Mappav√°laszt√≥ ablak
     Set folderPicker = Application.FileDialog(msoFileDialogFolderPicker)
     With folderPicker
-        .title = "?? V·laszd ki a PDF-ek mentÈsi mapp·j·t"
+        .title = "?? V√°laszd ki a PDF-ek ment√©si mapp√°j√°t"
         .AllowMultiSelect = False
         If .Show <> -1 Then
-            MsgBox "?? M˚velet megszakÌtva. Nem lett kiv·lasztva mappa.", vbExclamation
+            MsgBox "?? M≈±velet megszak√≠tva. Nem lett kiv√°lasztva mappa.", vbExclamation
             Exit Sub
         End If
         filePath = .SelectedItems(1)
     End With
     
-    ' VÈgigmegy¸nk a lista t·bl·n
+    ' V√©gigmegy√ºnk a lista t√°bl√°n
     For i = 1 To listaT.ListRows.Count
         nev = listaT.ListColumns("nev").DataBodyRange.Cells(i, 1).value
         szoveg = listaT.ListColumns("szoveg").DataBodyRange.Cells(i, 1).value
         megszolit = listaT.ListColumns("megszolit").DataBodyRange.Cells(i, 1).value
         
-        ' Csak ha van szˆveg
+        ' Csak ha van sz√∂veg
         If szoveg <> "" Then
-            ' Feltˆltj¸k a sablonlap mezıit
+            ' Felt√∂ltj√ºk a sablonlap mez≈ëit
             With wsSablon
                 .Range("B2").value = megszolit & " " & nev
                 .Range("B4").value = szoveg
             End With
             
-            ' PDF mentÈse a sablonlaprÛl
+            ' PDF ment√©se a sablonlapr√≥l
             fileName = nev & ".pdf"
             wsSablon.ExportAsFixedFormat _
                 Type:=xlTypePDF, _
@@ -53,12 +53,12 @@ Sub ListaSorokPDFMentesSablonrol()
                 IgnorePrintAreas:=False, _
                 OpenAfterPublish:=False
             
-            ' TˆrlÈs a sablonlaprÛl (opcion·lis, de szÈp tiszta marad)
+            ' T√∂rl√©s a sablonlapr√≥l (opcion√°lis, de sz√©p tiszta marad)
             wsSablon.Range("B2:B4").ClearContents
         End If
     Next i
     
-    MsgBox "? PDF-ek elkÈsz¸ltek a kiv·lasztott mapp·ba!", vbInformation
+    MsgBox "? PDF-ek elk√©sz√ºltek a kiv√°lasztott mapp√°ba!", vbInformation
 
 End Sub
 

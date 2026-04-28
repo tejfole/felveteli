@@ -27,10 +27,10 @@ Sub EmailKeszitesOutlook()
             Set OutMail = OutApp.CreateItem(0)
             With OutMail
                 .To = emailcim
-                .Subject = "Felvételi Értesítés - " & nev
+                .Subject = "FelvÃ©teli Ã‰rtesÃ­tÃ©s - " & nev
                 .body = megszolit & " " & nev & "," & vbNewLine & vbNewLine & _
                         szoveg & vbNewLine & vbNewLine & _
-                        "Üdvözlettel," & vbNewLine & "Felvételi Osztály"
+                        "ÃœdvÃ¶zlettel," & vbNewLine & "FelvÃ©teli OsztÃ¡ly"
                 
                 ' Csatoljuk a PDF-et, ha van
                 attachFile = filePath & nev & ".pdf"
@@ -38,12 +38,12 @@ Sub EmailKeszitesOutlook()
                     .Attachments.add attachFile
                 End If
                 
-                .Display ' vagy .Send ha azonnal küldeni akarod
+                .Display ' vagy .Send ha azonnal kÃ¼ldeni akarod
             End With
         End If
     Next i
     
-    MsgBox "? Az összes e-mail elõnézetre megnyílt!", vbInformation
+    MsgBox "? Az Ã¶sszes e-mail elÅ‘nÃ©zetre megnyÃ­lt!", vbInformation
 
 End Sub
 

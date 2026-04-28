@@ -6,20 +6,20 @@ Public Sub Ribbon_BizonyitvanyMatrix(control As IRibbonControl)
 End Sub
 
 Public Sub Ribbon_BizonyitvanyFrissites(control As IRibbonControl)
-    ' 1. BizonyÌtv·ny pontok frissÌtÈse
+    ' 1. Bizony√≠tv√°ny pontok friss√≠t√©se
     BiziMatrix_UpdateTarget_ChangedOnly
     
-    ' 2. AUTOMATIKUS ˙jrasz·mol·s (p_bizonyitvany v·ltozott)
+    ' 2. AUTOMATIKUS √∫jrasz√°mol√°s (p_bizonyitvany v√°ltozott)
     RecalcPontok_Automatikus
 End Sub
 
 Public Sub Ribbon_BizonyitvanyTeljes(control As IRibbonControl)
-    ' 1. M·trix betˆltÈs
+    ' 1. M√°trix bet√∂lt√©s
     BiziMatrix_Build
     
-    ' 2. p_bizonyitvany frissÌtÈs
+    ' 2. p_bizonyitvany friss√≠t√©s
     BiziMatrix_UpdateTarget_ChangedOnly
     
-    ' 3. AUTOMATIKUS teljes pont ˙jrasz·mol·s
+    ' 3. AUTOMATIKUS teljes pont √∫jrasz√°mol√°s
     RecalcPontok_Automatikus
 End Sub

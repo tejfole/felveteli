@@ -20,10 +20,10 @@ Sub GeneratePasswordsFromTableAndExportCSV_Final_UniqueWithLogClean(Optional con
 
     Set dict = CreateObject("Scripting.Dictionary")
 
-    ' FIX: diakadat t·bla haszn·lata
+    ' FIX: diakadat t√°bla haszn√°lata
     Set tbl = GetTableByName("diakadat")
     If tbl Is Nothing Then
-        MsgBox "Nem tal·lhatÛ a 'diakadat' nev˚ t·bla a munkaf¸zetben!", vbCritical
+        MsgBox "Nem tal√°lhat√≥ a 'diakadat' nev≈± t√°bla a munkaf√ºzetben!", vbCritical
         Exit Sub
     End If
     Set ws = tbl.parent
@@ -40,7 +40,7 @@ Sub GeneratePasswordsFromTableAndExportCSV_Final_UniqueWithLogClean(Optional con
     Set oktazonCol = tbl.ListColumns("oktazon")
     On Error GoTo 0
 
-    ' Jelszavak gener·l·sa a DIAKADAT t·bl·ban
+    ' Jelszavak gener√°l√°sa a DIAKADAT t√°bl√°ban
     For Each r In tbl.ListRows
         Dim oktazonValue As String
         oktazonValue = Trim(CStr(r.Range(1, oktazonCol.Index).value))
@@ -66,13 +66,13 @@ Sub GeneratePasswordsFromTableAndExportCSV_Final_UniqueWithLogClean(Optional con
         End If
     Next r
 
-    ' Mappa v·laszt·s
+    ' Mappa v√°laszt√°s
     Set fd = Application.FileDialog(msoFileDialogFolderPicker)
-    fd.title = "V·lassz mapp·t a CSV Ès log f·jl mentÈsÈhez"
+    fd.title = "V√°lassz mapp√°t a CSV √©s log f√°jl ment√©s√©hez"
     If fd.Show = -1 Then
         folderPath = fd.SelectedItems(1)
     Else
-        MsgBox "Mappav·laszt·s megszakÌtva!", vbExclamation
+        MsgBox "Mappav√°laszt√°s megszak√≠tva!", vbExclamation
         Exit Sub
     End If
 
@@ -87,7 +87,7 @@ Sub GeneratePasswordsFromTableAndExportCSV_Final_UniqueWithLogClean(Optional con
 
     Print #fileNo, "fajlnev;jelszo"
 
-    ' Export a DIAKADAT t·bl·bÛl
+    ' Export a DIAKADAT t√°bl√°b√≥l
     For Each r In tbl.ListRows
         Dim oktazonExport As String
         Dim jelszoExport As String
@@ -99,7 +99,7 @@ Sub GeneratePasswordsFromTableAndExportCSV_Final_UniqueWithLogClean(Optional con
         If dict.Exists(oktazonExport) Then GoTo SkipNext
 
         If jelszoExport = "" Or UCase$(jelszoExport) = "HIBA" Then
-            Print #logNo, "Hib·s sor - Oktazon: " & oktazonExport & ", JelszÛ: " & jelszoExport
+            Print #logNo, "Hib√°s sor - Oktazon: " & oktazonExport & ", Jelsz√≥: " & jelszoExport
             GoTo SkipNext
         End If
 
@@ -113,11 +113,11 @@ SkipNext:
     Close #fileNo
     Close #logNo
 
-    MsgBox "CSV Ès hib·s sorok log sikeresen elkÈsz¸lt! (forr·s: diakadat)", vbInformation
+    MsgBox "CSV √©s hib√°s sorok log sikeresen elk√©sz√ºlt! (forr√°s: diakadat)", vbInformation
     Exit Sub
 
 HianyzoOszlop:
-    MsgBox "Hi·nyzik valamelyik sz¸ksÈges oszlop a 'diakadat' t·bl·bÛl: 'f_a_nev', 'f_szul_ido', 'jelszo', 'oktazon'!", vbCritical
+    MsgBox "Hi√°nyzik valamelyik sz√ºks√©ges oszlop a 'diakadat' t√°bl√°b√≥l: 'f_a_nev', 'f_szul_ido', 'jelszo', 'oktazon'!", vbCritical
 End Sub
 
 Private Function GetTableByName(ByVal tableName As String) As ListObject
@@ -140,15 +140,15 @@ Private Function CleanName(ByVal szoveg As String) As String
         szoveg = Trim$(mid$(szoveg, 4))
     End If
 
-    szoveg = Replace(szoveg, "·", "a")
-    szoveg = Replace(szoveg, "È", "e")
-    szoveg = Replace(szoveg, "Ì", "i")
-    szoveg = Replace(szoveg, "Û", "o")
-    szoveg = Replace(szoveg, "ˆ", "o")
-    szoveg = Replace(szoveg, "ı", "o")
-    szoveg = Replace(szoveg, "˙", "u")
-    szoveg = Replace(szoveg, "¸", "u")
-    szoveg = Replace(szoveg, "˚", "u")
+    szoveg = Replace(szoveg, "√°", "a")
+    szoveg = Replace(szoveg, "√©", "e")
+    szoveg = Replace(szoveg, "√≠", "i")
+    szoveg = Replace(szoveg, "√≥", "o")
+    szoveg = Replace(szoveg, "√∂", "o")
+    szoveg = Replace(szoveg, "≈ë", "o")
+    szoveg = Replace(szoveg, "√∫", "u")
+    szoveg = Replace(szoveg, "√º", "u")
+    szoveg = Replace(szoveg, "≈±", "u")
 
     szoveg = Replace(szoveg, " ", "")
     szoveg = Replace(szoveg, "-", "")

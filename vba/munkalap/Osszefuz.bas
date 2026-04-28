@@ -7,15 +7,15 @@ Attribute NyelvekBeirasaOsszefuzve.VB_ProcData.VB_Invoke_Func = "P\n14"
     Dim ertek As Variant
     Dim nyelv1Col As Long, ny_2Col As Long, nyelvOsszesCol As Long
     
-    ' ?? Betöltjük a "Rangsor" nevû táblát
-    Set tbl = ThisWorkbook.Sheets("lista").ListObjects("lista") ' ‹ módosítsd, ha más a lap neve
+    ' ?? BetÃ¶ltjÃ¼k a "Rangsor" nevÅ± tÃ¡blÃ¡t
+    Set tbl = ThisWorkbook.Sheets("lista").ListObjects("lista") ' â€¹ mÃ³dosÃ­tsd, ha mÃ¡s a lap neve
 
-    ' ?? Oszlopszámok mentése (jobban átlátható és gyorsabb)
+    ' ?? OszlopszÃ¡mok mentÃ©se (jobban Ã¡tlÃ¡thatÃ³ Ã©s gyorsabb)
     nyelv1Col = tbl.ListColumns("ny_1").Index
     nyelv2Col = tbl.ListColumns("ny_2").Index
-    nyelvOsszesCol = tbl.ListColumns("ny_osszefuz").Index ' ‹ ez legyen az összefûzött nyelvek oszlopa
+    nyelvOsszesCol = tbl.ListColumns("ny_osszefuz").Index ' â€¹ ez legyen az Ã¶sszefÅ±zÃ¶tt nyelvek oszlopa
     
-    ' ?? Végigmegyünk minden soron
+    ' ?? VÃ©gigmegyÃ¼nk minden soron
     For Each aktSor In tbl.ListRows
         ertek = aktSor.Range(1, tbl.ListColumns("tagozat").Index).value
         
@@ -27,20 +27,20 @@ Attribute NyelvekBeirasaOsszefuzve.VB_ProcData.VB_Invoke_Func = "P\n14"
                 aktSor.Range(1, nyelv1Col).value = "angol"
                 aktSor.Range(1, nyelv2Col).value = "olasz"
             Case 3000
-                aktSor.Range(1, nyelv1Col).value = "német"
+                aktSor.Range(1, nyelv1Col).value = "nÃ©met"
                 aktSor.Range(1, nyelv2Col).value = "angol"
             Case 4000
                 aktSor.Range(1, nyelv1Col).value = "francia"
                 aktSor.Range(1, nyelv2Col).value = "angol"
             Case 5000
                 aktSor.Range(1, nyelv1Col).value = "angol"
-                aktSor.Range(1, nyelv2Col).value = "német"
+                aktSor.Range(1, nyelv2Col).value = "nÃ©met"
             Case Else
                 aktSor.Range(1, nyelv1Col).value = ""
                 aktSor.Range(1, nyelv2Col).value = ""
         End Select
         
-        ' ?? Összefûzés
+        ' ?? Ã–sszefÅ±zÃ©s
         aktSor.Range(1, nyelvOsszesCol).value = Trim( _
             aktSor.Range(1, nyelv1Col).value & " - " & aktSor.Range(1, nyelv2Col).value)
     Next aktSor

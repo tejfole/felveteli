@@ -14,7 +14,7 @@ Sub MasolasDiakadatbolRangsorba(Optional control As IRibbonControl)
 
     Set wb = ThisWorkbook
 
-    ' T·bla beazonosÌt·s
+    ' T√°bla beazonos√≠t√°s
     For Each ws In wb.Worksheets
         For Each tbl In ws.ListObjects
             If tbl.Name = "diakadat" Then Set diakTbl = tbl
@@ -23,11 +23,11 @@ Sub MasolasDiakadatbolRangsorba(Optional control As IRibbonControl)
     Next ws
 
     If diakTbl Is Nothing Or rangsorTbl Is Nothing Then
-        MsgBox "Nem tal·lhatÛ valamelyik t·bla (diakadat vagy rangsor)!", vbCritical
+        MsgBox "Nem tal√°lhat√≥ valamelyik t√°bla (diakadat vagy rangsor)!", vbCritical
         Exit Sub
     End If
 
-    ' ¡tm·solhatÛ oszlopok (forr·s õ cÈl)
+    ' √Åtm√°solhat√≥ oszlopok (forr√°s ‚Ä∫ c√©l)
     Set atnevezes = CreateObject("Scripting.Dictionary")
     atnevezes.add "f_nev", "nev"
     atnevezes.add "oktazon", "oktazon"
@@ -38,7 +38,7 @@ Sub MasolasDiakadatbolRangsorba(Optional control As IRibbonControl)
     atnevezes.add "j_3000", "j_3000"
     atnevezes.add "j_4000", "j_4000"
 
-    ' Oktazon azonosÌtÛk elıkÈszÌtÈse rangsor t·bl·bÛl
+    ' Oktazon azonos√≠t√≥k el≈ëk√©sz√≠t√©se rangsor t√°bl√°b√≥l
     Set oktazonDict = CreateObject("Scripting.Dictionary")
     rangsorData = rangsorTbl.DataBodyRange.value
     rangsorOktazonIndex = rangsorTbl.ListColumns("oktazon").Index
@@ -47,11 +47,11 @@ Sub MasolasDiakadatbolRangsorba(Optional control As IRibbonControl)
         Dim oktazonKey As String
         oktazonKey = Trim(CStr(rangsorData(i, rangsorOktazonIndex)))
         If oktazonKey <> "" Then
-            oktazonDict(oktazonKey) = i ' sorindex mentÈse
+            oktazonDict(oktazonKey) = i ' sorindex ment√©se
         End If
     Next i
 
-    ' M·sol·s soronkÈnt
+    ' M√°sol√°s soronk√©nt
     forrasAdatok = diakTbl.DataBodyRange.value
     diakOktazonIndex = diakTbl.ListColumns("oktazon").Index
 
@@ -63,23 +63,23 @@ Sub MasolasDiakadatbolRangsorba(Optional control As IRibbonControl)
         Dim celSor As Range
 
         If diakOktazon = "" Then
-            ' Hi·nyzÛ oktazon: ˙j sor, s·rga jelˆlÈs + log
+            ' Hi√°nyz√≥ oktazon: √∫j sor, s√°rga jel√∂l√©s + log
             Set celSor = rangsorTbl.ListRows.add.Range
             jelolSarga = True
-            logSorok = logSorok & "Hi·nyzÛ oktazon a diakadat sor " & i & vbCrLf
+            logSorok = logSorok & "Hi√°nyz√≥ oktazon a diakadat sor " & i & vbCrLf
         ElseIf oktazonDict.Exists(diakOktazon) Then
-            ' lÈtezı sor õ frissÌtÈs
+            ' l√©tez≈ë sor ‚Ä∫ friss√≠t√©s
             Set celSor = rangsorTbl.DataBodyRange.rows(oktazonDict(diakOktazon))
         Else
-            ' ˙j sor, oktazon alapj·n
+            ' √∫j sor, oktazon alapj√°n
             Set celSor = rangsorTbl.ListRows.add.Range
             oktazonDict.add diakOktazon, celSor.Row - rangsorTbl.HeaderRowRange.Row
         End If
 
-        ' Elıszˆr vissza·llÌtjuk az alap szÌnt
+        ' El≈ësz√∂r vissza√°ll√≠tjuk az alap sz√≠nt
         celSor.Interior.ColorIndex = xlNone
 
-        ' Csak a megengedett oszlopokat Ìrjuk
+        ' Csak a megengedett oszlopokat √≠rjuk
         Dim kulcs As Variant
         For Each kulcs In atnevezes.keys
             Dim forrasCol As Long, celCol As Long
@@ -92,22 +92,22 @@ Sub MasolasDiakadatbolRangsorba(Optional control As IRibbonControl)
             End If
         Next kulcs
 
-        ' S·rga h·ttÈr, ha sz¸ksÈges
+        ' S√°rga h√°tt√©r, ha sz√ºks√©ges
         If jelolSarga Then
             celSor.Interior.color = RGB(255, 255, 0)
         End If
     Next i
 
-    ' Log f·jl mentÈse, ha volt hiba
+    ' Log f√°jl ment√©se, ha volt hiba
     If logSorok <> "" Then
         logUt = wb.path & "\rangsor_masolas_log.txt"
         Set logFSO = CreateObject("Scripting.FileSystemObject")
         Set logFile = logFSO.CreateTextFile(logUt, True, True)
-        logFile.Write "FigyelmeztetÈsek - " & Format(Now, "yyyy-mm-dd HH:MM:SS") & vbCrLf & logSorok
+        logFile.Write "Figyelmeztet√©sek - " & Format(Now, "yyyy-mm-dd HH:MM:SS") & vbCrLf & logSorok
         logFile.Close
-        MsgBox "M·sol·s kÈsz. FigyelmeztetÈsek naplÛzva: " & vbCrLf & logUt, vbExclamation
+        MsgBox "M√°sol√°s k√©sz. Figyelmeztet√©sek napl√≥zva: " & vbCrLf & logUt, vbExclamation
     Else
-        MsgBox "M·sol·s kÈsz. Nem volt hiba!", vbInformation
+        MsgBox "M√°sol√°s k√©sz. Nem volt hiba!", vbInformation
     End If
 End Sub
 

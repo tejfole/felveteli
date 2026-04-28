@@ -23,25 +23,25 @@ Sub SzinezzTopEsKevesPontokatRangsorban(Optional control As IRibbonControl)
     kevesPontSorok = ""
     topPontSorok = ""
 
-    ' KÈpernyıfrissÌtÈs kikapcsol·sa
+    ' K√©perny≈ëfriss√≠t√©s kikapcsol√°sa
     Application.ScreenUpdating = False
     Application.Calculation = xlCalculationManual
 
-    ' --- Munkalap elÈrÈs ---
+    ' --- Munkalap el√©r√©s ---
     On Error Resume Next
     Set wsAdatok = ThisWorkbook.Sheets("adatok")
     On Error GoTo ErrorHandler
     
     If wsAdatok Is Nothing Then
-        MsgBox "?? A 'adatok' nev˚ munkalap nem tal·lhatÛ!", vbCritical
+        MsgBox "?? A 'adatok' nev≈± munkalap nem tal√°lhat√≥!", vbCritical
         GoTo Cleanup
     End If
 
-    ' --- Ponthat·r kezelÈse ---
+    ' --- Ponthat√°r kezel√©se ---
     If IsEmpty(wsAdatok.Range("A14").value) Or Not IsNumeric(wsAdatok.Range("A14").value) Then
-        ponthatarInput = InputBox("Add meg a ponthat·rt, amely felett zˆlddel jelˆlje a tanulÛkat:", "Top lista ponthat·r", "160")
+        ponthatarInput = InputBox("Add meg a ponthat√°rt, amely felett z√∂lddel jel√∂lje a tanul√≥kat:", "Top lista ponthat√°r", "160")
         If ponthatarInput = "" Or Not IsNumeric(ponthatarInput) Then
-            MsgBox "?? …rvÈnytelen ponthat·r!", vbExclamation
+            MsgBox "?? √ârv√©nytelen ponthat√°r!", vbExclamation
             GoTo Cleanup
         End If
         ponthatar = val(ponthatarInput)
@@ -50,15 +50,15 @@ Sub SzinezzTopEsKevesPontokatRangsorban(Optional control As IRibbonControl)
         ponthatar = val(wsAdatok.Range("A14").value)
     End If
 
-    ' --- diakadat t·bla keresÈse ---
+    ' --- diakadat t√°bla keres√©se ---
     Set tbl = FindTable("diakadat")
     If tbl Is Nothing Then
-        MsgBox "?? A 'diakadat' nev˚ t·bla nem tal·lhatÛ!", vbCritical
+        MsgBox "?? A 'diakadat' nev≈± t√°bla nem tal√°lhat√≥!", vbCritical
         GoTo Cleanup
     End If
     
     If tbl.ListRows.Count = 0 Then
-        MsgBox "?? A t·bl·zat ¸res!", vbExclamation
+        MsgBox "?? A t√°bl√°zat √ºres!", vbExclamation
         GoTo Cleanup
     End If
 
@@ -71,16 +71,16 @@ Sub SzinezzTopEsKevesPontokatRangsorban(Optional control As IRibbonControl)
     colSzobeli = tbl.ListColumns("szobeli").Index
     
     If Err.Number <> 0 Then
-        MsgBox "? Hi·nyzÛ oszlop(ok) a t·bl·zatban!" & vbCrLf & Err.Description, vbCritical
+        MsgBox "? Hi√°nyz√≥ oszlop(ok) a t√°bl√°zatban!" & vbCrLf & Err.Description, vbCritical
         GoTo Cleanup
     End If
     On Error GoTo ErrorHandler
 
-    ' --- Beolvas·s tˆmbbe ---
+    ' --- Beolvas√°s t√∂mbbe ---
     adatTomb = tbl.DataBodyRange.value
     n = UBound(adatTomb, 1)
 
-    ' --- EllenırzÈs: van-e szÛbeli pont ---
+    ' --- Ellen≈ërz√©s: van-e sz√≥beli pont ---
     For i = 1 To n
         If IsNumeric(adatTomb(i, colSzobeli)) And val(adatTomb(i, colSzobeli)) > 0 Then
             vanSzobeli = True
@@ -88,36 +88,36 @@ Sub SzinezzTopEsKevesPontokatRangsorban(Optional control As IRibbonControl)
         End If
     Next i
 
-    ' --- ELS’ MENET: ÷sszes form·z·s tˆrlÈse (GYORS!) ---
+    ' --- ELS≈ê MENET: √ñsszes form√°z√°s t√∂rl√©se (GYORS!) ---
     Set rangsorRange = tbl.ListColumns("rangsor").DataBodyRange
     rangsorRange.Interior.ColorIndex = xlNone
 
-    ' --- M¡SODIK MENET: Kategoriz·l·s (mely sorok legyenek szÌnezve) ---
+    ' --- M√ÅSODIK MENET: Kategoriz√°l√°s (mely sorok legyenek sz√≠nezve) ---
     For i = 1 To n
         irasbeliPont = SafeVal(adatTomb(i, colMagyar)) + SafeVal(adatTomb(i, colMatek))
         mindPont = SafeVal(adatTomb(i, colPont))
 
         If irasbeliPont < KEVES_IRASBELI_KUSZOB Then
-            ' KevÈs pont: piros
+            ' Kev√©s pont: piros
             If kevesPontSorok <> "" Then kevesPontSorok = kevesPontSorok & ","
             kevesPontSorok = kevesPontSorok & i
             dbKevesPont = dbKevesPont + 1
             
         ElseIf vanSzobeli And mindPont >= ponthatar Then
-            ' Top pont: zˆld
+            ' Top pont: z√∂ld
             If topPontSorok <> "" Then topPontSorok = topPontSorok & ","
             topPontSorok = topPontSorok & i
             dbTopPont = dbTopPont + 1
         End If
     Next i
 
-    ' --- HARMADIK MENET: Tˆmb-alap˙ szÌnezÈs (EGY L…P…SBEN!) ---
-    ' KevÈs pont (piros)
+    ' --- HARMADIK MENET: T√∂mb-alap√∫ sz√≠nez√©s (EGY L√âP√âSBEN!) ---
+    ' Kev√©s pont (piros)
     If kevesPontSorok <> "" Then
         ColorRowsByList rangsorRange, kevesPontSorok, RGB(255, 200, 200)
     End If
     
-    ' Top pont (zˆld)
+    ' Top pont (z√∂ld)
     If topPontSorok <> "" Then
         ColorRowsByList rangsorRange, topPontSorok, RGB(200, 255, 200)
     End If
@@ -130,12 +130,12 @@ Cleanup:
         Dim elapsed As Double
         elapsed = Round(Timer - startTime, 3)
         
-        MsgBox "? SzÌnezÈs kÈsz!" & vbCrLf & vbCrLf & _
-               "?? ÷sszesÌtÈs:" & vbCrLf & _
-               "ï Õr·sbeli < 55 pont: " & dbKevesPont & " fı" & vbCrLf & _
-               IIf(vanSzobeli, "ï ElÈrte a ponthat·rt (" & ponthatar & "): " & dbTopPont & " fı", _
-               "ï SzÛbeli nem szerepelt, top lista kihagyva.") & vbCrLf & vbCrLf & _
-               "?? Fut·si idı: " & elapsed & " mp", vbInformation
+        MsgBox "? Sz√≠nez√©s k√©sz!" & vbCrLf & vbCrLf & _
+               "?? √ñsszes√≠t√©s:" & vbCrLf & _
+               "‚Ä¢ √çr√°sbeli < 55 pont: " & dbKevesPont & " f≈ë" & vbCrLf & _
+               IIf(vanSzobeli, "‚Ä¢ El√©rte a ponthat√°rt (" & ponthatar & "): " & dbTopPont & " f≈ë", _
+               "‚Ä¢ Sz√≥beli nem szerepelt, top lista kihagyva.") & vbCrLf & vbCrLf & _
+               "?? Fut√°si id≈ë: " & elapsed & " mp", vbInformation
     End If
     
     Exit Sub
@@ -143,11 +143,11 @@ Cleanup:
 ErrorHandler:
     Application.ScreenUpdating = True
     Application.Calculation = xlCalculationAutomatic
-    MsgBox "? Hiba tˆrtÈnt: " & Err.Description & vbCrLf & _
-           "HibakÛd: " & Err.Number, vbCritical
+    MsgBox "? Hiba t√∂rt√©nt: " & Err.Description & vbCrLf & _
+           "Hibak√≥d: " & Err.Number, vbCritical
 End Sub
 
-' ========== SEG…DF‹GGV…NYEK ==========
+' ========== SEG√âDF√úGGV√âNYEK ==========
 
 Private Function FindTable(tableName As String) As ListObject
     Dim ws As Worksheet
@@ -178,8 +178,8 @@ Private Function SafeVal(ByVal value As Variant) As Double
 End Function
 
 Private Sub ColorRowsByList(ByVal targetRange As Range, ByVal rowList As String, ByVal color As Long)
-    ' Tˆmb-alap˙ szÌnezÈs: vesszıvel elv·lasztott sorlista alapj·n
-    ' Pl: "1,3,5,7" õ 1., 3., 5., 7. sor szÌnezÈse
+    ' T√∂mb-alap√∫ sz√≠nez√©s: vessz≈ëvel elv√°lasztott sorlista alapj√°n
+    ' Pl: "1,3,5,7" ‚Ä∫ 1., 3., 5., 7. sor sz√≠nez√©se
     
     On Error Resume Next
     Dim rows() As String
@@ -187,10 +187,10 @@ Private Sub ColorRowsByList(ByVal targetRange As Range, ByVal rowList As String,
     Dim rowNum As Long
     Dim cellsToColor As Range
     
-    ' Sorlista szÈtv·laszt·sa
+    ' Sorlista sz√©tv√°laszt√°sa
     rows = Split(rowList, ",")
     
-    ' Union haszn·lata: ˆsszegy˚jtj¸k a cell·kat, majd EGY L…P…SBEN szÌnezz¸k
+    ' Union haszn√°lata: √∂sszegy≈±jtj√ºk a cell√°kat, majd EGY L√âP√âSBEN sz√≠nezz√ºk
     For i = LBound(rows) To UBound(rows)
         rowNum = CLng(Trim(rows(i)))
         
@@ -200,8 +200,8 @@ Private Sub ColorRowsByList(ByVal targetRange As Range, ByVal rowList As String,
             Set cellsToColor = Union(cellsToColor, targetRange.Cells(rowNum, 1))
         End If
         
-        ' Excel Union limitet: max 500-1000 tartom·ny egyszerre
-        ' Ha sok sor van, szÌnezz¸k rÈszletekben
+        ' Excel Union limitet: max 500-1000 tartom√°ny egyszerre
+        ' Ha sok sor van, sz√≠nezz√ºk r√©szletekben
         If (i - LBound(rows) + 1) Mod 500 = 0 Or i = UBound(rows) Then
             If Not cellsToColor Is Nothing Then
                 cellsToColor.Interior.color = color
@@ -210,7 +210,7 @@ Private Sub ColorRowsByList(ByVal targetRange As Range, ByVal rowList As String,
         End If
     Next i
     
-    ' UtolsÛ csoport szÌnezÈse
+    ' Utols√≥ csoport sz√≠nez√©se
     If Not cellsToColor Is Nothing Then
         cellsToColor.Interior.color = color
     End If

@@ -1,9 +1,9 @@
 Attribute VB_Name = "ExportPontozokSingleDoc"
 Option Explicit
 
-' Teljes modul ó frissÌtve: az ˆsszesÌtı dokumentumok fejlÈcÈbe is beÌrjuk
-' a bizotts·g nevÈt Ès az idıpontot (ahogy a pontozÛ dokumentumn·l).
-' A sablonok Ès mapp·k a beallitasok lapon / Beallitasok men¸ben ·llÌthatÛk.
+' Teljes modul ‚Äî friss√≠tve: az √∂sszes√≠t≈ë dokumentumok fejl√©c√©be is be√≠rjuk
+' a bizotts√°g nev√©t √©s az id≈ëpontot (ahogy a pontoz√≥ dokumentumn√°l).
+' A sablonok √©s mapp√°k a beallitasok lapon / Beallitasok men√ºben √°ll√≠that√≥k.
 
 ' Word late-binding konstansok
 Private Const wdPageBreak As Long = 7
@@ -13,51 +13,51 @@ Private Const wdFormatXMLDocument As Long = 16
 Private Const wdHeaderFooterPrimary As Long = 1
 Private Const wdAlignParagraphCenter As Long = 1
 
-' Fı elj·r·s - integr·lt m˚kˆdÈs
+' F≈ë elj√°r√°s - integr√°lt m≈±k√∂d√©s
 Sub ExportPontozok_Full_WithSummary()
     On Error GoTo ErrMain
     Const N_PER_PAGE As Long = 4
     Const placeholder As String = "{{DATA_START}}"
-    Const EXPORTED_COL_NAME As String = "exported" ' oszlopnÈv, ami jelˆli a feldolgozott sorokat
+    Const EXPORTED_COL_NAME As String = "exported" ' oszlopn√©v, ami jel√∂li a feldolgozott sorokat
     Dim fso As Object: Set fso = CreateObject("Scripting.FileSystemObject")
     Dim mainTemplatePath As String: mainTemplatePath = GetConfiguredPontozolapTemplatePath()
     Dim summaryTemplatePath As String: summaryTemplatePath = GetConfiguredOsszesitoTemplatePath()
     Dim outputRoot As String: outputRoot = GetConfiguredPontozoOutputRoot()
     
-    ' Ellenırizz¸k a mapp·t
+    ' Ellen≈ërizz√ºk a mapp√°t
     If Not fso.FolderExists(outputRoot) Then
         On Error Resume Next
         fso.CreateFolder outputRoot
         On Error GoTo 0
     End If
     
-    ' KÈrdÈsek a futtatÛnak
+    ' K√©rd√©sek a futtat√≥nak
     Dim markExported As Boolean, mergePerCommittee As Boolean, createSummaryDocs As Boolean
-    If MsgBox("Jelˆljem az export·lt sorokat az Excel t·bl·ban (exported)?", vbYesNo + vbQuestion, "JelˆlÈs") = vbYes Then
+    If MsgBox("Jel√∂ljem az export√°lt sorokat az Excel t√°bl√°ban (exported)?", vbYesNo + vbQuestion, "Jel√∂l√©s") = vbYes Then
         markExported = True
     Else
         markExported = False
     End If
-    If MsgBox("÷sszef˚zzem a bizotts·gi .docx f·jlokat egy per-bizotts·g f·jlba?", vbYesNo + vbQuestion, "Merge") = vbYes Then
+    If MsgBox("√ñsszef≈±zzem a bizotts√°gi .docx f√°jlokat egy per-bizotts√°g f√°jlba?", vbYesNo + vbQuestion, "Merge") = vbYes Then
         mergePerCommittee = True
     Else
         mergePerCommittee = False
     End If
-    If MsgBox("KÈszÌtsek per-bizotts·g Word ˆsszesÌtı dokumentumot a sablon alapj·n (" & _
-              fso.GetFileName(summaryTemplatePath) & ")?", vbYesNo + vbQuestion, "÷sszesÌtı") = vbYes Then
+    If MsgBox("K√©sz√≠tsek per-bizotts√°g Word √∂sszes√≠t≈ë dokumentumot a sablon alapj√°n (" & _
+              fso.GetFileName(summaryTemplatePath) & ")?", vbYesNo + vbQuestion, "√ñsszes√≠t≈ë") = vbYes Then
         createSummaryDocs = True
     Else
         createSummaryDocs = False
     End If
     
-    ' Inicializ·ljuk a naplÛt
+    ' Inicializ√°ljuk a napl√≥t
     InitExportLog
     
-    ' Biztons·gos sablonm·solat a Temp-be (fı sablon)
+    ' Biztons√°gos sablonm√°solat a Temp-be (f≈ë sablon)
     Dim localMainTemplate As String: localMainTemplate = Environ("Temp") & "\temp_pontozolap_template.docx"
     Dim mainTemplateUsed As String: mainTemplateUsed = ""
     If Not fso.FileExists(mainTemplatePath) Then
-        MsgBox "A fı sablon nem tal·lhatÛ: " & mainTemplatePath, vbCritical
+        MsgBox "A f≈ë sablon nem tal√°lhat√≥: " & mainTemplatePath, vbCritical
         Exit Sub
     End If
     On Error Resume Next
@@ -71,14 +71,14 @@ Sub ExportPontozok_Full_WithSummary()
     End If
     On Error GoTo 0
     
-    ' Summary sablon ellenırzÈse (ha kÈrt¸k)
+    ' Summary sablon ellen≈ërz√©se (ha k√©rt√ºk)
     Dim summaryTemplateUsed As String: summaryTemplateUsed = ""
     If createSummaryDocs Then
         If Not fso.FileExists(summaryTemplatePath) Then
-            MsgBox "Az ˆsszesÌtı sablon nem tal·lhatÛ: " & summaryTemplatePath & vbCrLf & "A summary dokumentumok nem kÈsz¸lnek.", vbExclamation
+            MsgBox "Az √∂sszes√≠t≈ë sablon nem tal√°lhat√≥: " & summaryTemplatePath & vbCrLf & "A summary dokumentumok nem k√©sz√ºlnek.", vbExclamation
             createSummaryDocs = False
         Else
-            ' m·soljuk tempbe
+            ' m√°soljuk tempbe
             Dim localSummaryTemplate As String: localSummaryTemplate = Environ("Temp") & "\temp_osszesito_template.docx"
             On Error Resume Next
             If fso.FileExists(localSummaryTemplate) Then fso.DeleteFile localSummaryTemplate, True
@@ -93,13 +93,13 @@ Sub ExportPontozok_Full_WithSummary()
         End If
     End If
     
-    ' Beolvassuk az Excel t·bla "diakadat"
+    ' Beolvassuk az Excel t√°bla "diakadat"
     Dim ws As Worksheet, lo As ListObject
     On Error Resume Next
     Set ws = ThisWorkbook.Worksheets("diakadat")
     If ws Is Nothing Then MsgBox "Nincs 'diakadat' munkalap.", vbExclamation: Exit Sub
     Set lo = ws.ListObjects("diakadat")
-    If lo Is Nothing Then MsgBox "Nincs 'diakadat' t·bla (ListObject).", vbExclamation: Exit Sub
+    If lo Is Nothing Then MsgBox "Nincs 'diakadat' t√°bla (ListObject).", vbExclamation: Exit Sub
     On Error GoTo 0
     
     ' Oszlopok indexei
@@ -110,18 +110,18 @@ Sub ExportPontozok_Full_WithSummary()
         If hdr <> "" Then dictCols(hdr) = c
     Next c
     If Not dictCols.Exists("f_nev") Or Not dictCols.Exists("bizottsag") Or Not dictCols.Exists("datum_nap") Then
-        MsgBox "A 'diakadat' t·bla nem tartalmazza a sz¸ksÈges oszlopokat: f_nev, bizottsag, datum_nap", vbExclamation
+        MsgBox "A 'diakadat' t√°bla nem tartalmazza a sz√ºks√©ges oszlopokat: f_nev, bizottsag, datum_nap", vbExclamation
         Exit Sub
     End If
     
-    ' Ha jelˆlÈs kÈrt, biztosÌtjuk az exported oszlopot
+    ' Ha jel√∂l√©s k√©rt, biztos√≠tjuk az exported oszlopot
     If markExported Then
         If Not dictCols.Exists(EXPORTED_COL_NAME) Then
             On Error Resume Next
             lo.ListColumns.add
             lo.HeaderRowRange.Cells(1, lo.ListColumns.Count).value = EXPORTED_COL_NAME
             On Error GoTo 0
-            ' frissÌtj¸k a dictCols
+            ' friss√≠tj√ºk a dictCols
             dictCols.RemoveAll
             For c = 1 To lo.HeaderRowRange.Columns.Count
                 hdr = Trim(LCase(CStr(lo.HeaderRowRange.Cells(1, c).value & "")))
@@ -130,12 +130,12 @@ Sub ExportPontozok_Full_WithSummary()
         End If
     End If
     
-    ' CsoportosÌt·s: kulcs = bizottsag||datumStr ; t·roljuk a ListRow objektumokat
+    ' Csoportos√≠t√°s: kulcs = bizottsag||datumStr ; t√°roljuk a ListRow objektumokat
     Dim groups As Object: Set groups = CreateObject("Scripting.Dictionary")
     Dim lr As ListRow
     Dim nm As String, biz As String, dt As Variant, key As String, dtStr As String
     For Each lr In lo.ListRows
-        ' ha markExported Ès m·r jelˆlt, kihagyjuk
+        ' ha markExported √©s m√°r jel√∂lt, kihagyjuk
         If markExported Then
             Dim valExp As String
             valExp = Trim(CStr(lr.Range.Cells(1, dictCols(EXPORTED_COL_NAME)).value & ""))
@@ -157,16 +157,16 @@ Sub ExportPontozok_Full_WithSummary()
             Dim collRows As Collection: Set collRows = New Collection
             groups.add key, collRows
         End If
-        groups(key).add lr  ' t·roljuk a ListRow-t
+        groups(key).add lr  ' t√°roljuk a ListRow-t
 NextRowMain:
     Next lr
     
     If groups.Count = 0 Then
-        MsgBox "Nincs feldolgozhatÛ (˙j) adat.", vbInformation
+        MsgBox "Nincs feldolgozhat√≥ (√∫j) adat.", vbInformation
         Exit Sub
     End If
     
-    ' IndÌtjuk a Word-ˆt (late binding)
+    ' Ind√≠tjuk a Word-√∂t (late binding)
     Dim wdApp As Object
     On Error Resume Next
     Set wdApp = GetObject(, "Word.Application")
@@ -179,18 +179,18 @@ NextRowMain:
     On Error Resume Next
     Set templateDoc = wdApp.Documents.Open(mainTemplateUsed, ReadOnly:=True)
     If Err.Number <> 0 Or templateDoc Is Nothing Then
-        MsgBox "Nem siker¸lt megnyitni a fı sablont: " & Err.Number & " - " & Err.Description, vbCritical
+        MsgBox "Nem siker√ºlt megnyitni a f≈ë sablont: " & Err.Number & " - " & Err.Description, vbCritical
         GoTo CleanupMain
     End If
     On Error GoTo 0
     Dim templateContent As Object: Set templateContent = templateDoc.Content
     
-    ' Feldolgoz·s: minden csoportbÛl kÈszÌt¸nk egy docx f·jlt
+    ' Feldolgoz√°s: minden csoportb√≥l k√©sz√≠t√ºnk egy docx f√°jlt
     Dim g As Variant, rowsColl As Collection, names As Collection
     Dim totalFiles As Long: totalFiles = 0
     For Each g In groups.keys
         Set rowsColl = groups(g)
-        ' kÈszÌts¸k el a nÈvlist·t
+        ' k√©sz√≠ts√ºk el a n√©vlist√°t
         Set names = New Collection
         For Each lr In rowsColl
             names.add Trim(CStr(lr.Range.Cells(1, dictCols("f_nev")).value & ""))
@@ -216,12 +216,12 @@ NextRowMain:
         Dim message As String: message = ""
         
         On Error GoTo GroupErr
-        ' ⁄j doc lÈtrehoz·sa sablon alapj·n
+        ' √öj doc l√©trehoz√°sa sablon alapj√°n
         Dim newDoc As Object
         Set newDoc = wdApp.Documents.add(Template:=mainTemplateUsed, NewTemplate:=False)
-        If newDoc Is Nothing Then Err.Raise vbObjectError + 1000, , "Nem siker¸lt dokumentumot lÈtrehozni."
+        If newDoc Is Nothing Then Err.Raise vbObjectError + 1000, , "Nem siker√ºlt dokumentumot l√©trehozni."
         
-        ' FejlÈc minden szekciÛban (pontozÛ dokumentum)
+        ' Fejl√©c minden szekci√≥ban (pontoz√≥ dokumentum)
         Dim sec As Object
         For Each sec In newDoc.Sections
             With sec.headers(wdHeaderFooterPrimary).Range
@@ -233,14 +233,14 @@ NextRowMain:
             End With
         Next sec
         
-        ' Feltˆltj¸k oldalankÈnt a neveket
+        ' Felt√∂ltj√ºk oldalank√©nt a neveket
         Dim i As Long, batchIndex As Long
         batchIndex = 0
         For i = 1 To names.Count Step N_PER_PAGE
             batchIndex = batchIndex + 1
             pagesCreated = pagesCreated + 1
             If batchIndex = 1 Then
-                ' elsı oldal: sablon m·r bent van
+                ' els≈ë oldal: sablon m√°r bent van
                 If newDoc.Tables.Count >= 1 Then
                     Dim tbl0 As Object: Set tbl0 = newDoc.Tables(1)
                     Dim phRow As Long, phCol As Long
@@ -256,7 +256,7 @@ NextRowMain:
                     rng0.collapse Direction:=0
                     InsertSimpleList rng0, names, i, N_PER_PAGE
                 End If
-                ' glob·lis helyırzık cserÈje (ha lÈteznek)
+                ' glob√°lis hely≈ërz≈ëk cser√©je (ha l√©teznek)
                 If RangeContainsText(newDoc.Range(0, newDoc.Content.End), "{{COMMITTEE}}") Then
                     ReplaceInDocumentRange newDoc.Range(0, newDoc.Content.End), "{{COMMITTEE}}", bizLabel
                 End If
@@ -264,7 +264,7 @@ NextRowMain:
                     ReplaceInDocumentRange newDoc.Range(0, newDoc.Content.End), "{{DATE}}", dateLabel
                 End If
             Else
-                ' ˙j oldal: beillesztj¸k a sablon tartalm·t
+                ' √∫j oldal: beillesztj√ºk a sablon tartalm√°t
                 Dim pasteStart As Long: pasteStart = newDoc.Content.End
                 newDoc.Range(newDoc.Content.End).InsertBreak Type:=wdPageBreak
                 templateContent.Copy
@@ -293,7 +293,7 @@ NextRowMain:
             End If
         Next i
         
-        ' MentÈs (pontozÛ dokumentum)
+        ' Ment√©s (pontoz√≥ dokumentum)
         Dim outName As String
         outName = SafeFileName(bizLabel & "_" & dateLabel & ".docx")
         outPath = fso.BuildPath(committeeFolder, outName)
@@ -301,14 +301,14 @@ NextRowMain:
         newDoc.Close SaveChanges:=False
         totalFiles = totalFiles + 1
         
-        ' Azonnali summary dokumentum kÈszÌtÈse ugyanabbÛl a nÈvlist·bÛl (ha kÈrt¸k)
+        ' Azonnali summary dokumentum k√©sz√≠t√©se ugyanabb√≥l a n√©vlist√°b√≥l (ha k√©rt√ºk)
         If createSummaryDocs And summaryTemplateUsed <> "" Then
             On Error Resume Next
             Dim summaryDoc As Object
             Set summaryDoc = wdApp.Documents.add(Template:=summaryTemplateUsed, NewTemplate:=False)
             On Error GoTo 0
             If Not summaryDoc Is Nothing Then
-                ' --- FEJL…C be·llÌt·sa a summary dokumentumn·l is ---
+                ' --- FEJL√âC be√°ll√≠t√°sa a summary dokumentumn√°l is ---
                 Dim ssec As Object
                 For Each ssec In summaryDoc.Sections
                     With ssec.headers(wdHeaderFooterPrimary).Range
@@ -356,7 +356,7 @@ NextRowMain:
                         Else
                             Dim rngS As Object: Set rngS = summaryDoc.Content
                             rngS.collapse Direction:=0
-                            rngS.InsertAfter vbCrLf & "÷sszesÌtett nevek:" & vbCrLf
+                            rngS.InsertAfter vbCrLf & "√ñsszes√≠tett nevek:" & vbCrLf
                             Dim ii As Long
                             For ii = 1 To names.Count
                                 rngS.InsertAfter CStr(ii) & ". " & names(ii) & vbCrLf
@@ -365,7 +365,7 @@ NextRowMain:
                     End If
                 End If
                 
-                ' MentÈs: Osszesito_<bizLabel>_<dateLabel>.docx a committeeFolder-be
+                ' Ment√©s: Osszesito_<bizLabel>_<dateLabel>.docx a committeeFolder-be
                 Dim sumName As String: sumName = "Osszesito_" & SafeFileName(bizLabel & "_" & dateLabel) & ".docx"
                 Dim sumPath As String: sumPath = fso.BuildPath(committeeFolder, sumName)
                 summaryDoc.SaveAs2 fileName:=sumPath, FileFormat:=wdFormatXMLDocument
@@ -374,7 +374,7 @@ NextRowMain:
             Set summaryDoc = Nothing
         End If
         
-        ' JelˆlÈs Excelben (ha kÈrt¸k) - timestampot Ìrunk az exported oszlopba
+        ' Jel√∂l√©s Excelben (ha k√©rt√ºk) - timestampot √≠runk az exported oszlopba
         If markExported Then
             Dim rowItem As ListRow
             For Each rowItem In rowsColl
@@ -384,9 +384,9 @@ NextRowMain:
             Next rowItem
         End If
         
-        ' Log Ès Excel ˆsszesÌtı frissÌtÈse
+        ' Log √©s Excel √∂sszes√≠t≈ë friss√≠t√©se
         LogEntry Now, bizLabel, dateLabel, pagesCreated, outPath, status, message
-        ' FrissÌtj¸k a summary sheet (AllNames + Grader1..3)
+        ' Friss√≠tj√ºk a summary sheet (AllNames + Grader1..3)
         UpdateSummarySheet bizLabel, dateLabel, names, pagesCreated, outPath, status, 3
         
         Set newDoc = Nothing
@@ -406,23 +406,23 @@ GroupErr:
 NextGroupMain:
     Next g
     
-    ' Bez·rjuk a sablont
+    ' Bez√°rjuk a sablont
     On Error Resume Next
     If Not templateDoc Is Nothing Then templateDoc.Close SaveChanges:=False
     On Error GoTo 0
     
-    ' Merge per committee (ha kÈrt¸k)
+    ' Merge per committee (ha k√©rt√ºk)
     If mergePerCommittee Then
         MergeAllCommitteesInFolder outputRoot, wdApp, fso
     End If
     
     wdApp.Visible = True
     wdApp.Activate
-    MsgBox "KÈsz. LÈtrehozott dokumentumok sz·ma: " & totalFiles & vbCrLf & "GyˆkÈr mappa: " & outputRoot, vbInformation
+    MsgBox "K√©sz. L√©trehozott dokumentumok sz√°ma: " & totalFiles & vbCrLf & "Gy√∂k√©r mappa: " & outputRoot, vbInformation
     Exit Sub
 
 ErrMain:
-    MsgBox "V·ratlan hiba: " & Err.Number & " - " & Err.Description, vbCritical
+    MsgBox "V√°ratlan hiba: " & Err.Number & " - " & Err.Description, vbCritical
     Resume CleanupMain
 
 CleanupMain:
@@ -434,8 +434,8 @@ CleanupMain:
 End Sub
 
 ' -------------------------
-' Merge helper: ˆsszef˚zi minden bizotts·g mapp·j·ban a .docx f·jlokat egy ALL_<bizottsag>.docx f·jlba
-' FrissÌtve: a merged dokumentum fejlÈcÈbe is beÌrjuk a bizotts·g nevÈt Ès "various" d·tumot.
+' Merge helper: √∂sszef≈±zi minden bizotts√°g mapp√°j√°ban a .docx f√°jlokat egy ALL_<bizottsag>.docx f√°jlba
+' Friss√≠tve: a merged dokumentum fejl√©c√©be is be√≠rjuk a bizotts√°g nev√©t √©s "various" d√°tumot.
 ' -------------------------
 Private Sub MergeAllCommitteesInFolder(rootPath As String, wdApp As Object, fso As Object)
     On Error Resume Next
@@ -444,7 +444,7 @@ Private Sub MergeAllCommitteesInFolder(rootPath As String, wdApp As Object, fso 
     For Each subfld In fld.SubFolders
         Dim mergedName As String
         mergedName = fso.BuildPath(subfld.path, "ALL_" & SafeFileName(subfld.Name) & ".docx")
-        ' ha nincs benne .docx f·jl, kihagyjuk
+        ' ha nincs benne .docx f√°jl, kihagyjuk
         Dim hasDocx As Boolean: hasDocx = False
         Dim f As Object
         For Each f In subfld.Files
@@ -453,7 +453,7 @@ Private Sub MergeAllCommitteesInFolder(rootPath As String, wdApp As Object, fso 
         If Not hasDocx Then GoTo NextSub
         Dim mergedDoc As Object
         Set mergedDoc = wdApp.Documents.add(BlankTemplate:=False)
-        ' --- FEJL…C be·llÌt·sa mergedDoc-on is ---
+        ' --- FEJL√âC be√°ll√≠t√°sa mergedDoc-on is ---
         Dim ssec As Object
         For Each ssec In mergedDoc.Sections
             With ssec.headers(wdHeaderFooterPrimary).Range
@@ -479,7 +479,7 @@ NextSub:
 End Sub
 
 ' -------------------------
-' SegÈdf¸ggvÈnyek: placeholder keresÈs Ès feltˆltÈs
+' Seg√©df√ºggv√©nyek: placeholder keres√©s √©s felt√∂lt√©s
 ' -------------------------
 Private Sub FindPlaceholderInTable(tbl As Object, placeholder As String, ByRef outRow As Long, ByRef outCol As Long)
     Dim r As Long, co As Long, plain As String
@@ -594,7 +594,7 @@ Private Function GetFirstDataRow(tbl As Object) As Long
     Dim r As Long, s As String
     For r = 1 To tbl.rows.Count
         s = LCase(CellTextPlain(tbl.cell(r, 1).Range.Text))
-        If s = "nÈv" Or InStr(s, "nÈv") > 0 Then
+        If s = "n√©v" Or InStr(s, "n√©v") > 0 Then
             GetFirstDataRow = r + 1
             Exit Function
         End If
@@ -750,7 +750,7 @@ Private Function ColumnLetter(colNum As Long) As String
 End Function
 
 ' -------------------------
-' Utility Ès egyszer˚ lista beillesztÈs
+' Utility √©s egyszer≈± lista beilleszt√©s
 ' -------------------------
 Private Function SafeFileName(s As String) As String
     Dim bad As Variant: bad = Array("/", "\", ":", "*", "?", """", "<", ">", "|")

@@ -13,7 +13,7 @@ Sub Szamolas_Darab_Es_Max()
     Set darabCol = tbl.ListColumns("dupla")
     Set dict = CreateObject("Scripting.Dictionary")
     
-    ' Elıszˆr ˆsszesz·moljuk h·nyszor szerepel az isk_nev minden ÈrtÈke
+    ' El≈ësz√∂r √∂sszesz√°moljuk h√°nyszor szerepel az isk_nev minden √©rt√©ke
     For Each r In tbl.ListRows
         ertek = Trim(CStr(r.Range(1, isknevCol.Index).value))
         If ertek <> "" Then
@@ -25,7 +25,7 @@ Sub Szamolas_Darab_Es_Max()
         End If
     Next r
     
-    ' VisszaÌrjuk a darabsz·mokat Ès meghat·rozzuk a maximumot
+    ' Vissza√≠rjuk a darabsz√°mokat √©s meghat√°rozzuk a maximumot
     maxErtek = 0
     For Each r In tbl.ListRows
         ertek = Trim(CStr(r.Range(1, isknevCol.Index).value))
@@ -37,8 +37,8 @@ Sub Szamolas_Darab_Es_Max()
         End If
     Next r
 
-    MsgBox "Ok A 'darab' oszlop frissÌtve!" & vbNewLine & _
-           "?? Legmagasabb elıfordul·s: " & maxErtek, vbInformation
+    MsgBox "Ok A 'darab' oszlop friss√≠tve!" & vbNewLine & _
+           "?? Legmagasabb el≈ëfordul√°s: " & maxErtek, vbInformation
 End Sub
 
 

@@ -16,12 +16,12 @@ Private Const KEY_PONTOZO_TEMPLATE As String = "pontozolap_template"
 Private Const KEY_OSSZESITO_TEMPLATE As String = "osszesitolap_template"
 Private Const KEY_PONTOZO_OUTPUT_ROOT As String = "pontozo_output_root"
 
-Private Const DEFAULT_BACKUP_ROOT As String = "\\NS2\FelvÈteli\Backup\"
-Private Const DEFAULT_NEVSOR_PDF_FOLDER As String = "\\NS2\FelvÈteli\Data\Nevsor"
-Private Const DEFAULT_SZOBELI_TEMPLATE As String = "\\NS2\FelvÈteli\outlooksablon\szobeli-behivo.oft"
-Private Const DEFAULT_PONTOZO_TEMPLATE As String = "\\NS2\FelvÈteli\Data\PontozolapTemplate.docx"
-Private Const DEFAULT_OSSZESITO_TEMPLATE As String = "\\NS2\FelvÈteli\Data\OsszesitolapTemplate.docx"
-Private Const DEFAULT_PONTOZO_OUTPUT_ROOT As String = "\\NS2\FelvÈteli\Data\Pontozo\"
+Private Const DEFAULT_BACKUP_ROOT As String = "\\NS2\Felv√©teli\Backup\"
+Private Const DEFAULT_NEVSOR_PDF_FOLDER As String = "\\NS2\Felv√©teli\Data\Nevsor"
+Private Const DEFAULT_SZOBELI_TEMPLATE As String = "\\NS2\Felv√©teli\outlooksablon\szobeli-behivo.oft"
+Private Const DEFAULT_PONTOZO_TEMPLATE As String = "\\NS2\Felv√©teli\Data\PontozolapTemplate.docx"
+Private Const DEFAULT_OSSZESITO_TEMPLATE As String = "\\NS2\Felv√©teli\Data\OsszesitolapTemplate.docx"
+Private Const DEFAULT_PONTOZO_OUTPUT_ROOT As String = "\\NS2\Felv√©teli\Data\Pontozo\"
 
 Public Sub Ribbon_Beallitasok(control As IRibbonControl)
     Beallitasok_Menu control
@@ -37,7 +37,7 @@ Public Sub Beallitasok_Menu(Optional control As IRibbonControl)
     Dim choice As String
 
     Do
-        choice = InputBox(BuildSettingsMenuText(), "Be·llÌt·sok", "1")
+        choice = InputBox(BuildSettingsMenuText(), "Be√°ll√≠t√°sok", "1")
         choice = Trim$(choice)
         If choice = "" Then Exit Sub
 
@@ -45,19 +45,19 @@ Public Sub Beallitasok_Menu(Optional control As IRibbonControl)
             Case "1"
                 Beallitasok_Megnyitasa
             Case "2"
-                PickFolderForSetting KEY_BACKUP_ROOT, "V·laszd ki a backup mapp·t"
+                PickFolderForSetting KEY_BACKUP_ROOT, "V√°laszd ki a backup mapp√°t"
             Case "3"
-                PickFolderForSetting KEY_NEVSOR_PDF_FOLDER, "V·laszd ki a nÈvsor PDF mapp·t"
+                PickFolderForSetting KEY_NEVSOR_PDF_FOLDER, "V√°laszd ki a n√©vsor PDF mapp√°t"
             Case "4"
-                PickFileForSetting KEY_SZOBELI_TEMPLATE, "V·laszd ki a szÛbeli meghÌvÛ Outlook sablont", "Outlook sablonok", "*.oft"
+                PickFileForSetting KEY_SZOBELI_TEMPLATE, "V√°laszd ki a sz√≥beli megh√≠v√≥ Outlook sablont", "Outlook sablonok", "*.oft"
             Case "5"
-                PickFileForSetting KEY_PONTOZO_TEMPLATE, "V·laszd ki a pontozÛlap Word sablont", "Word dokumentumok", "*.doc;*.docx;*.docm"
+                PickFileForSetting KEY_PONTOZO_TEMPLATE, "V√°laszd ki a pontoz√≥lap Word sablont", "Word dokumentumok", "*.doc;*.docx;*.docm"
             Case "6"
-                PickFileForSetting KEY_OSSZESITO_TEMPLATE, "V·laszd ki az ˆsszesÌtılap Word sablont", "Word dokumentumok", "*.doc;*.docx;*.docm"
+                PickFileForSetting KEY_OSSZESITO_TEMPLATE, "V√°laszd ki az √∂sszes√≠t≈ëlap Word sablont", "Word dokumentumok", "*.doc;*.docx;*.docm"
             Case "7"
-                PickFolderForSetting KEY_PONTOZO_OUTPUT_ROOT, "V·laszd ki a pontozÛ kimeneti mapp·t"
+                PickFolderForSetting KEY_PONTOZO_OUTPUT_ROOT, "V√°laszd ki a pontoz√≥ kimeneti mapp√°t"
             Case Else
-                MsgBox "…rvÈnytelen v·laszt·s.", vbExclamation
+                MsgBox "√ârv√©nytelen v√°laszt√°s.", vbExclamation
         End Select
     Loop
 End Sub
@@ -88,17 +88,17 @@ End Function
 
 Private Function BuildSettingsMenuText() As String
     BuildSettingsMenuText = _
-        "V·lassz be·llÌt·st:" & vbCrLf & _
-        "  1. Be·llÌt·sok lap megnyit·sa" & vbCrLf & _
+        "V√°lassz be√°ll√≠t√°st:" & vbCrLf & _
+        "  1. Be√°ll√≠t√°sok lap megnyit√°sa" & vbCrLf & _
         "  2. Backup mappa" & vbCrLf & _
-        "  3. NÈvsor PDF mappa" & vbCrLf & _
-        "  4. SzÛbeli meghÌvÛ Outlook sablon" & vbCrLf & _
-        "  5. PontozÛlap Word sablon" & vbCrLf & _
-        "  6. ÷sszesÌtılap Word sablon" & vbCrLf & _
-        "  7. PontozÛ kimeneti mappa" & vbCrLf & _
+        "  3. N√©vsor PDF mappa" & vbCrLf & _
+        "  4. Sz√≥beli megh√≠v√≥ Outlook sablon" & vbCrLf & _
+        "  5. Pontoz√≥lap Word sablon" & vbCrLf & _
+        "  6. √ñsszes√≠t≈ëlap Word sablon" & vbCrLf & _
+        "  7. Pontoz√≥ kimeneti mappa" & vbCrLf & _
         vbCrLf & _
-        "A be·llÌt·sok a " & SETTINGS_SHEET_NAME & " lapon is szerkeszthetık." & vbCrLf & _
-        "KilÈpÈs: MÈgse / ¸res"
+        "A be√°ll√≠t√°sok a " & SETTINGS_SHEET_NAME & " lapon is szerkeszthet≈ëk." & vbCrLf & _
+        "Kil√©p√©s: M√©gse / √ºres"
 End Function
 
 Private Function EnsureSettingsSheet(Optional ByVal activateSheet As Boolean = False) As Worksheet
@@ -127,19 +127,19 @@ Private Sub PrepareSettingsSheet(ws As Worksheet)
     ws.Visible = xlSheetVisible
 
     ws.Cells(SETTINGS_HEADER_ROW, COL_KEY).Value = "kulcs"
-    ws.Cells(SETTINGS_HEADER_ROW, COL_DESCRIPTION).Value = "leÌr·s"
-    ws.Cells(SETTINGS_HEADER_ROW, COL_VALUE).Value = "ÈrtÈk"
-    ws.Cells(SETTINGS_HEADER_ROW, COL_DEFAULT).Value = "alapÈrtelmezett"
+    ws.Cells(SETTINGS_HEADER_ROW, COL_DESCRIPTION).Value = "le√≠r√°s"
+    ws.Cells(SETTINGS_HEADER_ROW, COL_VALUE).Value = "√©rt√©k"
+    ws.Cells(SETTINGS_HEADER_ROW, COL_DEFAULT).Value = "alap√©rtelmezett"
     ws.Rows(SETTINGS_HEADER_ROW).Font.Bold = True
 
-    EnsureSettingRow ws, KEY_BACKUP_ROOT, "Automatikus verziÛmentÈs gyˆkÈr mappa", DEFAULT_BACKUP_ROOT
-    EnsureSettingRow ws, KEY_NEVSOR_PDF_FOLDER, "NÈvsor PDF export mappa", DEFAULT_NEVSOR_PDF_FOLDER
-    EnsureSettingRow ws, KEY_SZOBELI_TEMPLATE, "SzÛbeli meghÌvÛ Outlook sablon", DEFAULT_SZOBELI_TEMPLATE
-    EnsureSettingRow ws, KEY_PONTOZO_TEMPLATE, "PontozÛlap Word sablon", DEFAULT_PONTOZO_TEMPLATE
-    EnsureSettingRow ws, KEY_OSSZESITO_TEMPLATE, "÷sszesÌtılap Word sablon", DEFAULT_OSSZESITO_TEMPLATE
-    EnsureSettingRow ws, KEY_PONTOZO_OUTPUT_ROOT, "PontozÛ dokumentumok gyˆkÈr mapp·ja", DEFAULT_PONTOZO_OUTPUT_ROOT
+    EnsureSettingRow ws, KEY_BACKUP_ROOT, "Automatikus verzi√≥ment√©s gy√∂k√©r mappa", DEFAULT_BACKUP_ROOT
+    EnsureSettingRow ws, KEY_NEVSOR_PDF_FOLDER, "N√©vsor PDF export mappa", DEFAULT_NEVSOR_PDF_FOLDER
+    EnsureSettingRow ws, KEY_SZOBELI_TEMPLATE, "Sz√≥beli megh√≠v√≥ Outlook sablon", DEFAULT_SZOBELI_TEMPLATE
+    EnsureSettingRow ws, KEY_PONTOZO_TEMPLATE, "Pontoz√≥lap Word sablon", DEFAULT_PONTOZO_TEMPLATE
+    EnsureSettingRow ws, KEY_OSSZESITO_TEMPLATE, "√ñsszes√≠t≈ëlap Word sablon", DEFAULT_OSSZESITO_TEMPLATE
+    EnsureSettingRow ws, KEY_PONTOZO_OUTPUT_ROOT, "Pontoz√≥ dokumentumok gy√∂k√©r mapp√°ja", DEFAULT_PONTOZO_OUTPUT_ROOT
 
-    ws.Range("F1").Value = "A C oszlopba Ìrd a saj·t ÈrtÈket. ‹resen hagyva az alapÈrtelmezett lesz haszn·lva."
+    ws.Range("F1").Value = "A C oszlopba √≠rd a saj√°t √©rt√©ket. √úresen hagyva az alap√©rtelmezett lesz haszn√°lva."
     ws.Columns("A:F").AutoFit
 End Sub
 
@@ -214,7 +214,7 @@ Private Sub PickFolderForSetting(ByVal settingKey As String, ByVal title As Stri
         SaveSettingValue settingKey, .SelectedItems(1)
     End With
 
-    MsgBox "Be·llÌt·s elmentve.", vbInformation
+    MsgBox "Be√°ll√≠t√°s elmentve.", vbInformation
 End Sub
 
 Private Sub PickFileForSetting(ByVal settingKey As String, ByVal title As String, ByVal filterName As String, ByVal filterPattern As String)
@@ -234,7 +234,7 @@ Private Sub PickFileForSetting(ByVal settingKey As String, ByVal title As String
         SaveSettingValue settingKey, .SelectedItems(1)
     End With
 
-    MsgBox "Be·llÌt·s elmentve.", vbInformation
+    MsgBox "Be√°ll√≠t√°s elmentve.", vbInformation
 End Sub
 
 Private Function EnsureTrailingSlashLocal(ByVal pathValue As String) As String

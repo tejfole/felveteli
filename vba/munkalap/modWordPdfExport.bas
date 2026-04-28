@@ -1,7 +1,7 @@
 Attribute VB_Name = "modWordPdfExport"
 Option Explicit
 
-' Excelbıl fut: Word dokumentumot megnyitja / csatlakozik Ès PDF-ekre bontja
+' Excelb≈ël fut: Word dokumentumot megnyitja / csatlakozik √©s PDF-ekre bontja
 Public Sub SavePagesGroupedByRowChange_Excel(Optional control As IRibbonControl)
     On Error GoTo EH
 
@@ -18,36 +18,36 @@ Public Sub SavePagesGroupedByRowChange_Excel(Optional control As IRibbonControl)
     Const wdExportCreateHeadingBookmarks As Long = 1
 
     Dim docPath As String
-    docPath = PickWordFile("V·laszd ki a Word dokumentumot")
+    docPath = PickWordFile("V√°laszd ki a Word dokumentumot")
     If docPath = "" Then Exit Sub
 
     Dim outFolder As String
-    outFolder = PickFolder("V·laszd ki a kimeneti mapp·t (PDF-ek)")
+    outFolder = PickFolder("V√°laszd ki a kimeneti mapp√°t (PDF-ek)")
     If outFolder = "" Then Exit Sub
 
     Dim xRow As Long, xStart As Long, xEnd As Long
-    xRow = AskLong("H·nyadik sor alapj·n tˆrtÈnjen a csoportosÌt·s?", "PDF bont·s", 1)
+    xRow = AskLong("H√°nyadik sor alapj√°n t√∂rt√©njen a csoportos√≠t√°s?", "PDF bont√°s", 1)
     If xRow <= 0 Then Exit Sub
 
-    xStart = AskLong("Kezdı oldal?", "PDF bont·s", 1)
+    xStart = AskLong("Kezd≈ë oldal?", "PDF bont√°s", 1)
     If xStart <= 0 Then Exit Sub
 
-    xEnd = AskLong("UtolsÛ oldal?", "PDF bont·s", xStart)
+    xEnd = AskLong("Utols√≥ oldal?", "PDF bont√°s", xStart)
     If xEnd < xStart Then Exit Sub
 
-    ' --- Word pÈld·ny ---
+    ' --- Word p√©ld√°ny ---
     Dim wdApp As Object
     Set wdApp = GetOrCreateWordApp(True)
 
-    ' --- Doc megnyit·sa (ha m·r nyitva van, azt haszn·ljuk) ---
+    ' --- Doc megnyit√°sa (ha m√°r nyitva van, azt haszn√°ljuk) ---
     Dim doc As Object
     Set doc = GetOrOpenWordDoc(wdApp, docPath)
     If doc Is Nothing Then
-        MsgBox "Nem siker¸lt megnyitni a dokumentumot.", vbExclamation
+        MsgBox "Nem siker√ºlt megnyitni a dokumentumot.", vbExclamation
         Exit Sub
     End If
 
-    ' --- Feldolgoz·s ---
+    ' --- Feldolgoz√°s ---
     Dim i As Long
     Dim currentKey As String, previousKey As String
     Dim groupStart As Long
@@ -57,7 +57,7 @@ Public Sub SavePagesGroupedByRowChange_Excel(Optional control As IRibbonControl)
     Application.ScreenUpdating = False
 
     For i = xStart To xEnd
-        ' Ugr·s az adott oldal adott sor·ra
+        ' Ugr√°s az adott oldal adott sor√°ra
         wdApp.Selection.GoTo What:=wdGoToPage, Which:=wdGoToAbsolute, Name:=CStr(i)
         wdApp.Selection.GoTo What:=wdGoToLine, Which:=wdGoToAbsolute, Name:=CStr(xRow - 1)
         wdApp.Selection.Extend
@@ -67,7 +67,7 @@ Public Sub SavePagesGroupedByRowChange_Excel(Optional control As IRibbonControl)
         currentKey = wdApp.Selection.Range.Text
         currentKey = CleanFileKey(currentKey, i)
 
-        ' Ha megv·ltozott a kulcs, ments¸k az elızı csoportot
+        ' Ha megv√°ltozott a kulcs, ments√ºk az el≈ëz≈ë csoportot
         If previousKey <> "" And currentKey <> previousKey Then
             ExportDocPagesToPDF doc, outFolder & "\" & previousKey & ".pdf", groupStart, i - 1, _
                                 wdExportFormatPDF, wdExportOptimizeForPrint, wdExportFromTo, _
@@ -78,7 +78,7 @@ Public Sub SavePagesGroupedByRowChange_Excel(Optional control As IRibbonControl)
         previousKey = currentKey
     Next i
 
-    ' UtolsÛ csoport mentÈse
+    ' Utols√≥ csoport ment√©se
     If previousKey <> "" Then
         ExportDocPagesToPDF doc, outFolder & "\" & previousKey & ".pdf", groupStart, xEnd, _
                             wdExportFormatPDF, wdExportOptimizeForPrint, wdExportFromTo, _
@@ -86,7 +86,7 @@ Public Sub SavePagesGroupedByRowChange_Excel(Optional control As IRibbonControl)
     End If
 
     Application.ScreenUpdating = True
-    MsgBox "KÈsz: PDF-ek elkÈsz¸ltek.", vbInformation
+    MsgBox "K√©sz: PDF-ek elk√©sz√ºltek.", vbInformation
     Exit Sub
 
 EH:
@@ -96,7 +96,7 @@ End Sub
 
 
 ' ==============================
-' Word app + doc kezelık
+' Word app + doc kezel≈ëk
 ' ==============================
 Private Function GetOrCreateWordApp(ByVal makeVisible As Boolean) As Object
     Dim wdApp As Object
@@ -155,7 +155,7 @@ End Sub
 
 
 ' ==============================
-' UI segÈdek (Excel)
+' UI seg√©dek (Excel)
 ' ==============================
 Private Function PickWordFile(ByVal title As String) As String
     Dim fd As FileDialog
@@ -199,7 +199,7 @@ End Function
 
 
 ' ==============================
-' F·jlnÈv tisztÌt·s
+' F√°jln√©v tiszt√≠t√°s
 ' ==============================
 Private Function CleanFileKey(ByVal s As String, ByVal pageNum As Long) As String
     s = Replace(s, vbCr, "")

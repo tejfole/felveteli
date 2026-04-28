@@ -2,15 +2,15 @@ Attribute VB_Name = "VerzioMentesAdottKonyvtarba"
 Option Explicit
 
 ' ============================================================
-' Manuális verziómentés a "\Felvételi\Backup_Manual\" alá
+' ManuÃ¡lis verziÃ³mentÃ©s a "\FelvÃ©teli\Backup_Manual\" alÃ¡
 '
-' Cél mappa:
-'   <Felvételi_root>\Backup_Manual\<BaseName>\
+' CÃ©l mappa:
+'   <FelvÃ©teli_root>\Backup_Manual\<BaseName>\
 '
-' Fájlnév idõbélyeggel (mindig egyedi):
+' FÃ¡jlnÃ©v idÅ‘bÃ©lyeggel (mindig egyedi):
 '   <BaseName>_YYYYMMDD_HHMMSS.<ext>
 '
-' UNC-kompatibilis mappalétrehozás: FileSystemObject (FSO)
+' UNC-kompatibilis mappalÃ©trehozÃ¡s: FileSystemObject (FSO)
 ' ============================================================
 
 Public Sub SaveVersionedCopy(Optional control As IRibbonControl)
@@ -19,14 +19,14 @@ Public Sub SaveVersionedCopy(Optional control As IRibbonControl)
     Dim wb As Workbook: Set wb = ThisWorkbook
 
     If Len(wb.path) = 0 Then
-        MsgBox "A fájlt elõször el kell menteni, hogy legyen elérési út!", vbCritical
+        MsgBox "A fÃ¡jlt elÅ‘szÃ¶r el kell menteni, hogy legyen elÃ©rÃ©si Ãºt!", vbCritical
         Exit Sub
     End If
 
     Dim felveteliRoot As String
-    felveteliRoot = FindRootUpToFolder(wb.fullName, "Felvételi")
+    felveteliRoot = FindRootUpToFolder(wb.fullName, "FelvÃ©teli")
     If Len(felveteliRoot) = 0 Then
-        MsgBox "A verziómentés csak a '\Felvételi\' könyvtár alól mûködik." & vbCrLf & _
+        MsgBox "A verziÃ³mentÃ©s csak a '\FelvÃ©teli\' kÃ¶nyvtÃ¡r alÃ³l mÅ±kÃ¶dik." & vbCrLf & _
                "Jelenlegi hely: " & wb.fullName, vbCritical
         Exit Sub
     End If
@@ -47,19 +47,19 @@ Public Sub SaveVersionedCopy(Optional control As IRibbonControl)
     fullPath = targetFolder & Application.PathSeparator & baseName & "_" & stamp & "." & ext
 
     wb.SaveCopyAs fullPath
-    MsgBox "Manuális verzió mentve:" & vbCrLf & fullPath, vbInformation
+    MsgBox "ManuÃ¡lis verziÃ³ mentve:" & vbCrLf & fullPath, vbInformation
     Exit Sub
 
 EH:
-    MsgBox "Manuális verziómentés hiba: " & Err.Number & " - " & Err.Description, vbCritical
+    MsgBox "ManuÃ¡lis verziÃ³mentÃ©s hiba: " & Err.Number & " - " & Err.Description, vbCritical
 End Sub
 
 ' ----------------------------
-' Root finder: visszaadja az útvonalat a megadott mappáig (végén \-sel)
-' Példa:
-'   input:  \\NS2\Felvételi\Data\valami\file.xlsm
-'   folder: Felvételi
-'   output: \\NS2\Felvételi\
+' Root finder: visszaadja az Ãºtvonalat a megadott mappÃ¡ig (vÃ©gÃ©n \-sel)
+' PÃ©lda:
+'   input:  \\NS2\FelvÃ©teli\Data\valami\file.xlsm
+'   folder: FelvÃ©teli
+'   output: \\NS2\FelvÃ©teli\
 ' ----------------------------
 Private Function FindRootUpToFolder(ByVal fullName As String, ByVal folderName As String) As String
     Dim p As String
@@ -81,7 +81,7 @@ Private Function FindRootUpToFolder(ByVal fullName As String, ByVal folderName A
 End Function
 
 Private Sub EnsureFolder(ByVal fullPath As String)
-    ' UNC és helyi útvonalon is biztosan létrehozza a teljes mappautat
+    ' UNC Ã©s helyi Ãºtvonalon is biztosan lÃ©trehozza a teljes mappautat
     Dim fso As Object
     Set fso = CreateObject("Scripting.FileSystemObject")
 

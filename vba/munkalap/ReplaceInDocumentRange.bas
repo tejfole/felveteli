@@ -1,5 +1,5 @@
 Attribute VB_Name = "ReplaceInDocumentRange"
-' Public, hibatûrõ helyettesítõ: cserél a megadott Range-ben, visszaadja, hogy sikerült-e
+' Public, hibatÅ±rÅ‘ helyettesÃ­tÅ‘: cserÃ©l a megadott Range-ben, visszaadja, hogy sikerÃ¼lt-e
 Public Function ReplaceInDocumentRange(rng As Object, findText As String, replaceText As String) As Boolean
     On Error GoTo ErrHandler
     With rng.Find

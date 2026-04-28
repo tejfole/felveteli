@@ -4,7 +4,7 @@ Option Explicit
 Public Const BACKUP_SUBFOLDER_PREFIX As String = "FELVETELI_"
 
 Public Sub SaveVersionedCopy_Logged(Optional control As IRibbonControl)
-    ' Almappa Èv alapj·n: elsıkÈnt a munkaf¸zet nevÈbıl, fallback: aktu·lis Èv
+    ' Almappa √©v alapj√°n: els≈ëk√©nt a munkaf√ºzet nev√©b≈ël, fallback: aktu√°lis √©v
     Dim y As Long
     y = GetYearFromWorkbookNameOrZero(ThisWorkbook.Name)
     If y = 0 Then y = Year(Date)
@@ -27,14 +27,14 @@ Public Sub SaveVersionedCopy_Core_Logged( _
     On Error GoTo EH
 
     If wb Is Nothing Then
-        LogWrite logPath, "Workbook objektum ¸res - kilÈpÈs."
+        LogWrite logPath, "Workbook objektum √ºres - kil√©p√©s."
         Exit Sub
     End If
     LogWrite logPath, "Workbook Name: " & wb.Name
     LogWrite logPath, "Workbook Path: " & wb.path
 
     If wb.path = "" Then
-        LogWrite logPath, "Workbook nincs elmentve (wb.Path = ''). KilÈpÈs."
+        LogWrite logPath, "Workbook nincs elmentve (wb.Path = ''). Kil√©p√©s."
         Exit Sub
     End If
 
@@ -46,15 +46,15 @@ Public Sub SaveVersionedCopy_Core_Logged( _
     LogWrite logPath, "Computed folderPath: " & folderPath
 
     If Dir$(folderPath, vbDirectory) = "" Then
-        LogWrite logPath, "Mappa nem lÈtezik. PrÛb·lok lÈtrehozni: " & folderPath
+        LogWrite logPath, "Mappa nem l√©tezik. Pr√≥b√°lok l√©trehozni: " & folderPath
         If Not MkDirRecursive_Logged(folderPath, logPath) Then
-            LogWrite logPath, "MkDirRecursive visszautasÌtotta a lÈtrehoz·st. KilÈpÈs."
+            LogWrite logPath, "MkDirRecursive visszautas√≠totta a l√©trehoz√°st. Kil√©p√©s."
             GoTo ExitSub
         Else
-            LogWrite logPath, "Mappa lÈtrehozva (vagy m·r lÈtezett): " & folderPath
+            LogWrite logPath, "Mappa l√©trehozva (vagy m√°r l√©tezett): " & folderPath
         End If
     Else
-        LogWrite logPath, "Mappa m·r lÈtezik."
+        LogWrite logPath, "Mappa m√°r l√©tezik."
     End If
 
     Dim prefix As String
@@ -83,7 +83,7 @@ Public Sub SaveVersionedCopy_Core_Logged( _
     LogWrite logPath, "Unique path: " & fullPath
 
     If Not CanWriteTest(fullPath, logPath) Then
-        LogWrite logPath, "Nem siker¸lt Ìrni a cÈlra (CanWriteTest false). KilÈpÈs."
+        LogWrite logPath, "Nem siker√ºlt √≠rni a c√©lra (CanWriteTest false). Kil√©p√©s."
         GoTo ExitSub
     End If
 
@@ -92,7 +92,7 @@ Public Sub SaveVersionedCopy_Core_Logged( _
     LogWrite logPath, "SaveCopyAs sikeres: " & fullPath
 
     If statusBar Then
-        StatusBarTemp "VerziÛ mentve: " & fullPath, 3
+        StatusBarTemp "Verzi√≥ mentve: " & fullPath, 3
     End If
 
 ExitSub:
@@ -102,7 +102,7 @@ ExitSub:
 EH:
     LogWrite logPath, "HIBA: " & Err.Number & " - " & Err.Description
     If statusBar Then
-        StatusBarTemp "VerziÛ mentÈs hiba: " & Err.Description, 5
+        StatusBarTemp "Verzi√≥ ment√©s hiba: " & Err.Description, 5
     End If
     Resume ExitSub
 End Sub
@@ -117,8 +117,8 @@ Private Sub LogWrite(ByVal logFile As String, ByVal msg As String)
 End Sub
 
 Private Function GetYearFromWorkbookNameOrZero(ByVal fileName As String) As Long
-    ' Kikeresi az elsı elıfordulÛ 4 sz·mjegy˚ Èvet (2000-2099) a f·jlnÈvbıl.
-    ' PÈlda: "Felveteli_2026.xlsm" -> 2026
+    ' Kikeresi az els≈ë el≈ëfordul√≥ 4 sz√°mjegy≈± √©vet (2000-2099) a f√°jln√©vb≈ël.
+    ' P√©lda: "Felveteli_2026.xlsm" -> 2026
     Dim base As String
     base = GetBaseName(fileName)
 
@@ -151,14 +151,14 @@ Private Function MkDirRecursive_Logged(ByVal folderPath As String, ByVal logPath
     Dim noSlash As String: noSlash = Left$(p, Len(p) - 1)
     Dim pos As Long: pos = InStrRev(noSlash, "\")
     If pos <= 0 Then
-        LogWrite logPath, "MkDirRecursive: nem tal·lhatÛ '\' a path-ban: " & noSlash
+        LogWrite logPath, "MkDirRecursive: nem tal√°lhat√≥ '\' a path-ban: " & noSlash
         MkDirRecursive_Logged = False
         Exit Function
     End If
     Dim parent As String: parent = Left$(noSlash, pos - 1)
     If parent <> "" Then
         If Dir$(parent & "\", vbDirectory) = "" Then
-            LogWrite logPath, "MkDirRecursive: elıszˆr a sz¸lı mappa lÈtrehoz·sa: " & parent
+            LogWrite logPath, "MkDirRecursive: el≈ësz√∂r a sz√ºl≈ë mappa l√©trehoz√°sa: " & parent
             If Not MkDirRecursive_Logged(parent & "\", logPath) Then
                 MkDirRecursive_Logged = False
                 Exit Function
@@ -167,7 +167,7 @@ Private Function MkDirRecursive_Logged(ByVal folderPath As String, ByVal logPath
     End If
 
     MkDir noSlash
-    LogWrite logPath, "MkDirRecursive: lÈtrehozva: " & noSlash
+    LogWrite logPath, "MkDirRecursive: l√©trehozva: " & noSlash
     MkDirRecursive_Logged = True
     Exit Function
 

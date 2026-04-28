@@ -77,14 +77,14 @@ Private Sub BuildSzuresLista(ByVal Valasztas As String, ByVal KeresettErtek As V
 
         Select Case Valasztas
             Case "elut", "elutkevespont"
-                ' kevéspont (<55)
+                ' kevÃ©spont (<55)
                 If IsNumeric(d(i, cIras)) And CDbl(d(i, cIras)) < 55 Then
                     n = n + 1
                     nevek(n) = nev
-                    okok(n) = "kevéspont"
+                    okok(n) = "kevÃ©spont"
                 End If
 
-                ' elutasítva + tagozatok
+                ' elutasÃ­tva + tagozatok
                 If IsX(d(i, cElut)) Then
                     For j = 1 To 4
                         If IsX(d(i, cJ(j))) Then
@@ -106,11 +106,11 @@ Private Sub BuildSzuresLista(ByVal Valasztas As String, ByVal KeresettErtek As V
                 If IsNumeric(d(i, cIras)) And CDbl(d(i, cIras)) < 55 Then
                     n = n + 1
                     nevek(n) = nev
-                    okok(n) = "kevéspont"
+                    okok(n) = "kevÃ©spont"
                 End If
 
             Case Else
-                ' más választásokhoz itt most nem adunk okot
+                ' mÃ¡s vÃ¡lasztÃ¡sokhoz itt most nem adunk okot
         End Select
 
 NextI:
@@ -126,7 +126,7 @@ NextI:
     Exit Sub
 
 Hibakezeles:
-    ' hibánál üres marad
+    ' hibÃ¡nÃ¡l Ã¼res marad
 End Sub
 
 Private Function GetRequiredColIndex(ByVal tbl As ListObject, ByVal colName As String) As Long
@@ -136,7 +136,7 @@ Private Function GetRequiredColIndex(ByVal tbl As ListObject, ByVal colName As S
 
 NemTalalhato:
     Err.Raise vbObjectError + 513, "SzuressOk", _
-              "Hiányzó oszlop a(z) '" & tbl.Name & "' táblában: '" & colName & "'"
+              "HiÃ¡nyzÃ³ oszlop a(z) '" & tbl.Name & "' tÃ¡blÃ¡ban: '" & colName & "'"
 End Function
 
 Private Function NormText(ByVal v As Variant) As String

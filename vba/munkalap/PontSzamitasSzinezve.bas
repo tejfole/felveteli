@@ -19,7 +19,7 @@ Public Sub SzamoljPontokatTombosen(Optional control As IRibbonControl)
     Dim tbl As ListObject
     Set tbl = FindTable("diakadat")
     If tbl Is Nothing Then
-        Err.Raise vbObjectError + 100, , "A 'diakadat' tábla nem található!"
+        Err.Raise vbObjectError + 100, , "A 'diakadat' tÃ¡bla nem talÃ¡lhatÃ³!"
     End If
     
     If tbl.ListRows.Count = 0 Then GoTo Cleanup
@@ -37,7 +37,7 @@ Public Sub SzamoljPontokatTombosen(Optional control As IRibbonControl)
     colSzorzo = GetColIndex(tbl, "irasbeliossz+szorzo")
     colBizi = GetColIndex(tbl, "biziirasbeliossz")
     
-    ' ÚJ: a szóbeli már kész összpont (import tölti)
+    ' ÃšJ: a szÃ³beli mÃ¡r kÃ©sz Ã¶sszpont (import tÃ¶lti)
     colSzobeli = GetColIndex(tbl, "szobeli")
     colMindOssz = GetColIndex(tbl, "p_mindossz")
     
@@ -54,7 +54,7 @@ Public Sub SzamoljPontokatTombosen(Optional control As IRibbonControl)
         matek = SafeVal(dataArr(i, colMatek))
         bizonyitvany = SafeVal(dataArr(i, colBizonyitvany))
         
-        ' Importból jön, mi csak beolvassuk + kerekítjük
+        ' ImportbÃ³l jÃ¶n, mi csak beolvassuk + kerekÃ­tjÃ¼k
         szobeli = Round(SafeVal(dataArr(i, colSzobeli)), 2)
         
         irasbeli = magyar + matek
@@ -71,7 +71,7 @@ Public Sub SzamoljPontokatTombosen(Optional control As IRibbonControl)
     
     tbl.DataBodyRange.value = dataArr
     
-    ' Színezések
+    ' SzÃ­nezÃ©sek
     ApplyColumnColor tbl, "irasbeliossz", RGB(180, 220, 255)
     ApplyColumnColor tbl, "irasbeliossz+szorzo", RGB(180, 220, 255)
     ApplyColumnColor tbl, "biziirasbeliossz", RGB(180, 220, 255)
@@ -89,9 +89,9 @@ ErrorHandler:
     Application.EnableEvents = prevEvents
     Application.ScreenUpdating = prevScreen
     
-    MsgBox "Hiba történt: " & Err.Description & vbCrLf & _
+    MsgBox "Hiba tÃ¶rtÃ©nt: " & Err.Description & vbCrLf & _
            "Sor: " & i & vbCrLf & _
-           "Hibakód: " & Err.Number, vbCritical
+           "HibakÃ³d: " & Err.Number, vbCritical
 End Sub
 
 Private Function GetColIndex(tbl As ListObject, colName As String) As Long
@@ -99,7 +99,7 @@ Private Function GetColIndex(tbl As ListObject, colName As String) As Long
     GetColIndex = tbl.ListColumns(colName).Index
     Exit Function
 EH:
-    Err.Raise vbObjectError + 101, , "Hiányzó oszlop a táblában: " & colName
+    Err.Raise vbObjectError + 101, , "HiÃ¡nyzÃ³ oszlop a tÃ¡blÃ¡ban: " & colName
 End Function
 
 Private Function FindTable(tableName As String) As ListObject

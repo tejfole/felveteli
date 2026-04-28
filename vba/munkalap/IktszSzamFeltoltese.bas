@@ -10,7 +10,7 @@ Sub KitoltIktsz_TablaAutomatikusan(Optional control As IRibbonControl)
     Dim megtalalva As Boolean
     
     megtalalva = False
-    ' Minden munkalapot vÈgignÈz
+    ' Minden munkalapot v√©gign√©z
     For Each ws In ThisWorkbook.Worksheets
         For Each tbl In ws.ListObjects
             If tbl.Name = "lista" Then
@@ -22,11 +22,11 @@ Sub KitoltIktsz_TablaAutomatikusan(Optional control As IRibbonControl)
     Next ws
     
     If Not megtalalva Then
-        MsgBox "Nem tal·lhatÛ 'lista' nev˚ t·bla egyik munkalapon sem!", vbCritical
+        MsgBox "Nem tal√°lhat√≥ 'lista' nev≈± t√°bla egyik munkalapon sem!", vbCritical
         Exit Sub
     End If
     
-    ' Oszlopok keresÈse a t·bl·ban
+    ' Oszlopok keres√©se a t√°bl√°ban
     For Each col In tbl.ListColumns
         Select Case LCase(col.Name)
             Case "oktazon": Set oktazonCol = col
@@ -35,16 +35,16 @@ Sub KitoltIktsz_TablaAutomatikusan(Optional control As IRibbonControl)
     Next col
     
     If oktazonCol Is Nothing Or iktszCol Is Nothing Then
-        MsgBox "Hi·nyzik az 'oktazon' vagy 'iktsz' oszlop a t·bl·ban!", vbCritical
+        MsgBox "Hi√°nyzik az 'oktazon' vagy 'iktsz' oszlop a t√°bl√°ban!", vbCritical
         Exit Sub
     End If
     
-    ' Kezdı sz·m bekÈrÈse
-    kezdoSzam = CLng(InputBox("Add meg a kezdı iktsz sz·mot:", "Kezdı sz·m", 1))
+    ' Kezd≈ë sz√°m bek√©r√©se
+    kezdoSzam = CLng(InputBox("Add meg a kezd≈ë iktsz sz√°mot:", "Kezd≈ë sz√°m", 1))
     
     Set dict = CreateObject("Scripting.Dictionary")
     
-    ' T·bl·n bel¸li sorok feldolgoz·sa
+    ' T√°bl√°n bel√ºli sorok feldolgoz√°sa
     For Each r In tbl.ListRows
         Dim oktazonVal As String
         oktazonVal = Trim(r.Range(1, oktazonCol.Index).value)
@@ -60,7 +60,7 @@ Sub KitoltIktsz_TablaAutomatikusan(Optional control As IRibbonControl)
         End If
     Next r
     
-    MsgBox "Az iktsz oszlop sikeresen feltˆltve a 'lista' t·bl·ban!", vbInformation
+    MsgBox "Az iktsz oszlop sikeresen felt√∂ltve a 'lista' t√°bl√°ban!", vbInformation
 
 End Sub
 

@@ -1,15 +1,15 @@
 Attribute VB_Name = "modPBizonyitvanyRibbon"
 Option Explicit
 
-' Ribbon gombhoz: ⁄JRAT÷LT…S (m·trixbÛl) + p_bizonyitvany megjelenÌtÈs tizedesei
+' Ribbon gombhoz: √öJRAT√ñLT√âS (m√°trixb√≥l) + p_bizonyitvany megjelen√≠t√©s tizedesei
 Public Sub PBizonyitvany_UjratoltesEsTizedesBeallitas(Optional control As IRibbonControl)
     On Error GoTo EH
 
     Dim decStr As String
     decStr = InputBox( _
-        "H·ny tizedesjeggyel jelenjen meg a diakadat[p_bizonyitvany]?" & vbCrLf & _
-        "Õrj 0ñ6 kˆzˆtti sz·mot. (pl. 2)", _
-        "p_bizonyitvany ñ ˙jratˆltÈs + form·z·s", _
+        "H√°ny tizedesjeggyel jelenjen meg a diakadat[p_bizonyitvany]?" & vbCrLf & _
+        "√çrj 0‚Äì6 k√∂z√∂tti sz√°mot. (pl. 2)", _
+        "p_bizonyitvany ‚Äì √∫jrat√∂lt√©s + form√°z√°s", _
         "2")
 
     If Len(Trim$(decStr)) = 0 Then Exit Sub
@@ -23,15 +23,15 @@ Public Sub PBizonyitvany_UjratoltesEsTizedesBeallitas(Optional control As IRibbo
     Application.EnableEvents = False
     Application.Calculation = xlCalculationManual
 
-    ' 1) M·trixbÛl ˙jratˆltÈs: legyen teljes kˆr (ne csak dirty)!
+    ' 1) M√°trixb√≥l √∫jrat√∂lt√©s: legyen teljes k√∂r (ne csak dirty)!
     BiziMatrix_MarkAllDirty
     BiziMatrix_UpdateTarget_ChangedOnly
 
-    ' 2) MegjelenÌtÈs tizedeseinek be·llÌt·sa
+    ' 2) Megjelen√≠t√©s tizedeseinek be√°ll√≠t√°sa
     PBizonyitvany_ApplyFormat decimals
 
-    MsgBox "KÈsz." & vbCrLf & _
-           "p_bizonyitvany ˙jratˆltve Ès " & decimals & " tizedesre form·zva.", vbInformation
+    MsgBox "K√©sz." & vbCrLf & _
+           "p_bizonyitvany √∫jrat√∂ltve √©s " & decimals & " tizedesre form√°zva.", vbInformation
 
 CleanExit:
     Application.Calculation = xlCalculationAutomatic
@@ -44,7 +44,7 @@ EH:
     Resume CleanExit
 End Sub
 
-' Csak format be·llÌt·s ñ belsı segÈd
+' Csak format be√°ll√≠t√°s ‚Äì bels≈ë seg√©d
 Private Sub PBizonyitvany_ApplyFormat(ByVal decimals As Long)
     Dim wb As Workbook: Set wb = ThisWorkbook
     Dim ws As Worksheet: Set ws = wb.Worksheets("diakadat")
@@ -54,7 +54,7 @@ Private Sub PBizonyitvany_ApplyFormat(ByVal decimals As Long)
     On Error Resume Next
     colIdx = lo.ListColumns("p_bizonyitvany").Index
     On Error GoTo 0
-    If colIdx = 0 Then Err.Raise vbObjectError + 901, "PBizonyitvany_ApplyFormat", "Nincs p_bizonyitvany oszlop a diakadat t·bl·ban."
+    If colIdx = 0 Then Err.Raise vbObjectError + 901, "PBizonyitvany_ApplyFormat", "Nincs p_bizonyitvany oszlop a diakadat t√°bl√°ban."
 
     If lo.ListRows.Count = 0 Then Exit Sub
 
@@ -65,7 +65,7 @@ Private Sub PBizonyitvany_ApplyFormat(ByVal decimals As Long)
     lo.ListColumns(colIdx).DataBodyRange.NumberFormat = fmt
 End Sub
 
-' Minden m·trix sort dirty=1-re ·llÌt (hogy teljes ˙jratˆltÈs legyen)
+' Minden m√°trix sort dirty=1-re √°ll√≠t (hogy teljes √∫jrat√∂lt√©s legyen)
 Private Sub BiziMatrix_MarkAllDirty()
     Dim wb As Workbook: Set wb = ThisWorkbook
     Dim wsM As Worksheet

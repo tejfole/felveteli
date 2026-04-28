@@ -7,11 +7,11 @@ Function Toldalek2(szam As Integer) As String
         Case 8, 3
             Toldalek2 = szam & "-as"
         Case 5
-            Toldalek2 = szam & "-ös"
+            Toldalek2 = szam & "-Ã¶s"
         Case 6
             Toldalek2 = szam & "-os"
         Case Else
-            Toldalek2 = szam & "-" ' Alapértelmezett (nem kellene elõfordulnia)
+            Toldalek2 = szam & "-" ' AlapÃ©rtelmezett (nem kellene elÅ‘fordulnia)
     End Select
 End Function
 

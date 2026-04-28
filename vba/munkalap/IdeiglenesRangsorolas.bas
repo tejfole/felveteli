@@ -8,14 +8,14 @@ Public Sub Publikalas_AzonositoPont_Sorszam_RangsorSzerint(Optional control As I
     Dim wsInput As Worksheet: Set wsInput = wb.Worksheets("diakadat")
     Dim loInput As ListObject: Set loInput = wsInput.ListObjects("diakadat")
 
-    ' --- opcion·lis nÈv oszlop ---
+    ' --- opcion√°lis n√©v oszlop ---
     Dim includeName As Boolean
-    includeName = (MsgBox("Ker¸ljˆn N…V oszlop is a publik·lt list·ba?", vbQuestion + vbYesNo, "Publik·l·s be·llÌt·s") = vbYes)
+    includeName = (MsgBox("Ker√ºlj√∂n N√âV oszlop is a publik√°lt list√°ba?", vbQuestion + vbYesNo, "Publik√°l√°s be√°ll√≠t√°s") = vbYes)
 
     ' --- p_mindossz tizedesek ---
     Dim decStr As String
-    decStr = Trim$(InputBox("H·ny tizedesjeggyel jelenjen meg a p_mindossz a publik·lt lapon? (0-6)", _
-                            "Form·tum", "2"))
+    decStr = Trim$(InputBox("H√°ny tizedesjeggyel jelenjen meg a p_mindossz a publik√°lt lapon? (0-6)", _
+                            "Form√°tum", "2"))
 
     Dim decimals As Long
     decimals = 2
@@ -27,11 +27,11 @@ Public Sub Publikalas_AzonositoPont_Sorszam_RangsorSzerint(Optional control As I
         End If
     End If
 
-    ' --- minimum pontsz·m sz˚rı (opcion·lis) ---
+    ' --- minimum pontsz√°m sz≈±r≈ë (opcion√°lis) ---
     Dim minPontStr As String
     minPontStr = LCase$(Trim$(InputBox( _
-        "Minimum p_mindossz, ami beker¸l a list·ba (csak az elfogadottakra)." & vbCrLf & _
-        "Hagyd ¸resen / Ìrd be: mind / ˆsszes  õ nincs sz˚rÈs.", _
+        "Minimum p_mindossz, ami beker√ºl a list√°ba (csak az elfogadottakra)." & vbCrLf & _
+        "Hagyd √ºresen / √≠rd be: mind / √∂sszes  ‚Ä∫ nincs sz≈±r√©s.", _
         "Minimum pont", "mind")))
 
     Dim useMinPont As Boolean
@@ -39,21 +39,21 @@ Public Sub Publikalas_AzonositoPont_Sorszam_RangsorSzerint(Optional control As I
     useMinPont = False
     minPont = 0
 
-    If minPontStr <> "" And minPontStr <> "mind" And minPontStr <> "osszes" And minPontStr <> "ˆsszes" Then
+    If minPontStr <> "" And minPontStr <> "mind" And minPontStr <> "osszes" And minPontStr <> "√∂sszes" Then
         minPontStr = Replace(minPontStr, ",", ".")
         If IsNumeric(minPontStr) Then
             minPont = CDbl(minPontStr)
             useMinPont = True
         Else
-            MsgBox "A minimum pont nem sz·m: " & minPontStr, vbExclamation
+            MsgBox "A minimum pont nem sz√°m: " & minPontStr, vbExclamation
             Exit Sub
         End If
     End If
 
-    ' --- tagozat sz˚rÈs ---
+    ' --- tagozat sz≈±r√©s ---
     Dim szuresMezo As String
     szuresMezo = LCase$(Trim$(InputBox("Melyik tagozat? (j_1000/j_2000/j_3000/j_4000 vagy mind)", _
-                                       "Publik·l·s ñ sz˚rÈs", "mind")))
+                                       "Publik√°l√°s ‚Äì sz≈±r√©s", "mind")))
     If szuresMezo = "" Then Exit Sub
 
     Dim ixSzures As Long
@@ -65,7 +65,7 @@ Public Sub Publikalas_AzonositoPont_Sorszam_RangsorSzerint(Optional control As I
         End If
     End If
 
-    ' --- cÈl lapnÈv ---
+    ' --- c√©l lapn√©v ---
     Dim alapNev As String
     If szuresMezo = "mind" Then
         alapNev = "publik"
@@ -74,13 +74,13 @@ Public Sub Publikalas_AzonositoPont_Sorszam_RangsorSzerint(Optional control As I
     End If
 
     Dim celLapNevRaw As String
-    celLapNevRaw = Trim$(InputBox("Add meg az ˙j munkalap nevÈt:", "CÈl munkalap", alapNev))
+    celLapNevRaw = Trim$(InputBox("Add meg az √∫j munkalap nev√©t:", "C√©l munkalap", alapNev))
     If celLapNevRaw = "" Then Exit Sub
 
     Dim celLapNev As String
     celLapNev = SanitizeSheetName(celLapNevRaw)
 
-    ' --- kˆtelezı oszlopok ---
+    ' --- k√∂telez≈ë oszlopok ---
     Dim ixOkt As Long, ixPont As Long, ixJelige As Long, ixRang As Long
     Dim ixSzobeli As Long, ixIrasbeli As Long, ixBiz As Long
     Dim ixNev As Long
@@ -98,20 +98,20 @@ Public Sub Publikalas_AzonositoPont_Sorszam_RangsorSzerint(Optional control As I
     If ixNev = 0 Then ixNev = LoCol(loInput, "a_nev")
 
     If ixOkt = 0 Or ixPont = 0 Or ixJelige = 0 Or ixRang = 0 Then
-        MsgBox "Hi·nyzÛ oszlop a diakadat t·bl·ban (oktazon/p_mindossz/f_jelige/rangsor).", vbCritical
+        MsgBox "Hi√°nyz√≥ oszlop a diakadat t√°bl√°ban (oktazon/p_mindossz/f_jelige/rangsor).", vbCritical
         Exit Sub
     End If
     If ixSzobeli = 0 Or ixIrasbeli = 0 Or ixBiz = 0 Then
-        MsgBox "Hi·nyzÛ oszlop az elutasÌt·s ellenırzÈsÈhez (szobeli/irasbeliossz/p_bizonyitvany).", vbCritical
+        MsgBox "Hi√°nyz√≥ oszlop az elutas√≠t√°s ellen≈ërz√©s√©hez (szobeli/irasbeliossz/p_bizonyitvany).", vbCritical
         Exit Sub
     End If
     If includeName And ixNev = 0 Then
-        MsgBox "A nÈv oszlop bekapcsolva, de nincs 'f_nev' (vagy 'nev') oszlop a diakadat t·bl·ban.", vbCritical
+        MsgBox "A n√©v oszlop bekapcsolva, de nincs 'f_nev' (vagy 'nev') oszlop a diakadat t√°bl√°ban.", vbCritical
         Exit Sub
     End If
 
     If loInput.ListRows.Count = 0 Then
-        MsgBox "A diakadat t·bla ¸res.", vbExclamation
+        MsgBox "A diakadat t√°bla √ºres.", vbExclamation
         Exit Sub
     End If
 
@@ -121,7 +121,7 @@ Public Sub Publikalas_AzonositoPont_Sorszam_RangsorSzerint(Optional control As I
     Dim maxN As Long: maxN = UBound(arr, 1)
 
     ' accepted: azonosito, nev, pont, rangsor
-    ' rejected: azonosito, nev, "ElutasÌtva"
+    ' rejected: azonosito, nev, "Elutas√≠tva"
     Dim accepted() As Variant, rejected() As Variant
     ReDim accepted(1 To maxN, 1 To 4)
     ReDim rejected(1 To maxN, 1 To 3)
@@ -150,7 +150,7 @@ Public Sub Publikalas_AzonositoPont_Sorszam_RangsorSzerint(Optional control As I
             nRej = nRej + 1
             rejected(nRej, 1) = az
             rejected(nRej, 2) = nev
-            rejected(nRej, 3) = "ElutasÌtva"
+            rejected(nRej, 3) = "Elutas√≠tva"
             GoTo NextRow
         End If
 
@@ -170,7 +170,7 @@ NextRow:
     Next r
 
     If nAcc = 0 And nRej = 0 Then
-        MsgBox "Nincs tal·lat a sz˚rÈs/min pont alapj·n.", vbExclamation
+        MsgBox "Nincs tal√°lat a sz≈±r√©s/min pont alapj√°n.", vbExclamation
         Exit Sub
     End If
 
@@ -186,7 +186,7 @@ NextRow:
     wsOutput.Name = celLapNev
 
     If includeName Then
-        ' A:sorszam B:azonosito C:nev D:p_mindossz E:rangsor(segÈd)
+        ' A:sorszam B:azonosito C:nev D:p_mindossz E:rangsor(seg√©d)
         wsOutput.Range("A1:E1").value = Array("sorszam", "azonosito", "nev", "p_mindossz", "rangsor")
         wsOutput.Columns("B").NumberFormat = "@"
 
@@ -212,7 +212,7 @@ NextRow:
 
             wsOutput.Range("B" & startRejN).Resize(nRej, 1).value = Slice2D(rejected, nRej, 1) ' azonosito
             wsOutput.Range("C" & startRejN).Resize(nRej, 1).value = Slice2D(rejected, nRej, 2) ' nev
-            wsOutput.Range("D" & startRejN).Resize(nRej, 1).value = Slice2D(rejected, nRej, 3) ' ElutasÌtva
+            wsOutput.Range("D" & startRejN).Resize(nRej, 1).value = Slice2D(rejected, nRej, 3) ' Elutas√≠tva
 
             wsOutput.Range("A" & startRejN).Resize(nRej, 1).value = ""
             wsOutput.Range("E" & startRejN).Resize(nRej, 1).value = ""
@@ -225,12 +225,12 @@ NextRow:
             wsOutput.Columns("D").NumberFormat = "0." & String$(decimals, "0")
         End If
 
-        wsOutput.Columns("E").Delete ' segÈd rangsor tˆrlÈs
+        wsOutput.Columns("E").Delete ' seg√©d rangsor t√∂rl√©s
         wsOutput.rows(1).Font.Bold = True
         wsOutput.Columns("A:D").AutoFit
 
     Else
-        ' A:sorszam B:azonosito C:p_mindossz D:rangsor(segÈd)
+        ' A:sorszam B:azonosito C:p_mindossz D:rangsor(seg√©d)
         wsOutput.Range("A1:D1").value = Array("sorszam", "azonosito", "p_mindossz", "rangsor")
         wsOutput.Columns("B").NumberFormat = "@"
 
@@ -280,9 +280,9 @@ NextRow:
     ActiveWindow.FreezePanes = True
 
     Dim msg As String
-    msg = "Publik·lhatÛ lista elkÈsz¸lt. Lap: " & wsOutput.Name & vbCrLf & _
-          "Rangsorolt (sorsz·mozott): " & nAcc & " fı"
-    If nRej > 0 Then msg = msg & vbCrLf & "Lista vÈgÈn (ElutasÌtva, sorsz·m nÈlk¸l): " & nRej & " fı"
+    msg = "Publik√°lhat√≥ lista elk√©sz√ºlt. Lap: " & wsOutput.Name & vbCrLf & _
+          "Rangsorolt (sorsz√°mozott): " & nAcc & " f≈ë"
+    If nRej > 0 Then msg = msg & vbCrLf & "Lista v√©g√©n (Elutas√≠tva, sorsz√°m n√©lk√ºl): " & nRej & " f≈ë"
     MsgBox msg, vbInformation
     Exit Sub
 

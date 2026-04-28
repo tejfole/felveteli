@@ -1,13 +1,13 @@
 Attribute VB_Name = "modIdopontMenu"
 Option Explicit
 
-' RibbonbÛl is hÌvhatÛ
+' Ribbonb√≥l is h√≠vhat√≥
 Public Sub Idopontok_Menu(Optional control As IRibbonControl)
     On Error GoTo EH
 
     Dim lo As ListObject: Set lo = GetIdopontTabla_V2()
     If lo Is Nothing Then
-        MsgBox "Nem tal·lom az idıpont t·bl·t: idopontok / tbl_idopontok", vbExclamation
+        MsgBox "Nem tal√°lom az id≈ëpont t√°bl√°t: idopontok / tbl_idopontok", vbExclamation
         Exit Sub
     End If
 
@@ -15,7 +15,7 @@ Public Sub Idopontok_Menu(Optional control As IRibbonControl)
     Do
         choice = InputBox( _
             BuildMenuText(lo), _
-            "Idıpontok men¸", _
+            "Id≈ëpontok men√º", _
             "1")
         choice = Trim$(choice)
         If choice = "" Then Exit Sub
@@ -31,31 +31,31 @@ Public Sub Idopontok_Menu(Optional control As IRibbonControl)
             Case "8": Idopontok_TomegesOrankentiGeneralas lo
             Case "9": Idopontok_LejartakInaktivalasa lo
             Case Else
-                MsgBox "…rvÈnytelen v·laszt·s.", vbExclamation
+                MsgBox "√ârv√©nytelen v√°laszt√°s.", vbExclamation
         End Select
     Loop
 
     Exit Sub
 EH:
-    MsgBox "Idıpont men¸ hiba: " & Err.Number & vbCrLf & Err.Description, vbCritical
+    MsgBox "Id≈ëpont men√º hiba: " & Err.Number & vbCrLf & Err.Description, vbCritical
 End Sub
 
 Private Function BuildMenuText(lo As ListObject) As String
     BuildMenuText = _
-        "V·lassz m˚veletet:" & vbCrLf & _
-        "  1. Lista / ¡ttekintÈs" & vbCrLf & _
-        "  2. ⁄j idıpont(ok) felvÈtele (kÈzi, soronkÈnt)" & vbCrLf & _
-        "  3. AktÌv kapcsol·s (toggle) index alapj·n" & vbCrLf & _
-        "  4. Idıpont tˆrlÈse index alapj·n" & vbCrLf & _
-        "  5. Duplik·tumok takarÌt·sa (ugyanaz a d·tum -> 1 sor)" & vbCrLf & _
-        "  6. Minden inaktiv·l·sa" & vbCrLf & _
-        "  7. Minden tˆrlÈse" & vbCrLf & _
-        "  8. Tˆmeges gener·l·s Ûr·nkÈnt (tartom·ny + idıs·v + sz¸net)" & vbCrLf & _
-        "  9. Lej·rt idıpontok inaktiv·l·sa (datum_nap < Now)" & vbCrLf & _
+        "V√°lassz m≈±veletet:" & vbCrLf & _
+        "  1. Lista / √Åttekint√©s" & vbCrLf & _
+        "  2. √öj id≈ëpont(ok) felv√©tele (k√©zi, soronk√©nt)" & vbCrLf & _
+        "  3. Akt√≠v kapcsol√°s (toggle) index alapj√°n" & vbCrLf & _
+        "  4. Id≈ëpont t√∂rl√©se index alapj√°n" & vbCrLf & _
+        "  5. Duplik√°tumok takar√≠t√°sa (ugyanaz a d√°tum -> 1 sor)" & vbCrLf & _
+        "  6. Minden inaktiv√°l√°sa" & vbCrLf & _
+        "  7. Minden t√∂rl√©se" & vbCrLf & _
+        "  8. T√∂meges gener√°l√°s √≥r√°nk√©nt (tartom√°ny + id≈ës√°v + sz√ºnet)" & vbCrLf & _
+        "  9. Lej√°rt id≈ëpontok inaktiv√°l√°sa (datum_nap < Now)" & vbCrLf & _
         vbCrLf & _
-        "T·bla: " & lo.parent.Name & " / " & lo.Name & " (sorok: " & lo.ListRows.Count & ")" & vbCrLf & _
+        "T√°bla: " & lo.parent.Name & " / " & lo.Name & " (sorok: " & lo.ListRows.Count & ")" & vbCrLf & _
         vbCrLf & _
-        "KilÈpÈs: MÈgse / ¸res"
+        "Kil√©p√©s: M√©gse / √ºres"
 End Function
 
 ' =========================
@@ -67,14 +67,14 @@ Private Sub Idopontok_Listaz(lo As ListObject)
     If iDt = 0 Or iAk = 0 Then Exit Sub
 
     If lo.ListRows.Count = 0 Or lo.DataBodyRange Is Nothing Then
-        MsgBox "Nincs idıpont.", vbInformation
+        MsgBox "Nincs id≈ëpont.", vbInformation
         Exit Sub
     End If
 
     Dim arr As Variant: arr = lo.DataBodyRange.value
 
     Dim msg As String
-    msg = "Idıpontok (index / d·tum / aktÌv):" & vbCrLf & vbCrLf
+    msg = "Id≈ëpontok (index / d√°tum / akt√≠v):" & vbCrLf & vbCrLf
 
     Dim r As Long
     For r = 1 To UBound(arr, 1)
@@ -82,7 +82,7 @@ Private Sub Idopontok_Listaz(lo As ListObject)
               FormatAnyDate(arr(r, iDt)) & _
               "   | aktiv=" & CStr(arr(r, iAk)) & vbCrLf
         If r = 40 Then
-            msg = msg & "... (csak az elsı 40 sor l·tszik)" & vbCrLf
+            msg = msg & "... (csak az els≈ë 40 sor l√°tszik)" & vbCrLf
             Exit For
         End If
     Next r
@@ -91,7 +91,7 @@ Private Sub Idopontok_Listaz(lo As ListObject)
 End Sub
 
 ' =========================
-' 2) ⁄J FELVITEL (kÈzi)
+' 2) √öJ FELVITEL (k√©zi)
 ' =========================
 Private Sub Idopontok_UjFelvitel(lo As ListObject)
     Dim iDt As Long: iDt = GetColIndex_Menu(lo, "datum_nap")
@@ -100,12 +100,12 @@ Private Sub Idopontok_UjFelvitel(lo As ListObject)
 
     Dim s As String
     s = InputBox( _
-        "Adj meg idıpontokat soronkÈnt (ENTER-rel ˙j sor)." & vbCrLf & _
-        "Form·tum aj·nlott: 2026.03.07 09:00:00 (a m·sodperc opcion·lis)" & vbCrLf & _
-        "PÈlda:" & vbCrLf & _
+        "Adj meg id≈ëpontokat soronk√©nt (ENTER-rel √∫j sor)." & vbCrLf & _
+        "Form√°tum aj√°nlott: 2026.03.07 09:00:00 (a m√°sodperc opcion√°lis)" & vbCrLf & _
+        "P√©lda:" & vbCrLf & _
         "2026.03.07 09:00" & vbCrLf & _
         "2026.03.07 10:00", _
-        "⁄j idıpontok felvÈtele")
+        "√öj id≈ëpontok felv√©tele")
     s = Trim$(s)
     If s = "" Then Exit Sub
 
@@ -126,12 +126,12 @@ Private Sub Idopontok_UjFelvitel(lo As ListObject)
             Set lr = lo.ListRows.add
             lr.Range.Cells(1, iDt).value = dt
             lr.Range.Cells(1, iDt).NumberFormat = "yyyy.mm.dd hh:mm:ss"
-            lr.Range.Cells(1, iAk).value = 1 ' aktÌv
+            lr.Range.Cells(1, iAk).value = 1 ' akt√≠v
             addCount = addCount + 1
         Else
             If Trim$(lines(i)) <> "" Then
                 badCount = badCount + 1
-                If badCount <= 10 Then badList = badList & "ï " & lines(i) & vbCrLf
+                If badCount <= 10 Then badList = badList & "‚Ä¢ " & lines(i) & vbCrLf
             End If
         End If
     Next i
@@ -139,19 +139,19 @@ Private Sub Idopontok_UjFelvitel(lo As ListObject)
     Application.ScreenUpdating = True
 
     Dim msg As String
-    msg = "FelvÈve: " & addCount & " idıpont." & vbCrLf & _
-          "Hib·s sorok: " & badCount
-    If badList <> "" Then msg = msg & vbCrLf & vbCrLf & "PÈld·k hib·s sorokra:" & vbCrLf & badList
+    msg = "Felv√©ve: " & addCount & " id≈ëpont." & vbCrLf & _
+          "Hib√°s sorok: " & badCount
+    If badList <> "" Then msg = msg & vbCrLf & vbCrLf & "P√©ld√°k hib√°s sorokra:" & vbCrLf & badList
 
     MsgBox msg, vbInformation
 End Sub
 
 ' =========================
-' 3) AKTÕV TOGGLE
+' 3) AKT√çV TOGGLE
 ' =========================
 Private Sub Idopontok_AktivToggle(lo As ListObject)
     If lo.ListRows.Count = 0 Then
-        MsgBox "Nincs idıpont.", vbExclamation
+        MsgBox "Nincs id≈ëpont.", vbExclamation
         Exit Sub
     End If
 
@@ -159,7 +159,7 @@ Private Sub Idopontok_AktivToggle(lo As ListObject)
     If iAk = 0 Then Exit Sub
 
     Dim idx As Long
-    idx = CLng(val(InputBox("Melyik INDEX-et kapcsoljam ·t? (1.." & lo.ListRows.Count & ")", "AktÌv kapcsol·s")))
+    idx = CLng(val(InputBox("Melyik INDEX-et kapcsoljam √°t? (1.." & lo.ListRows.Count & ")", "Akt√≠v kapcsol√°s")))
     If idx < 1 Or idx > lo.ListRows.Count Then Exit Sub
 
     Dim v As Variant
@@ -169,30 +169,30 @@ Private Sub Idopontok_AktivToggle(lo As ListObject)
     newVal = IIf(CLng(val(v)) = 1, 0, 1)
 
     lo.DataBodyRange.Cells(idx, iAk).value = newVal
-    MsgBox "KÈsz. Index " & idx & " aktiv=" & newVal, vbInformation
+    MsgBox "K√©sz. Index " & idx & " aktiv=" & newVal, vbInformation
 End Sub
 
 ' =========================
-' 4) T÷RL…S
+' 4) T√ñRL√âS
 ' =========================
 Private Sub Idopontok_Torles(lo As ListObject)
     If lo.ListRows.Count = 0 Then
-        MsgBox "Nincs idıpont.", vbExclamation
+        MsgBox "Nincs id≈ëpont.", vbExclamation
         Exit Sub
     End If
 
     Dim idx As Long
-    idx = CLng(val(InputBox("Melyik INDEX-et tˆrˆljem? (1.." & lo.ListRows.Count & ")", "Idıpont tˆrlÈse")))
+    idx = CLng(val(InputBox("Melyik INDEX-et t√∂r√∂ljem? (1.." & lo.ListRows.Count & ")", "Id≈ëpont t√∂rl√©se")))
     If idx < 1 Or idx > lo.ListRows.Count Then Exit Sub
 
-    If MsgBox("Biztosan tˆrlˆd a(z) " & idx & ". sort az idıpont t·bl·bÛl?", vbYesNo + vbQuestion) <> vbYes Then Exit Sub
+    If MsgBox("Biztosan t√∂rl√∂d a(z) " & idx & ". sort az id≈ëpont t√°bl√°b√≥l?", vbYesNo + vbQuestion) <> vbYes Then Exit Sub
 
     lo.ListRows(idx).Delete
-    MsgBox "Tˆrˆlve.", vbInformation
+    MsgBox "T√∂r√∂lve.", vbInformation
 End Sub
 
 ' =========================
-' 5) DUPLIK¡TUM TAKARÕT¡S
+' 5) DUPLIK√ÅTUM TAKAR√çT√ÅS
 ' =========================
 Private Sub Idopontok_DuplikatumTakaritas(lo As ListObject)
     Dim iDt As Long: iDt = GetColIndex_Menu(lo, "datum_nap")
@@ -200,7 +200,7 @@ Private Sub Idopontok_DuplikatumTakaritas(lo As ListObject)
     If iDt = 0 Or iAk = 0 Then Exit Sub
 
     If lo.ListRows.Count = 0 Or lo.DataBodyRange Is Nothing Then
-        MsgBox "Nincs idıpont.", vbInformation
+        MsgBox "Nincs id≈ëpont.", vbInformation
         Exit Sub
     End If
 
@@ -227,7 +227,7 @@ Private Sub Idopontok_DuplikatumTakaritas(lo As ListObject)
     Next r
 
     If delN = 0 Then
-        MsgBox "Nincs duplik·lt idıpont.", vbInformation
+        MsgBox "Nincs duplik√°lt id≈ëpont.", vbInformation
         Exit Sub
     End If
 
@@ -238,47 +238,47 @@ Private Sub Idopontok_DuplikatumTakaritas(lo As ListObject)
     Next i
     Application.ScreenUpdating = True
 
-    MsgBox "Duplik·tum takarÌt·s kÈsz. Tˆrˆlt sorok: " & delN, vbInformation
+    MsgBox "Duplik√°tum takar√≠t√°s k√©sz. T√∂r√∂lt sorok: " & delN, vbInformation
 End Sub
 
 ' =========================
-' 6) MINDEN INAKTIV¡L¡SA
+' 6) MINDEN INAKTIV√ÅL√ÅSA
 ' =========================
 Private Sub Idopontok_MindenInaktiv(lo As ListObject)
     Dim iAk As Long: iAk = GetColIndex_Menu(lo, "aktiv")
     If iAk = 0 Then Exit Sub
 
     If lo.ListRows.Count = 0 Then
-        MsgBox "Nincs idıpont.", vbInformation
+        MsgBox "Nincs id≈ëpont.", vbInformation
         Exit Sub
     End If
 
-    If MsgBox("Biztosan INAKTÕVRA ·llÌtod az ˆsszes idıpontot?", vbYesNo + vbQuestion) <> vbYes Then Exit Sub
+    If MsgBox("Biztosan INAKT√çVRA √°ll√≠tod az √∂sszes id≈ëpontot?", vbYesNo + vbQuestion) <> vbYes Then Exit Sub
 
     lo.ListColumns(iAk).DataBodyRange.value = 0
-    MsgBox "KÈsz: minden idıpont inaktÌv.", vbInformation
+    MsgBox "K√©sz: minden id≈ëpont inakt√≠v.", vbInformation
 End Sub
 
 ' =========================
-' 7) MINDEN T÷RL…SE
+' 7) MINDEN T√ñRL√âSE
 ' =========================
 Private Function Idopontok_MindenTorles(lo As ListObject) As Boolean
     If lo.ListRows.Count = 0 Then
-        MsgBox "Nincs idıpont.", vbInformation
+        MsgBox "Nincs id≈ëpont.", vbInformation
         Idopontok_MindenTorles = True
         Exit Function
     End If
 
-    If MsgBox("BIZTOSAN tˆrlˆd az ÷SSZES idıpontot? Ez nem visszavonhatÛ.", vbYesNo + vbCritical) <> vbYes Then Exit Function
+    If MsgBox("BIZTOSAN t√∂rl√∂d az √ñSSZES id≈ëpontot? Ez nem visszavonhat√≥.", vbYesNo + vbCritical) <> vbYes Then Exit Function
 
     If Not lo.DataBodyRange Is Nothing Then lo.DataBodyRange.Delete
 
-    MsgBox "Minden idıpont tˆrˆlve.", vbInformation
+    MsgBox "Minden id≈ëpont t√∂r√∂lve.", vbInformation
     Idopontok_MindenTorles = True
 End Function
 
 ' =========================
-' 8) T÷MEGES GENER¡L¡S ”R¡NK…NT (fix 60 perc)
+' 8) T√ñMEGES GENER√ÅL√ÅS √ìR√ÅNK√âNT (fix 60 perc)
 ' =========================
 Private Sub Idopontok_TomegesOrankentiGeneralas(lo As ListObject)
     On Error GoTo EH
@@ -288,51 +288,51 @@ Private Sub Idopontok_TomegesOrankentiGeneralas(lo As ListObject)
     If iDt = 0 Or iAk = 0 Then Exit Sub
 
     Dim sRange As String
-    sRange = Trim$(InputBox("D·tumtartom·ny (YYYY.MM.DD - YYYY.MM.DD)" & vbCrLf & _
-                            "PÈlda: 2026.03.07 - 2026.03.10", "Tˆmeges gener·l·s Ûr·nkÈnt", "2026.03.07 - 2026.03.10"))
+    sRange = Trim$(InputBox("D√°tumtartom√°ny (YYYY.MM.DD - YYYY.MM.DD)" & vbCrLf & _
+                            "P√©lda: 2026.03.07 - 2026.03.10", "T√∂meges gener√°l√°s √≥r√°nk√©nt", "2026.03.07 - 2026.03.10"))
     If sRange = "" Then Exit Sub
 
     Dim d1 As Date, d2 As Date
     If Not TryParseDateRangeHu(sRange, d1, d2) Then
-        MsgBox "Hib·s d·tumtartom·ny. Form·tum: 2026.03.07 - 2026.03.10", vbExclamation
+        MsgBox "Hib√°s d√°tumtartom√°ny. Form√°tum: 2026.03.07 - 2026.03.10", vbExclamation
         Exit Sub
     End If
 
     Dim sTime As String
-    sTime = Trim$(InputBox("Idıs·v (HH:MM - HH:MM)" & vbCrLf & _
-                           "PÈlda: 08:00 - 14:00", "Tˆmeges gener·l·s Ûr·nkÈnt", "08:00 - 14:00"))
+    sTime = Trim$(InputBox("Id≈ës√°v (HH:MM - HH:MM)" & vbCrLf & _
+                           "P√©lda: 08:00 - 14:00", "T√∂meges gener√°l√°s √≥r√°nk√©nt", "08:00 - 14:00"))
     If sTime = "" Then Exit Sub
 
     Dim t1 As Date, t2 As Date
     If Not TryParseTimeRange(sTime, t1, t2) Then
-        MsgBox "Hib·s idıs·v. Form·tum: 08:00 - 14:00", vbExclamation
+        MsgBox "Hib√°s id≈ës√°v. Form√°tum: 08:00 - 14:00", vbExclamation
         Exit Sub
     End If
 
     Dim sBreaks As String
-    sBreaks = Trim$(InputBox("Sz¸net(ek) kihagy·sa (opcion·lis)" & vbCrLf & _
-                             "Form·tum: HH:MM-HH:MM;HH:MM-HH:MM" & vbCrLf & _
-                             "PÈlda: 12:00-12:30" & vbCrLf & _
-                             "‹res = nincs sz¸net", _
-                             "Tˆmeges gener·l·s Ûr·nkÈnt", "12:00-12:30"))
+    sBreaks = Trim$(InputBox("Sz√ºnet(ek) kihagy√°sa (opcion√°lis)" & vbCrLf & _
+                             "Form√°tum: HH:MM-HH:MM;HH:MM-HH:MM" & vbCrLf & _
+                             "P√©lda: 12:00-12:30" & vbCrLf & _
+                             "√úres = nincs sz√ºnet", _
+                             "T√∂meges gener√°l√°s √≥r√°nk√©nt", "12:00-12:30"))
 
     Dim breaks As Variant
     breaks = ParseBreakRangesOrEmpty(sBreaks)
 
     Dim sDays As String
     sDays = Trim$(InputBox("Mely napokon?" & vbCrLf & _
-                           "1=hÈtfı ... 7=vas·rnap" & vbCrLf & _
-                           "PÈld·k: 1-5  |  6-7  |  1,3,5  |  1-7", _
-                           "Tˆmeges gener·l·s Ûr·nkÈnt", "1-5"))
+                           "1=h√©tf≈ë ... 7=vas√°rnap" & vbCrLf & _
+                           "P√©ld√°k: 1-5  |  6-7  |  1,3,5  |  1-7", _
+                           "T√∂meges gener√°l√°s √≥r√°nk√©nt", "1-5"))
     If sDays = "" Then Exit Sub
 
     Dim dayAllowed(1 To 7) As Boolean
     If Not TryParseDaySpec(sDays, dayAllowed) Then
-        MsgBox "Hib·s nap megad·s. PÈlda: 1-5 vagy 1,3,5", vbExclamation
+        MsgBox "Hib√°s nap megad√°s. P√©lda: 1-5 vagy 1,3,5", vbExclamation
         Exit Sub
     End If
 
-    ' meglÈvık a duplik·ciÛ ellen
+    ' megl√©v≈ëk a duplik√°ci√≥ ellen
     Dim existing As Object
     Set existing = CreateObject("Scripting.Dictionary")
     existing.CompareMode = 0
@@ -380,7 +380,7 @@ Private Sub Idopontok_TomegesOrankentiGeneralas(lo As ListObject)
                         Set lr = lo.ListRows.add
                         lr.Range.Cells(1, iDt).value = dt
                         lr.Range.Cells(1, iDt).NumberFormat = "yyyy.mm.dd hh:mm:ss"
-                        lr.Range.Cells(1, iAk).value = 1 ' aktÌv
+                        lr.Range.Cells(1, iAk).value = 1 ' akt√≠v
 
                         existing.add k, True
                         addCount = addCount + 1
@@ -394,19 +394,19 @@ Private Sub Idopontok_TomegesOrankentiGeneralas(lo As ListObject)
 
     Application.ScreenUpdating = True
 
-    MsgBox "Tˆmeges Ûr·nkÈnti gener·l·s kÈsz." & vbCrLf & _
-           "FelvÈve (aktÌv=1): " & addCount & vbCrLf & _
-           "Kihagyva (duplik·t): " & skipCount & vbCrLf & _
-           "Kihagyva (sz¸net): " & breakSkip, vbInformation
+    MsgBox "T√∂meges √≥r√°nk√©nti gener√°l√°s k√©sz." & vbCrLf & _
+           "Felv√©ve (akt√≠v=1): " & addCount & vbCrLf & _
+           "Kihagyva (duplik√°t): " & skipCount & vbCrLf & _
+           "Kihagyva (sz√ºnet): " & breakSkip, vbInformation
     Exit Sub
 
 EH:
     Application.ScreenUpdating = True
-    MsgBox "Tˆmeges gener·l·s hiba: " & Err.Number & vbCrLf & Err.Description, vbCritical
+    MsgBox "T√∂meges gener√°l√°s hiba: " & Err.Number & vbCrLf & Err.Description, vbCritical
 End Sub
 
 ' =========================
-' 9) LEJ¡RTAK INAKTIV¡L¡SA (datum_nap < Now)
+' 9) LEJ√ÅRTAK INAKTIV√ÅL√ÅSA (datum_nap < Now)
 ' =========================
 Private Sub Idopontok_LejartakInaktivalasa(lo As ListObject)
     On Error GoTo EH
@@ -416,11 +416,11 @@ Private Sub Idopontok_LejartakInaktivalasa(lo As ListObject)
     If iDt = 0 Or iAk = 0 Then Exit Sub
 
     If lo.ListRows.Count = 0 Or lo.DataBodyRange Is Nothing Then
-        MsgBox "Nincs idıpont.", vbInformation
+        MsgBox "Nincs id≈ëpont.", vbInformation
         Exit Sub
     End If
 
-    If MsgBox("Inaktiv·ljam az ˆsszes LEJ¡RT idıpontot? (datum_nap < most)", vbYesNo + vbQuestion) <> vbYes Then Exit Sub
+    If MsgBox("Inaktiv√°ljam az √∂sszes LEJ√ÅRT id≈ëpontot? (datum_nap < most)", vbYesNo + vbQuestion) <> vbYes Then Exit Sub
 
     Dim arr As Variant: arr = lo.DataBodyRange.value
     Dim r As Long, dt As Date, changed As Long
@@ -441,23 +441,23 @@ Private Sub Idopontok_LejartakInaktivalasa(lo As ListObject)
 
     Application.ScreenUpdating = True
 
-    MsgBox "KÈsz. Inaktiv·lt lej·rt idıpontok: " & changed, vbInformation
+    MsgBox "K√©sz. Inaktiv√°lt lej√°rt id≈ëpontok: " & changed, vbInformation
     Exit Sub
 
 EH:
     Application.ScreenUpdating = True
-    MsgBox "Lej·rt inaktiv·l·s hiba: " & Err.Number & vbCrLf & Err.Description, vbCritical
+    MsgBox "Lej√°rt inaktiv√°l√°s hiba: " & Err.Number & vbCrLf & Err.Description, vbCritical
 End Sub
 
 ' =========================================================
-' SegÈdek (csak ehhez a men¸hˆz)
+' Seg√©dek (csak ehhez a men√ºh√∂z)
 ' =========================================================
 Private Function GetColIndex_Menu(lo As ListObject, ByVal colName As String) As Long
     On Error Resume Next
     GetColIndex_Menu = lo.ListColumns(colName).Index
     On Error GoTo 0
     If GetColIndex_Menu = 0 Then
-        MsgBox "Hi·nyzÛ oszlop a t·bl·ban: " & colName, vbExclamation
+        MsgBox "Hi√°nyz√≥ oszlop a t√°bl√°ban: " & colName, vbExclamation
     End If
 End Function
 
@@ -472,8 +472,8 @@ End Function
 
 Private Function TryParseDateRangeHu(ByVal s As String, ByRef d1 As Date, ByRef d2 As Date) As Boolean
     On Error GoTo Fail
-    s = Replace(s, "ñ", "-")
-    s = Replace(s, "ó", "-")
+    s = Replace(s, "‚Äì", "-")
+    s = Replace(s, "‚Äî", "-")
     s = Replace(s, " ", "")
 
     Dim parts() As String
@@ -496,8 +496,8 @@ End Function
 
 Private Function TryParseTimeRange(ByVal s As String, ByRef t1 As Date, ByRef t2 As Date) As Boolean
     On Error GoTo Fail
-    s = Replace(s, "ñ", "-")
-    s = Replace(s, "ó", "-")
+    s = Replace(s, "‚Äì", "-")
+    s = Replace(s, "‚Äî", "-")
     s = Replace(s, " ", "")
 
     Dim parts() As String
@@ -592,7 +592,7 @@ Fail:
     TryParseDaySpec = False
 End Function
 
-' ===== sz¸netek kezelÈse =====
+' ===== sz√ºnetek kezel√©se =====
 
 Private Function ParseBreakRangesOrEmpty(ByVal s As String) As Variant
     s = Trim$(s)
@@ -619,7 +619,7 @@ Private Function ParseBreakRangesOrEmpty(ByVal s As String) As Variant
                 n = n + 1
                 out(n) = Array(tStart, tEnd)
             Else
-                Err.Raise vbObjectError + 513, , "Hib·s sz¸net tartom·ny: " & p
+                Err.Raise vbObjectError + 513, , "Hib√°s sz√ºnet tartom√°ny: " & p
             End If
         End If
     Next i
@@ -654,7 +654,7 @@ Private Function IsInAnyBreak(ByVal t As Date, ByVal breaks As Variant) As Boole
 SafeNo:
 End Function
 
-' ===== d·tum+idı parse (men¸hez) =====
+' ===== d√°tum+id≈ë parse (men√ºhez) =====
 Private Function TryParseHuDateTime_Menu(ByVal v As Variant, ByRef dtOut As Date) As Boolean
     On Error GoTo Fail
 

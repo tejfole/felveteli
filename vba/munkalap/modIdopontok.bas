@@ -1,7 +1,7 @@
 Attribute VB_Name = "modIdopontok"
 Option Explicit
 
-' BelÈpÈsi pont a Sheet modulbÛl
+' Bel√©p√©si pont a Sheet modulb√≥l
 Public Sub AssignDatumNap_FromIdopontTabla( _
     ByVal loD As ListObject, _
     ByVal rowIdx As Long, _
@@ -18,7 +18,7 @@ Public Sub AssignDatumNap_FromIdopontTabla( _
     If loT Is Nothing Then Exit Sub
 
     If loT.ListRows.Count = 0 Or loT.DataBodyRange Is Nothing Then
-        MsgBox "Nincs idıpont a tbl_idopontok t·bl·ban. VegyÈl fel idıpontokat az Idıpontok men¸bıl.", vbExclamation
+        MsgBox "Nincs id≈ëpont a tbl_idopontok t√°bl√°ban. Vegy√©l fel id≈ëpontokat az Id≈ëpontok men√ºb≈ël.", vbExclamation
         Exit Sub
     End If
 
@@ -26,7 +26,7 @@ Public Sub AssignDatumNap_FromIdopontTabla( _
     If loD.DataBodyRange Is Nothing Then Exit Sub
     If rowIdx < 1 Or rowIdx > loD.ListRows.Count Then Exit Sub
 
-    ' ===== 0) KEV…S ÕR¡SBELI (fel¸lbÌr·lhatÛ) =====
+    ' ===== 0) KEV√âS √çR√ÅSBELI (fel√ºlb√≠r√°lhat√≥) =====
     Dim colIras As Long, irasPont As Double
     colIras = GetLoColIndex(loD, "irasbeliossz")
 
@@ -39,22 +39,22 @@ Public Sub AssignDatumNap_FromIdopontTabla( _
             okt = CStr(GetCellValueSafe(loD, rowIdx, "oktazon"))
 
             Dim msg As String
-            msg = "KevÈs Ìr·sbeli pont (" & KEVES_IRASBELI_KUSZOB & " alatt) ñ alapbÛl nem kap idıpontot." & vbCrLf & vbCrLf & _
-                  "NÈv: " & nev & vbCrLf & _
+            msg = "Kev√©s √≠r√°sbeli pont (" & KEVES_IRASBELI_KUSZOB & " alatt) ‚Äì alapb√≥l nem kap id≈ëpontot." & vbCrLf & vbCrLf & _
+                  "N√©v: " & nev & vbCrLf & _
                   "Oktazon: " & okt & vbCrLf & _
-                  "Õr·sbeli: " & irasPont & vbCrLf & vbCrLf & _
-                  "Fel¸lbÌr·lod Ès mÈgis kiosztod az idıpontot?"
+                  "√çr√°sbeli: " & irasPont & vbCrLf & vbCrLf & _
+                  "Fel√ºlb√≠r√°lod √©s m√©gis kiosztod az id≈ëpontot?"
 
-            If MsgBox(msg, vbExclamation + vbYesNo, "KevÈs pont") = vbNo Then
+            If MsgBox(msg, vbExclamation + vbYesNo, "Kev√©s pont") = vbNo Then
                 Exit Sub
             Else
-                Call SetCellValueSafe(loD, rowIdx, "megjegyzes", "KevÈs Ìr·sbeli ñ fel¸lbÌr·lva")
+                Call SetCellValueSafe(loD, rowIdx, "megjegyzes", "Kev√©s √≠r√°sbeli ‚Äì fel√ºlb√≠r√°lva")
             End If
         End If
     End If
-    ' ===== /KEV…S ÕR¡SBELI =====
+    ' ===== /KEV√âS √çR√ÅSBELI =====
 
-    ' ===== 1) aktÌv idıpontok list·ja =====
+    ' ===== 1) akt√≠v id≈ëpontok list√°ja =====
     Dim arrT As Variant
     arrT = loT.DataBodyRange.value
 
@@ -63,18 +63,18 @@ Public Sub AssignDatumNap_FromIdopontTabla( _
     iAkT = GetLoColIndex(loT, "aktiv")
 
     If iDtT = 0 Or iAkT = 0 Then
-        MsgBox "Hi·nyzÛ oszlop a tbl_idopontok t·bl·ban: datum_nap Ès/vagy aktiv.", vbExclamation
+        MsgBox "Hi√°nyz√≥ oszlop a tbl_idopontok t√°bl√°ban: datum_nap √©s/vagy aktiv.", vbExclamation
         Exit Sub
     End If
 
-    ' ===== 2) foglalts·g sz·mol·s a diakadatbÛl =====
+    ' ===== 2) foglalts√°g sz√°mol√°s a diakadatb√≥l =====
     Dim iBizD As Long, iDtD As Long
     iBizD = GetLoColIndex(loD, "bizottsag")
     iDtD = GetLoColIndex(loD, "datum_nap")
     If iDtD = 0 Then iDtD = GetLoColIndex(loD, "idopont_nap") ' fallback
 
     If iBizD = 0 Or iDtD = 0 Then
-        MsgBox "Hi·nyzÛ oszlop a diakadat t·bl·ban: bizottsag Ès/vagy datum_nap (idopont_nap).", vbExclamation
+        MsgBox "Hi√°nyz√≥ oszlop a diakadat t√°bl√°ban: bizottsag √©s/vagy datum_nap (idopont_nap).", vbExclamation
         Exit Sub
     End If
 
@@ -95,11 +95,11 @@ Public Sub AssignDatumNap_FromIdopontTabla( _
     Next r
 
     If activeDates.Count = 0 Then
-        MsgBox "Nincs AKTÕV idıpont a tbl_idopontok t·bl·ban.", vbExclamation
+        MsgBox "Nincs AKT√çV id≈ëpont a tbl_idopontok t√°bl√°ban.", vbExclamation
         Exit Sub
     End If
 
-    ' ===== 3) lista: idıpont + szabad hely =====
+    ' ===== 3) lista: id≈ëpont + szabad hely =====
     Dim items() As String, keys() As String
     ReDim items(1 To activeDates.Count)
     ReDim keys(1 To activeDates.Count)
@@ -119,7 +119,7 @@ Public Sub AssignDatumNap_FromIdopontTabla( _
         items(i) = Format$(dt, "yyyy.mm.dd hh:nn:ss") & "   (szabad: " & free & ")"
     Next i
 
-    ' ===== 4) csak szabad idıpontok =====
+    ' ===== 4) csak szabad id≈ëpontok =====
     Dim items2() As String, keys2() As String, n As Long
     ReDim items2(1 To UBound(items))
     ReDim keys2(1 To UBound(items))
@@ -133,38 +133,38 @@ Public Sub AssignDatumNap_FromIdopontTabla( _
     Next i
 
     If n = 0 Then
-        MsgBox "Nincs szabad hely egyik aktÌv idıpontban sem ennÈl a bizotts·gn·l (" & biz & ").", vbExclamation
+        MsgBox "Nincs szabad hely egyik akt√≠v id≈ëpontban sem enn√©l a bizotts√°gn√°l (" & biz & ").", vbExclamation
         Exit Sub
     End If
 
     ReDim Preserve items2(1 To n)
     ReDim Preserve keys2(1 To n)
 
-    ' ===== 5) v·laszt·s InputBox-szal =====
+    ' ===== 5) v√°laszt√°s InputBox-szal =====
     Dim pick As Long
-    pick = ChooseIndexFromList("Idıpont v·laszt·s (Bizotts·g " & biz & ")", items2)
+    pick = ChooseIndexFromList("Id≈ëpont v√°laszt√°s (Bizotts√°g " & biz & ")", items2)
     If pick = 0 Then Exit Sub
 
     Dim dtChosen As Date
     dtChosen = CDate(CDbl(keys2(pick)))
 
-    ' ⁄jraellenırzÈs
+    ' √öjraellen≈ërz√©s
     If CountAssignedInArr(arrD, biz, dtChosen, iBizD, iDtD) >= kapacitas Then
-        MsgBox "Kˆzben betelt ez az idıpont. V·lassz m·sikat.", vbExclamation
+        MsgBox "K√∂zben betelt ez az id≈ëpont. V√°lassz m√°sikat.", vbExclamation
         Exit Sub
     End If
 
-    ' ===== 6) beÌr·s =====
+    ' ===== 6) be√≠r√°s =====
     loD.DataBodyRange.Cells(rowIdx, iDtD).value = dtChosen
     loD.DataBodyRange.Cells(rowIdx, iDtD).NumberFormat = "yyyy.mm.dd hh:mm:ss"
 
     Exit Sub
 
 Fail:
-    MsgBox "Hiba az idıpont kioszt·s kˆzben: " & Err.Description, vbExclamation
+    MsgBox "Hiba az id≈ëpont kioszt√°s k√∂zben: " & Err.Description, vbExclamation
 End Sub
 
-' ===== segÈdek =====
+' ===== seg√©dek =====
 
 Private Function GetLoColIndex(ByVal lo As ListObject, ByVal colName As String) As Long
     On Error GoTo Fail
@@ -196,7 +196,7 @@ Private Function ExtractFree(ByVal s As String) As Long
     ExtractFree = CLng(val(Trim$(t)))
 End Function
 
-' FONTOS: legyen Public, hogy biztosan elÈrhetı legyen minden modulbÛl
+' FONTOS: legyen Public, hogy biztosan el√©rhet≈ë legyen minden modulb√≥l
 Public Function ChooseIndexFromList(ByVal title As String, ByRef items() As String) As Long
     Dim lb As Long, ub As Long
 

@@ -1,0 +1,3 @@
+# VBA source files — UTF-8, CRLF line endings
+*.bas text eol=crlf working-tree-encoding=UTF-8
+*.cls text eol=crlf working-tree-encoding=UTF-8

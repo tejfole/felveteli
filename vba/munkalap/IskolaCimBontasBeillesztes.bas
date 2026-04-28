@@ -23,17 +23,17 @@ Sub BontsdEsMasoldAdatokLista()
     On Error GoTo 0
     
     If colCimOssze Is Nothing Then
-        MsgBox "'cim_ossze' oszlop nem tal·lhatÛ az 'iskolak' t·bl·ban az 'adatok' munkalapon!", vbCritical
+        MsgBox "'cim_ossze' oszlop nem tal√°lhat√≥ az 'iskolak' t√°bl√°ban az 'adatok' munkalapon!", vbCritical
         Exit Sub
     End If
     If colIskIrzs Is Nothing Or colIskVaros Is Nothing Or colIskCim Is Nothing Then
-        MsgBox "Nem tal·lhatÛ valamelyik oszlop ('isk_irsz', 'isk_varos', 'isk_utca') a 'listak' t·bl·ban a 'lista' munkalapon!", vbCritical
+        MsgBox "Nem tal√°lhat√≥ valamelyik oszlop ('isk_irsz', 'isk_varos', 'isk_utca') a 'listak' t√°bl√°ban a 'lista' munkalapon!", vbCritical
         Exit Sub
     End If
     
     nSor = tblIsk.ListRows.Count
     If tblList.ListRows.Count < nSor Then
-        MsgBox "A 'listak' t·bla kevesebb sort tartalmaz, mint az 'iskolak' t·bla!", vbExclamation
+        MsgBox "A 'listak' t√°bla kevesebb sort tartalmaz, mint az 'iskolak' t√°bla!", vbExclamation
         Exit Sub
     End If
     
@@ -46,7 +46,7 @@ Sub BontsdEsMasoldAdatokLista()
         colIskCim.Cells(i).value = maradek
     Next i
     
-    MsgBox "SzÈtbont·s kÈsz!"
+    MsgBox "Sz√©tbont√°s k√©sz!"
 End Sub
 
 Sub CimSzetszed(cim As String, ByRef irsz As String, ByRef varos As String, ByRef maradek As String)

@@ -1,17 +1,17 @@
 Attribute VB_Name = "HatarozatValasztas"
-Function Hat·rozat(nev As String) As String
+Function Hat√°rozat(nev As String) As String
     Dim tblRangsor As ListObject
     Dim i As Long
     Dim nevOszlop As Long, felveszOszlop As Long
     Dim utolsoSor As Long
 
-    ' T·bla elÈrÈse
+    ' T√°bla el√©r√©se
     On Error Resume Next
     Set tblRangsor = ThisWorkbook.Sheets("rangsor").ListObjects("rangsor")
     On Error GoTo 0
 
     If tblRangsor Is Nothing Then
-        Hat·rozat = "Hiba: A 'rangsor' nev˚ t·bla nem tal·lhatÛ!"
+        Hat√°rozat = "Hiba: A 'rangsor' nev≈± t√°bla nem tal√°lhat√≥!"
         Exit Function
     End If
 
@@ -19,20 +19,20 @@ Function Hat·rozat(nev As String) As String
     nevOszlop = tblRangsor.ListColumns("nev").Index
     felveszOszlop = tblRangsor.ListColumns("felvesz").Index
 
-    ' Sor bej·r·sa
+    ' Sor bej√°r√°sa
     For i = 1 To tblRangsor.ListRows.Count
         If LCase(tblRangsor.DataBodyRange(i, nevOszlop).value) = LCase(nev) Then
             If LCase(tblRangsor.DataBodyRange(i, felveszOszlop).value) = "x" Then
-                Hat·rozat = "felveszem"
+                Hat√°rozat = "felveszem"
             Else
-                Hat·rozat = "nem nyert felvÈtelt"
+                Hat√°rozat = "nem nyert felv√©telt"
             End If
             Exit Function
         End If
     Next i
 
-    ' Ha nem tal·lhatÛ
-    Hat·rozat = ""
+    ' Ha nem tal√°lhat√≥
+    Hat√°rozat = ""
 
 End Function
 

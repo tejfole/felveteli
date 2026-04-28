@@ -9,7 +9,7 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 Private Sub Worksheet_Change(ByVal Target As Range)
     If Not Intersect(Target, Me.Range("B1")) Is Nothing Then
-       Call NyelvekBeirasaOsszefuzve   ' Saj·t makrÛ neve
+       Call NyelvekBeirasaOsszefuzve   ' Saj√°t makr√≥ neve
     End If
 End Sub
 

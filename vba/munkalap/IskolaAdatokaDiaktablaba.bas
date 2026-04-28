@@ -11,7 +11,7 @@ Sub ToltsdIskolaAdatokatPirosSargaHibaval(Optional control As IRibbonControl)
     Dim icimCol As ListColumn, imailCol As ListColumn
     Dim i As Long
 
-    ' T·bl·k keresÈse
+    ' T√°bl√°k keres√©se
     For Each ws In ThisWorkbook.Worksheets
         For Each t In ws.ListObjects
             If t.Name = "diakadat" Then Set diakTbl = t
@@ -20,11 +20,11 @@ Sub ToltsdIskolaAdatokatPirosSargaHibaval(Optional control As IRibbonControl)
     Next ws
 
     If diakTbl Is Nothing Or iskolaTbl Is Nothing Then
-        MsgBox "Nem tal·lhatÛ 'diakadat' vagy 'iskola' nev˚ t·bla!", vbCritical
+        MsgBox "Nem tal√°lhat√≥ 'diakadat' vagy 'iskola' nev≈± t√°bla!", vbCritical
         Exit Sub
     End If
 
-    ' Iskola t·bla szÛt·rakba (normaliz·lt kulccsal is)
+    ' Iskola t√°bla sz√≥t√°rakba (normaliz√°lt kulccsal is)
     Set dictOM = CreateObject("Scripting.Dictionary")
     Set dictCim = CreateObject("Scripting.Dictionary")
     Set dictMail = CreateObject("Scripting.Dictionary")
@@ -42,7 +42,7 @@ Sub ToltsdIskolaAdatokatPirosSargaHibaval(Optional control As IRibbonControl)
         Next i
 
         If isknevIndex = 0 Or iskolaomIndex = 0 Or cimIndex = 0 Or mailIndex = 0 Then
-            MsgBox "Az 'iskola' t·bl·ban hi·nyzik egy sz¸ksÈges oszlop!", vbCritical
+            MsgBox "Az 'iskola' t√°bl√°ban hi√°nyzik egy sz√ºks√©ges oszlop!", vbCritical
             Exit Sub
         End If
 
@@ -53,7 +53,7 @@ Sub ToltsdIskolaAdatokatPirosSargaHibaval(Optional control As IRibbonControl)
                 dictOM(nev) = r.Range(1, iskolaomIndex).value
                 dictCim(nev) = r.Range(1, cimIndex).value
                 dictMail(nev) = r.Range(1, mailIndex).value
-                dictNorm(NormKey(nev)) = nev ' normaliz·lt -> eredeti (ha fuzzy keresÈs kell)
+                dictNorm(NormKey(nev)) = nev ' normaliz√°lt -> eredeti (ha fuzzy keres√©s kell)
             End If
         Next r
     End With
@@ -69,33 +69,33 @@ Sub ToltsdIskolaAdatokatPirosSargaHibaval(Optional control As IRibbonControl)
     Next col
 
     If isknevCol Is Nothing Or iskomCol Is Nothing Or icimCol Is Nothing Or imailCol Is Nothing Then
-        MsgBox "A 'diakadat' t·bl·ban hi·nyzik egy sz¸ksÈges oszlop!", vbCritical
+        MsgBox "A 'diakadat' t√°bl√°ban hi√°nyzik egy sz√ºks√©ges oszlop!", vbCritical
         Exit Sub
     End If
 
-    ' Cell·k kitˆltÈse
+    ' Cell√°k kit√∂lt√©se
     For Each r In diakTbl.ListRows
         isknev = Trim(r.Range(1, isknevCol.Index).value)
         isknevNorm = NormKey(isknev)
-        ' Alaphelyzet: h·ttÈr vissza·llÌt·sa
+        ' Alaphelyzet: h√°tt√©r vissza√°ll√≠t√°sa
         r.Range(1, iskomCol.Index).Resize(1, 3).Interior.ColorIndex = xlNone
 
         If isknev <> "" Then
             If dictOM.Exists(isknev) Then
-                ' Pontos tal·lat
+                ' Pontos tal√°lat
                 r.Range(1, iskomCol.Index).value = dictOM(isknev)
                 r.Range(1, icimCol.Index).value = dictCim(isknev)
                 r.Range(1, imailCol.Index).value = dictMail(isknev)
             ElseIf dictNorm.Exists(isknevNorm) Then
-                ' Normaliz·lt nÈv egyezÈs (kisbet˚, szÛkˆz, Èkezet): s·rga h·ttÈr + kitˆltÈs
+                ' Normaliz√°lt n√©v egyez√©s (kisbet≈±, sz√≥k√∂z, √©kezet): s√°rga h√°tt√©r + kit√∂lt√©s
                 Dim eredetiNev As String
                 eredetiNev = dictNorm(isknevNorm)
                 r.Range(1, iskomCol.Index).value = dictOM(eredetiNev)
                 r.Range(1, icimCol.Index).value = dictCim(eredetiNev)
                 r.Range(1, imailCol.Index).value = dictMail(eredetiNev)
-                r.Range(1, iskomCol.Index).Resize(1, 3).Interior.color = RGB(255, 220, 80) ' narancs-s·rga
+                r.Range(1, iskomCol.Index).Resize(1, 3).Interior.color = RGB(255, 220, 80) ' narancs-s√°rga
             Else
-                ' Nincs tal·lat: tˆrlÈs + piros
+                ' Nincs tal√°lat: t√∂rl√©s + piros
                 r.Range(1, iskomCol.Index).value = ""
                 r.Range(1, icimCol.Index).value = ""
                 r.Range(1, imailCol.Index).value = ""
@@ -104,24 +104,24 @@ Sub ToltsdIskolaAdatokatPirosSargaHibaval(Optional control As IRibbonControl)
         End If
     Next r
 
-    MsgBox "Az iskolaadatok kitˆltÈse kÈsz! A hi·nyzÛ vagy elgÈpelıs neveket szÌneztem.", vbInformation
+    MsgBox "Az iskolaadatok kit√∂lt√©se k√©sz! A hi√°nyz√≥ vagy elg√©pel≈ës neveket sz√≠neztem.", vbInformation
 End Sub
 
-' Kisbet˚, szÛkˆz- Ès Èkezet-telenÌtett kulcs
+' Kisbet≈±, sz√≥k√∂z- √©s √©kezet-telen√≠tett kulcs
 Function NormKey(s As String) As String
     Dim t As String
     t = LCase(s)
     t = Replace(t, " ", "")
     t = Replace(t, "-", "")
-    ' Magyar Èkezetek elt·volÌt·sa
-    t = Replace(t, "·", "a")
-    t = Replace(t, "È", "e")
-    t = Replace(t, "Ì", "i")
-    t = Replace(t, "Û", "o")
-    t = Replace(t, "ˆ", "o")
-    t = Replace(t, "ı", "o")
-    t = Replace(t, "˙", "u")
-    t = Replace(t, "¸", "u")
-    t = Replace(t, "˚", "u")
+    ' Magyar √©kezetek elt√°vol√≠t√°sa
+    t = Replace(t, "√°", "a")
+    t = Replace(t, "√©", "e")
+    t = Replace(t, "√≠", "i")
+    t = Replace(t, "√≥", "o")
+    t = Replace(t, "√∂", "o")
+    t = Replace(t, "≈ë", "o")
+    t = Replace(t, "√∫", "u")
+    t = Replace(t, "√º", "u")
+    t = Replace(t, "≈±", "u")
     NormKey = t
 End Function

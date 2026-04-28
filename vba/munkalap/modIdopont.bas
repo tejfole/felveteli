@@ -6,18 +6,18 @@ Public Sub TEST_IdopontRendszer()
     Set loT = GetIdopontTabla_V2()
 
     If loT Is Nothing Then
-        MsgBox "NINCS idıpont t·bla (GetIdopontTabla_V2 Nothing).", vbCritical
+        MsgBox "NINCS id≈ëpont t√°bla (GetIdopontTabla_V2 Nothing).", vbCritical
         Exit Sub
     End If
 
-    MsgBox "OK: megvan az idıpont t·bla." & vbCrLf & _
+    MsgBox "OK: megvan az id≈ëpont t√°bla." & vbCrLf & _
            "Lap: " & loT.parent.Name & vbCrLf & _
-           "T·bla: " & loT.Name & vbCrLf & _
+           "T√°bla: " & loT.Name & vbCrLf & _
            "Sorok: " & loT.ListRows.Count, vbInformation
 
-    ' teszt list·z·s: Ìrjunk ki 1-2 aktÌv idıpontot
+    ' teszt list√°z√°s: √≠rjunk ki 1-2 akt√≠v id≈ëpontot
     If loT.ListRows.Count = 0 Then
-        MsgBox "Az idıpont t·bla ¸res. VegyÈl fel idıpontot!", vbExclamation
+        MsgBox "Az id≈ëpont t√°bla √ºres. Vegy√©l fel id≈ëpontot!", vbExclamation
         Exit Sub
     End If
 
@@ -25,7 +25,7 @@ Public Sub TEST_IdopontRendszer()
     Dim iAk As Long: iAk = loT.ListColumns("aktiv").Index
 
     Dim arr As Variant: arr = loT.DataBodyRange.value
-    Dim r As Long, msg As String: msg = "Elsı 10 sor:" & vbCrLf
+    Dim r As Long, msg As String: msg = "Els≈ë 10 sor:" & vbCrLf
 
     For r = 1 To Application.Min(10, UBound(arr, 1))
         msg = msg & r & ") " & CStr(arr(r, iDt)) & " | aktiv=" & CStr(arr(r, iAk)) & vbCrLf

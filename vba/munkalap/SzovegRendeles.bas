@@ -63,7 +63,7 @@ Sub SzovegRendelesStrukturaltTablakkal_WriteIfChanged()
     Set szovegekT = wsAdatok.ListObjects("szovegek")
 
     If listaT Is Nothing Or rangsorT Is Nothing Or szovegekT Is Nothing Then
-        MsgBox "Nem tal·lhatÛ valamelyik v·rt t·bla (lista, rangsor vagy szovegek).", vbExclamation
+        MsgBox "Nem tal√°lhat√≥ valamelyik v√°rt t√°bla (lista, rangsor vagy szovegek).", vbExclamation
         GoTo Cleanup
     End If
 
@@ -89,7 +89,7 @@ Sub SzovegRendelesStrukturaltTablakkal_WriteIfChanged()
     mustHave = Array("nev", "tagozat", "ny_1_nagy", "ny_2", "ny_osszefuz", "ok")
     For i = LBound(mustHave) To UBound(mustHave)
         If Not dictLista.Exists(mustHave(i)) Then
-            MsgBox "Hi·nyzÛ oszlop a 'lista' t·bl·ban: " & mustHave(i), vbExclamation
+            MsgBox "Hi√°nyz√≥ oszlop a 'lista' t√°bl√°ban: " & mustHave(i), vbExclamation
             GoTo Cleanup
         End If
     Next i
@@ -97,13 +97,13 @@ Sub SzovegRendelesStrukturaltTablakkal_WriteIfChanged()
     mustHave = Array("nev", "irasbeliossz", "felvesz", "mastvalaszt", "elut")
     For i = LBound(mustHave) To UBound(mustHave)
         If Not dictRangsor.Exists(mustHave(i)) Then
-            MsgBox "Hi·nyzÛ oszlop a 'rangsor' t·bl·ban: " & mustHave(i), vbExclamation
+            MsgBox "Hi√°nyz√≥ oszlop a 'rangsor' t√°bl√°ban: " & mustHave(i), vbExclamation
             GoTo Cleanup
         End If
     Next i
 
     If Not dictSzovegek.Exists("kategoria") Then
-        MsgBox "Hi·nyzÛ 'kategoria' oszlop a 'szovegek' t·bl·ban.", vbExclamation
+        MsgBox "Hi√°nyz√≥ 'kategoria' oszlop a 'szovegek' t√°bl√°ban.", vbExclamation
         GoTo Cleanup
     End If
 
@@ -248,7 +248,7 @@ Sub SzovegRendelesStrukturaltTablakkal_WriteIfChanged()
     ufrKesz.Show
     On Error GoTo 0
 
-    MsgBox "Feldolgoz·s kÈsz. MÛdosÌtott cell·k: " & changedCount & " (mÛdosÌtott sorok: " & changedRows & ")", vbInformation
+    MsgBox "Feldolgoz√°s k√©sz. M√≥dos√≠tott cell√°k: " & changedCount & " (m√≥dos√≠tott sorok: " & changedRows & ")", vbInformation
 
 Cleanup:
     Application.Calculation = startCalcMode
@@ -257,6 +257,6 @@ Cleanup:
     Exit Sub
 
 ErrHandler:
-    MsgBox "Hiba a feldolgoz·s sor·n: " & Err.Number & " - " & Err.Description, vbCritical
+    MsgBox "Hiba a feldolgoz√°s sor√°n: " & Err.Number & " - " & Err.Description, vbCritical
     Resume Cleanup
 End Sub

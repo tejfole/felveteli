@@ -2,19 +2,19 @@ Attribute VB_Name = "SzamitRangotTablasTolt"
 Option Explicit
 
 ' ===============================================================
-' KLASSZIKUS FELV…TELI RANGSOR SZAB¡LYT¡BLA SZERINT, SORRENDDEL
+' KLASSZIKUS FELV√âTELI RANGSOR SZAB√ÅLYT√ÅBLA SZERINT, SORRENDDEL
 ' ===============================================================
 '
-' FeltÈtelek (pl. testvÈr, lakcÌm, h·tr·nyos, pluszpont stb.)
-' a "Szab·lyok" lapon lÈvı Excel-t·bl·bÛl ("tbl_szabalyok") ñ†
-' a t·bl·ban szereplı SORREND a dˆntı! S˙lyt, tÌpust figyelembe vesz,
-' de a megszokott felvÈteli sorrend szerinti szab·lyokra ÈpÌt.
+' Felt√©telek (pl. testv√©r, lakc√≠m, h√°tr√°nyos, pluszpont stb.)
+' a "Szab√°lyok" lapon l√©v≈ë Excel-t√°bl√°b√≥l ("tbl_szabalyok") ‚Äì¬†
+' a t√°bl√°ban szerepl≈ë SORREND a d√∂nt≈ë! S√∫lyt, t√≠pust figyelembe vesz,
+' de a megszokott felv√©teli sorrend szerinti szab√°lyokra √©p√≠t.
 '
-' A felhaszn·lÛ CSAK a szab·lyt·bl·t szerkeszti Excelben!
+' A felhaszn√°l√≥ CSAK a szab√°lyt√°bl√°t szerkeszti Excelben!
 '
-' A "diakadat" nev˚ ListObject (Excel-t·bl·ban) legyen a jelentkezık t·bl·ja.
-' A "p_mindossz" oszlop tartalmazza az ˆsszpontsz·mot.
-' A "rangsor" oszlopba ker¸l a ranghely.
+' A "diakadat" nev≈± ListObject (Excel-t√°bl√°ban) legyen a jelentkez≈ëk t√°bl√°ja.
+' A "p_mindossz" oszlop tartalmazza az √∂sszpontsz√°mot.
+' A "rangsor" oszlopba ker√ºl a ranghely.
 '
 ' ===============================================================
 
@@ -24,9 +24,9 @@ Sub RangsorTolt_Klasszikus_SorrendDontos()
     Dim pontRange As Range
     Dim i As Long, n As Long
 
-    ' --- MÛdosÌtsd, ha m·s a lap/t·blanÈv n·lad ---
+    ' --- M√≥dos√≠tsd, ha m√°s a lap/t√°blan√©v n√°lad ---
     Set wsAdat = Worksheets("diakadat")
-    Set wsSzabaly = Worksheets("Szab·lyok")
+    Set wsSzabaly = Worksheets("Szab√°lyok")
     Set diakTbl = wsAdat.ListObjects("diakadat")
     Set szabalyTbl = wsSzabaly.ListObjects("tbl_szabalyok")
     Set pontRange = diakTbl.ListColumns("p_mindossz").DataBodyRange
@@ -39,7 +39,7 @@ Sub RangsorTolt_Klasszikus_SorrendDontos()
         Dim rang As Long: rang = 1
         Dim azonosPontszamuak As Long: azonosPontszamuak = 0
 
-        ' --- Elsı lÈpÈs: rangsor pontsz·m alapj·n ---
+        ' --- Els≈ë l√©p√©s: rangsor pontsz√°m alapj√°n ---
         Dim k As Long
         For k = 1 To n
             If IsNumeric(pontRange.Cells(k, 1).value) Then
@@ -48,14 +48,14 @@ Sub RangsorTolt_Klasszikus_SorrendDontos()
             End If
         Next k
 
-        ' --- Ha nincs dˆntetlen, fix a helyezÈs ---
+        ' --- Ha nincs d√∂ntetlen, fix a helyez√©s ---
         If azonosPontszamuak = 1 Then
             diakTbl.DataBodyRange.Cells(i, rangIdx).value = rang
             GoTo NextVersenyzo
         End If
 
-        ' --- Dˆntetlenbont·s: szab·lyt·bla sorrend szerinti "elınyˆssÈg" ---
-        ' ÷sszegy˚jtj¸k az ˆsszes dˆntetlen indexÈt:
+        ' --- D√∂ntetlenbont√°s: szab√°lyt√°bla sorrend szerinti "el≈ëny√∂ss√©g" ---
+        ' √ñsszegy≈±jtj√ºk az √∂sszes d√∂ntetlen index√©t:
         Dim tieIndexes() As Long, tCount As Long
         ReDim tieIndexes(1 To azonosPontszamuak)
         tCount = 0
@@ -66,18 +66,18 @@ Sub RangsorTolt_Klasszikus_SorrendDontos()
             End If
         Next k
 
-        ' H·ny dˆntetlen versenyzı "megelızi" szab·ly szerinti bont·sban ezt a jelentkezıt?
+        ' H√°ny d√∂ntetlen versenyz≈ë "megel≈ëzi" szab√°ly szerinti bont√°sban ezt a jelentkez≈ët?
         Dim tiePoz As Long
         For k = 1 To azonosPontszamuak
             If tieIndexes(k) = i Then
-                ' Saj·t mag·t ne hasonlÌtsa!
+                ' Saj√°t mag√°t ne hasonl√≠tsa!
             Else
                 Dim cmp As Integer
                 cmp = Rangsor_Eloresorol(i, tieIndexes(k), diakTbl, szabalyTbl)
                 If cmp = 1 Then
                     rang = rang + 1
                 End If
-                ' cmp = -1: marad, cmp = 0: teljes dˆntetlen, marad
+                ' cmp = -1: marad, cmp = 0: teljes d√∂ntetlen, marad
             End If
         Next k
 
@@ -86,15 +86,15 @@ Sub RangsorTolt_Klasszikus_SorrendDontos()
 NextVersenyzo:
     Next i
 
-    MsgBox "Rangsor klasszikus szab·ly-sorrend szerint frissÌtve!", vbInformation
+    MsgBox "Rangsor klasszikus szab√°ly-sorrend szerint friss√≠tve!", vbInformation
 End Sub
 
-' =============== SEG…DF‹GGV…NY ===============
+' =============== SEG√âDF√úGGV√âNY ===============
 '
-' Adott kÈt jelentkezı (sorA, sorB) kˆzt vÈgigmegy a szab·lyt·bl·n Ès az elsı eltÈrÈsnÈl dˆnt:
-'  -1: A megelızi B-t
-'   1: B megelızi A-t
-'   0: teljes dˆntetlen minden szab·ly alapj·n is
+' Adott k√©t jelentkez≈ë (sorA, sorB) k√∂zt v√©gigmegy a szab√°lyt√°bl√°n √©s az els≈ë elt√©r√©sn√©l d√∂nt:
+'  -1: A megel≈ëzi B-t
+'   1: B megel≈ëzi A-t
+'   0: teljes d√∂ntetlen minden szab√°ly alapj√°n is
 '
 Function Rangsor_Eloresorol(sorA As Long, sorB As Long, diakTbl As ListObject, szabalyTbl As ListObject) As Integer
     Dim szabalySor As ListRow, oszlopnev As String, tipus As String, suly As Double, aktiv As String
@@ -102,10 +102,10 @@ Function Rangsor_Eloresorol(sorA As Long, sorB As Long, diakTbl As ListObject, s
     Dim j As Long
 
     For Each szabalySor In szabalyTbl.ListRows
-        oszlopnev = szabalySor.Range(1, szabalyTbl.ListColumns("Oszlop_NÈv").Index).value
-        tipus = szabalySor.Range(1, szabalyTbl.ListColumns("TÌpus").Index).value
-        suly = val(szabalySor.Range(1, szabalyTbl.ListColumns("S˙ly").Index).value)
-        aktiv = szabalySor.Range(1, szabalyTbl.ListColumns("AktÌv").Index).value
+        oszlopnev = szabalySor.Range(1, szabalyTbl.ListColumns("Oszlop_N√©v").Index).value
+        tipus = szabalySor.Range(1, szabalyTbl.ListColumns("T√≠pus").Index).value
+        suly = val(szabalySor.Range(1, szabalyTbl.ListColumns("S√∫ly").Index).value)
+        aktiv = szabalySor.Range(1, szabalyTbl.ListColumns("Akt√≠v").Index).value
 
         If UCase(aktiv) = "X" And oszlopnev <> "" Then
             colIdx = 0
@@ -132,9 +132,9 @@ Function Rangsor_Eloresorol(sorA As Long, sorB As Long, diakTbl As ListObject, s
                         Rangsor_Eloresorol = 1: Exit Function
                     End If
                 End If
-                ' Ha mÈg mindig nincs eltÈrÈs: megy a kˆvetkezı szab·lyhoz.
+                ' Ha m√©g mindig nincs elt√©r√©s: megy a k√∂vetkez≈ë szab√°lyhoz.
             End If
         End If
     Next szabalySor
-    Rangsor_Eloresorol = 0 ' teljes dˆntetlen
+    Rangsor_Eloresorol = 0 ' teljes d√∂ntetlen
 End Function

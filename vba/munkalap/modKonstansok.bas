@@ -4,11 +4,11 @@ Option Explicit
 Public Const KEVES_IRASBELI_KUSZOB As Long = 55
 
 Public Function HonapNevekHU() As Variant
-    HonapNevekHU = Array("", "január", "február", "március", "április", "május", "június", _
-        "július", "augusztus", "szeptember", "október", "november", "december")
+    HonapNevekHU = Array("", "januÃ¡r", "februÃ¡r", "mÃ¡rcius", "Ã¡prilis", "mÃ¡jus", "jÃºnius", _
+        "jÃºlius", "augusztus", "szeptember", "oktÃ³ber", "november", "december")
 End Function
 
 Public Function NapNevekHU() As Variant
-    NapNevekHU = Array("vasárnap", "hétfõ", "kedd", "szerda", "csütörtök", "péntek", "szombat")
+    NapNevekHU = Array("vasÃ¡rnap", "hÃ©tfÅ‘", "kedd", "szerda", "csÃ¼tÃ¶rtÃ¶k", "pÃ©ntek", "szombat")
 End Function
 

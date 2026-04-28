@@ -3,7 +3,7 @@ Option Explicit
 
 Public Sub Import_KozpontiFelveteli_Pontszamok(Optional control As IRibbonControl)
     Dim srcPath As String
-    srcPath = PickExcelFile("V·laszd ki a PONTSZ¡MOS (forr·s) Excel f·jlt")
+    srcPath = PickExcelFile("V√°laszd ki a PONTSZ√ÅMOS (forr√°s) Excel f√°jlt")
     If srcPath = "" Then Exit Sub
 
     Application.ScreenUpdating = False
@@ -22,48 +22,48 @@ Public Sub Import_KozpontiFelveteli_Pontszamok(Optional control As IRibbonContro
     On Error GoTo EH
     If wsS Is Nothing Then Set wsS = wbS.Worksheets(1)
 
-    ' --- CÈl oszlopindexek (t·bl·ban) ---
+    ' --- C√©l oszlopindexek (t√°bl√°ban) ---
     Dim mapD As Object: Set mapD = BuildListObjectHeaderMapNorm(loD)
-    If Not mapD.Exists(NKey("oktazon")) Then Err.Raise 1001, , "A cÈl t·bl·ban nincs: oktazon"
-    If Not mapD.Exists(NKey("p_magyar")) Then Err.Raise 1002, , "A cÈl t·bl·ban nincs: p_magyar"
-    If Not mapD.Exists(NKey("p_matek")) Then Err.Raise 1003, , "A cÈl t·bl·ban nincs: p_matek"
+    If Not mapD.Exists(NKey("oktazon")) Then Err.Raise 1001, , "A c√©l t√°bl√°ban nincs: oktazon"
+    If Not mapD.Exists(NKey("p_magyar")) Then Err.Raise 1002, , "A c√©l t√°bl√°ban nincs: p_magyar"
+    If Not mapD.Exists(NKey("p_matek")) Then Err.Raise 1003, , "A c√©l t√°bl√°ban nincs: p_matek"
 
     Dim colKeyD As Long: colKeyD = mapD(NKey("oktazon"))
     Dim colPMag As Long: colPMag = mapD(NKey("p_magyar"))
     Dim colPMat As Long: colPMat = mapD(NKey("p_matek"))
 
-    ' --- CÈl index: oktazon -> ListRow.Index ---
+    ' --- C√©l index: oktazon -> ListRow.Index ---
     Dim idxD As Object: Set idxD = CreateObject("Scripting.Dictionary")
     BuildDestIndex loD, colKeyD, idxD
 
-    ' --- Forr·s: kÈt fejlÈc sor ---
+    ' --- Forr√°s: k√©t fejl√©c sor ---
     Dim headerRowGroup As Long: headerRowGroup = 1
     Dim headerRowSub As Long: headerRowSub = 2
 
-    ' Oktazon fejlÈc neve bekÈrÈs (a 2. sorban keress¸k)
+    ' Oktazon fejl√©c neve bek√©r√©s (a 2. sorban keress√ºk)
     Dim srcKeyHeader As String
-    srcKeyHeader = InputBox("Forr·s kulcs oszlop FEJL…CE (2. fejlÈc sor):", "Kulcs kiv·laszt·s", "Oktat·si azonosÌtÛ")
+    srcKeyHeader = InputBox("Forr√°s kulcs oszlop FEJL√âCE (2. fejl√©c sor):", "Kulcs kiv√°laszt√°s", "Oktat√°si azonos√≠t√≥")
     If Trim$(srcKeyHeader) = "" Then GoTo CleanExit
 
-    ' Forr·s oszlopok felderÌtÈse (csoport+alfejlÈc)
+    ' Forr√°s oszlopok felder√≠t√©se (csoport+alfejl√©c)
     Dim colKeyS As Long
     colKeyS = FindSubHeaderCol(wsS, headerRowSub, srcKeyHeader)
-    If colKeyS = 0 Then Err.Raise 2001, , "Nem tal·lom a forr·s kulcs oszlopot (2. sor): " & srcKeyHeader
+    If colKeyS = 0 Then Err.Raise 2001, , "Nem tal√°lom a forr√°s kulcs oszlopot (2. sor): " & srcKeyHeader
 
-    Dim groupName As String: groupName = "Kˆzponti felvÈteli eredmÈnyek"
+    Dim groupName As String: groupName = "K√∂zponti felv√©teli eredm√©nyek"
     Dim colMagS As Long, colMatS As Long
-    colMagS = FindGroupedCol(wsS, headerRowGroup, headerRowSub, groupName, "Magyar nyelv elÈrt pontsz·m")
-    colMatS = FindGroupedCol(wsS, headerRowGroup, headerRowSub, groupName, "Matematika elÈrt pontsz·m")
+    colMagS = FindGroupedCol(wsS, headerRowGroup, headerRowSub, groupName, "Magyar nyelv el√©rt pontsz√°m")
+    colMatS = FindGroupedCol(wsS, headerRowGroup, headerRowSub, groupName, "Matematika el√©rt pontsz√°m")
 
-    If colMagS = 0 Then Err.Raise 2002, , "Nem tal·lom: [" & groupName & "] / [Magyar nyelv elÈrt pontsz·m]"
-    If colMatS = 0 Then Err.Raise 2003, , "Nem tal·lom: [" & groupName & "] / [Matematika elÈrt pontsz·m]"
+    If colMagS = 0 Then Err.Raise 2002, , "Nem tal√°lom: [" & groupName & "] / [Magyar nyelv el√©rt pontsz√°m]"
+    If colMatS = 0 Then Err.Raise 2003, , "Nem tal√°lom: [" & groupName & "] / [Matematika el√©rt pontsz√°m]"
 
-    ' --- Forr·s bej·r·s ---
+    ' --- Forr√°s bej√°r√°s ---
     Dim lastRow As Long
     lastRow = wsS.Cells(wsS.rows.Count, colKeyS).End(xlUp).Row
     If lastRow < headerRowSub + 1 Then GoTo CleanExit
 
-    Dim seenS As Object: Set seenS = CreateObject("Scripting.Dictionary") ' forr·s dupl·k
+    Dim seenS As Object: Set seenS = CreateObject("Scripting.Dictionary") ' forr√°s dupl√°k
     Dim dupReport As String: dupReport = ""
     Dim missingReport As String: missingReport = ""
 
@@ -77,31 +77,31 @@ Public Sub Import_KozpontiFelveteli_Pontszamok(Optional control As IRibbonContro
         k = Trim$(CStr(wsS.Cells(r, colKeyS).value))
         If k = "" Then GoTo NextR
 
-        ' Forr·s dupl·k
+        ' Forr√°s dupl√°k
         If seenS.Exists(k) Then
             dupCount = dupCount + 1
-            If dupCount <= 30 Then dupReport = dupReport & "ï " & k & " (sor " & r & ", m·r volt: sor " & seenS(k) & ")" & vbCrLf
-            GoTo NextR ' prefer·ljuk az elsıt
+            If dupCount <= 30 Then dupReport = dupReport & "‚Ä¢ " & k & " (sor " & r & ", m√°r volt: sor " & seenS(k) & ")" & vbCrLf
+            GoTo NextR ' prefer√°ljuk az els≈ët
         Else
             seenS(k) = r
         End If
 
-        ' CÈlban megvan?
+        ' C√©lban megvan?
         If Not idxD.Exists(k) Then
             missCount = missCount + 1
-            If missCount <= 30 Then missingReport = missingReport & "ï " & k & " (forr·s sor " & r & ")" & vbCrLf
+            If missCount <= 30 Then missingReport = missingReport & "‚Ä¢ " & k & " (forr√°s sor " & r & ")" & vbCrLf
             GoTo NextR
         End If
 
         Dim lr As ListRow
         Set lr = loD.ListRows(idxD(k))
 
-        ' ÈrtÈkek (pontsz·mok)
+        ' √©rt√©kek (pontsz√°mok)
         Dim vMag As Variant, vMat As Variant
         vMag = wsS.Cells(r, colMagS).value
         vMat = wsS.Cells(r, colMatS).value
 
-        ' ha ¸res, hagyjuk bÈkÈn; ha van sz·m, Ìrjuk be
+        ' ha √ºres, hagyjuk b√©k√©n; ha van sz√°m, √≠rjuk be
         If Trim$(CStr(vMag)) <> "" Then lr.Range.Cells(1, colPMag).value = vMag
         If Trim$(CStr(vMat)) <> "" Then lr.Range.Cells(1, colPMat).value = vMat
 
@@ -113,17 +113,17 @@ NextR:
     wbD.Save
 
     Dim msg As String
-    msg = "Pontsz·m import kÈsz." & vbCrLf & _
-          "FrissÌtett rekordok: " & updCount & vbCrLf & _
-          "Forr·s dupl·k: " & dupCount & vbCrLf & _
-          "CÈlban nem tal·lhatÛ oktazon: " & missCount
+    msg = "Pontsz√°m import k√©sz." & vbCrLf & _
+          "Friss√≠tett rekordok: " & updCount & vbCrLf & _
+          "Forr√°s dupl√°k: " & dupCount & vbCrLf & _
+          "C√©lban nem tal√°lhat√≥ oktazon: " & missCount
 
-    If dupReport <> "" Then msg = msg & vbCrLf & vbCrLf & "Duplik·lt oktazonok a forr·sban (elsıt vett¸k):" & vbCrLf & dupReport
-    If missingReport <> "" Then msg = msg & vbCrLf & vbCrLf & "Forr·sban van, cÈlban nincs:" & vbCrLf & missingReport
+    If dupReport <> "" Then msg = msg & vbCrLf & vbCrLf & "Duplik√°lt oktazonok a forr√°sban (els≈ët vett√ºk):" & vbCrLf & dupReport
+    If missingReport <> "" Then msg = msg & vbCrLf & vbCrLf & "Forr√°sban van, c√©lban nincs:" & vbCrLf & missingReport
 
     MsgBox msg, vbInformation
 
-    ' >>> AUTOMATIKUS ⁄JRASZ¡MOL¡S (Ìr·sbeli pont import ut·n) <<<
+    ' >>> AUTOMATIKUS √öJRASZ√ÅMOL√ÅS (√≠r√°sbeli pont import ut√°n) <<<
     If updCount > 0 Then
         RecalcPontok_Automatikus
     End If
@@ -144,10 +144,10 @@ EH:
 End Sub
 
 ' =========================
-' FORR¡S FEJL…C KERES’K (2 sor + merged group)
+' FORR√ÅS FEJL√âC KERES≈êK (2 sor + merged group)
 ' =========================
 
-' 2. fejlÈc sorban keres "pontos" (normaliz·lt) egyezÈssel
+' 2. fejl√©c sorban keres "pontos" (normaliz√°lt) egyez√©ssel
 Private Function FindSubHeaderCol(ws As Worksheet, headerRowSub As Long, headerText As String) As Long
     Dim lastCol As Long: lastCol = ws.Cells(headerRowSub, ws.Columns.Count).End(xlToLeft).Column
     Dim c As Long
@@ -160,7 +160,7 @@ Private Function FindSubHeaderCol(ws As Worksheet, headerRowSub As Long, headerT
     FindSubHeaderCol = 0
 End Function
 
-' 1. sor (group) + 2. sor (sub) alapj·n keres, a group cella lehet merged
+' 1. sor (group) + 2. sor (sub) alapj√°n keres, a group cella lehet merged
 Private Function FindGroupedCol(ws As Worksheet, headerRowGroup As Long, headerRowSub As Long, groupHeader As String, subHeader As String) As Long
     Dim lastCol As Long
     lastCol = ws.Cells(headerRowSub, ws.Columns.Count).End(xlToLeft).Column
@@ -180,7 +180,7 @@ Private Function FindGroupedCol(ws As Worksheet, headerRowGroup As Long, headerR
     FindGroupedCol = 0
 End Function
 
-' Visszaadja az 1. fejlÈc sor csoportszˆvegÈt; ha merged, a merge area bal-felsı cell·j·t
+' Visszaadja az 1. fejl√©c sor csoportsz√∂veg√©t; ha merged, a merge area bal-fels≈ë cell√°j√°t
 Private Function GroupHeaderText(ws As Worksheet, headerRowGroup As Long, col As Long) As String
     Dim cell As Range: Set cell = ws.Cells(headerRowGroup, col)
     If cell.MergeCells Then
@@ -191,7 +191,7 @@ Private Function GroupHeaderText(ws As Worksheet, headerRowGroup As Long, col As
 End Function
 
 ' =========================
-' C…L T¡BLA SEG…DEK
+' C√âL T√ÅBLA SEG√âDEK
 ' =========================
 
 Private Function BuildListObjectHeaderMapNorm(lo As ListObject) As Object
@@ -215,7 +215,7 @@ Private Sub BuildDestIndex(lo As ListObject, keyColIndex As Long, idx As Object)
 End Sub
 
 ' =========================
-' NORMALIZ¡L”
+' NORMALIZ√ÅL√ì
 ' =========================
 Private Function NKey(ByVal s As String) As String
     Dim t As String
@@ -223,18 +223,18 @@ Private Function NKey(ByVal s As String) As String
     t = Replace(t, ChrW(160), " ")
     Do While InStr(t, "  ") > 0: t = Replace(t, "  ", " "): Loop
     t = Replace(t, "-", " ")
-    t = Replace(t, "ó", " ")
-    t = Replace(t, "ñ", " ")
+    t = Replace(t, "‚Äî", " ")
+    t = Replace(t, "‚Äì", " ")
 
-    t = Replace(t, "·", "a")
-    t = Replace(t, "È", "e")
-    t = Replace(t, "Ì", "i")
-    t = Replace(t, "Û", "o")
-    t = Replace(t, "ˆ", "o")
-    t = Replace(t, "ı", "o")
-    t = Replace(t, "˙", "u")
-    t = Replace(t, "¸", "u")
-    t = Replace(t, "˚", "u")
+    t = Replace(t, "√°", "a")
+    t = Replace(t, "√©", "e")
+    t = Replace(t, "√≠", "i")
+    t = Replace(t, "√≥", "o")
+    t = Replace(t, "√∂", "o")
+    t = Replace(t, "≈ë", "o")
+    t = Replace(t, "√∫", "u")
+    t = Replace(t, "√º", "u")
+    t = Replace(t, "≈±", "u")
 
     NKey = t
 End Function
@@ -248,7 +248,7 @@ Private Function PickExcelFile(ByVal title As String) As String
     With fd
         .title = title
         .Filters.clear
-        .Filters.add "Excel f·jlok", "*.xlsx;*.xlsm;*.xls"
+        .Filters.add "Excel f√°jlok", "*.xlsx;*.xlsm;*.xls"
         .AllowMultiSelect = False
         If .Show <> -1 Then PickExcelFile = "" Else PickExcelFile = .SelectedItems(1)
     End With

@@ -12,7 +12,7 @@ Sub KitoltIktsz_TablaAutomatikusan()
     
     megtalalva = False
     
-    ' Minden munkalapot vÈgignÈz
+    ' Minden munkalapot v√©gign√©z
     For Each ws In ThisWorkbook.Worksheets
         For Each tbl In ws.ListObjects
             If tbl.Name = "lista" Then
@@ -24,11 +24,11 @@ Sub KitoltIktsz_TablaAutomatikusan()
     Next ws
     
     If Not megtalalva Then
-        MsgBox "? Nem tal·lhatÛ 'lista' nev˚ t·bla egyik munkalapon sem!", vbCritical
+        MsgBox "? Nem tal√°lhat√≥ 'lista' nev≈± t√°bla egyik munkalapon sem!", vbCritical
         Exit Sub
     End If
     
-    ' Oszlopok keresÈse a t·bl·ban
+    ' Oszlopok keres√©se a t√°bl√°ban
     For Each col In tbl.ListColumns
         Select Case LCase(col.Name)
             Case "isk_nev": Set isknevCol = col
@@ -37,16 +37,16 @@ Sub KitoltIktsz_TablaAutomatikusan()
     Next col
     
     If isknevCol Is Nothing Or iktszCol Is Nothing Then
-        MsgBox "? Hi·nyzik az 'isk_nev' vagy 'iktsz' oszlop a t·bl·ban!", vbCritical
+        MsgBox "? Hi√°nyzik az 'isk_nev' vagy 'iktsz' oszlop a t√°bl√°ban!", vbCritical
         Exit Sub
     End If
     
-    ' Kezdı sz·m bekÈrÈse
-    kezdoSzam = CLng(InputBox("Add meg a kezdı iktatÛsz·mot:", "Kezdı iktsz", 1))
+    ' Kezd≈ë sz√°m bek√©r√©se
+    kezdoSzam = CLng(InputBox("Add meg a kezd≈ë iktat√≥sz√°mot:", "Kezd≈ë iktsz", 1))
     
     Set dict = CreateObject("Scripting.Dictionary")
     
-    ' T·bl·n bel¸li sorok feldolgoz·sa
+    ' T√°bl√°n bel√ºli sorok feldolgoz√°sa
     For Each r In tbl.ListRows
         Dim isknev As String
         isknev = Trim(r.Range(1, isknevCol.Index).value)
@@ -62,7 +62,7 @@ Sub KitoltIktsz_TablaAutomatikusan()
         End If
     Next r
     
-    MsgBox "? Az iktsz oszlop sikeresen feltˆltve az 'isk_nev' alapj·n!", vbInformation
+    MsgBox "? Az iktsz oszlop sikeresen felt√∂ltve az 'isk_nev' alapj√°n!", vbInformation
 
 End Sub
 

@@ -25,7 +25,7 @@ Private Sub Worksheet_Change(ByVal Target As Range)
     If lo.DataBodyRange Is Nothing Then Exit Sub
 
     ' -------------------------
-    ' 1) AUTOMATIKUS PONTSZ¡M ⁄JRASZ¡MOL¡S
+    ' 1) AUTOMATIKUS PONTSZ√ÅM √öJRASZ√ÅMOL√ÅS
     ' -------------------------
     Dim watchCols As Variant
     watchCols = Array("p_magyar", "p_matek", "p_bizonyitvany", "p_szovegalkotas", "p_kirako", "p_bemutatkozas")
@@ -49,7 +49,7 @@ Private Sub Worksheet_Change(ByVal Target As Range)
     Next i
 
     ' -------------------------
-    ' 2) ID’PONT KIOSZT¡S (bizottsag -> datum_nap)
+    ' 2) ID≈êPONT KIOSZT√ÅS (bizottsag -> datum_nap)
     ' -------------------------
     Dim rngBiz As Range
     On Error Resume Next
@@ -67,7 +67,7 @@ Private Sub Worksheet_Change(ByVal Target As Range)
     Dim biz As Long
     biz = CLng(v)
     If biz < 1 Or biz > 10 Then
-        MsgBox "A bizotts·g csak 1 Ès 10 kˆzˆtti sz·m lehet.", vbExclamation
+        MsgBox "A bizotts√°g csak 1 √©s 10 k√∂z√∂tti sz√°m lehet.", vbExclamation
         GoTo SafeExit
     End If
 
@@ -83,11 +83,11 @@ Private Sub Worksheet_Change(ByVal Target As Range)
     On Error GoTo SafeExit
 
     If colDt = 0 Then
-        MsgBox "Hi·nyzÛ oszlop: datum_nap (vagy idopont_nap) a diakadat t·bl·ban.", vbExclamation
+        MsgBox "Hi√°nyz√≥ oszlop: datum_nap (vagy idopont_nap) a diakadat t√°bl√°ban.", vbExclamation
         GoTo SafeExit
     End If
 
-    ' ha m·r van idıpont, ne Ìrjuk fel¸l
+    ' ha m√°r van id≈ëpont, ne √≠rjuk fel√ºl
     If Trim$(CStr(lo.DataBodyRange.Cells(rowIdx, colDt).value)) <> "" Then GoTo SafeExit
 
     Application.EnableEvents = False

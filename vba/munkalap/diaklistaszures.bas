@@ -2,7 +2,7 @@ Attribute VB_Name = "diaklistaszures"
 Option Explicit
 
 ' =========================
-' BE¡LLÕT¡SOK
+' BE√ÅLL√çT√ÅSOK
 ' =========================
 Public Const SRC_RANGSOR_SHEET As String = "rangsor"
 Public Const SRC_RANGSOR_TABLE As String = "rangsor"
@@ -14,19 +14,19 @@ Public Const KEY_COL As String = "oktazon"
 Public Const NAME_COL As String = "f_nev"
 
 Public Const ACCEPT_COL As String = "felvesz"   ' "x" = felvett
-Public Const REJECT_COL As String = "elut"      ' "x" = elutasÌtott
+Public Const REJECT_COL As String = "elut"      ' "x" = elutas√≠tott
 Public Const FLAG_VALUE As String = "x"
 
-' Felvettek lista cÈl
+' Felvettek lista c√©l
 Public Const DST_SHEET As String = "diak_lista"
 Public Const DST_TABLE As String = "diak_lista_tbl"
 Public Const DST_TOPLEFT As String = "C1"
 
-' EsÈlyesek (elutasÌtottak) cÈl
+' Es√©lyesek (elutas√≠tottak) c√©l
 Public Const CAN_SHEET As String = "eselyesek"
 Public Const CAN_TABLE As String = "eselyesek_tbl"
 Public Const CAN_TOPLEFT As String = "C1"
-Public Const MAX_HIANY As Long = 5  ' ennyi pont hi·nyig "esÈlyes"
+Public Const MAX_HIANY As Long = 5  ' ennyi pont hi√°nyig "es√©lyes"
 
 ' =========================
 ' KIMENET OSZLOPOK
@@ -67,7 +67,7 @@ Private Function OutCols_Eselyesek() As Variant
 End Function
 
 ' ======================================================================
-' 1) FRISSÕT…S ñ Felvettek lista (oktazon alapj·n pontok a diakadatbÛl)
+' 1) FRISS√çT√âS ‚Äì Felvettek lista (oktazon alapj√°n pontok a diakadatb√≥l)
 ' ======================================================================
 Public Sub Frissites_Felvettek_DiakLista_OktazonAlapjan()
 
@@ -93,14 +93,14 @@ Public Sub Frissites_Felvettek_DiakLista_OktazonAlapjan()
     On Error GoTo ErrHandler
 
     Set wsR = GetSheetOrNothing(SRC_RANGSOR_SHEET)
-    If wsR Is Nothing Then Err.Raise vbObjectError + 11, , "Hi·nyzÛ munkalap: " & SRC_RANGSOR_SHEET
+    If wsR Is Nothing Then Err.Raise vbObjectError + 11, , "Hi√°nyz√≥ munkalap: " & SRC_RANGSOR_SHEET
     Set loR = GetTableOrNothing(wsR, SRC_RANGSOR_TABLE)
-    If loR Is Nothing Then Err.Raise vbObjectError + 12, , "Hi·nyzÛ t·bla: " & SRC_RANGSOR_TABLE & " (" & SRC_RANGSOR_SHEET & ")"
+    If loR Is Nothing Then Err.Raise vbObjectError + 12, , "Hi√°nyz√≥ t√°bla: " & SRC_RANGSOR_TABLE & " (" & SRC_RANGSOR_SHEET & ")"
 
     Set wsD = GetSheetOrNothing(SRC_DATA_SHEET)
-    If wsD Is Nothing Then Err.Raise vbObjectError + 13, , "Hi·nyzÛ munkalap: " & SRC_DATA_SHEET
+    If wsD Is Nothing Then Err.Raise vbObjectError + 13, , "Hi√°nyz√≥ munkalap: " & SRC_DATA_SHEET
     Set loD = GetTableOrNothing(wsD, SRC_DATA_TABLE)
-    If loD Is Nothing Then Err.Raise vbObjectError + 14, , "Hi·nyzÛ t·bla: " & SRC_DATA_TABLE & " (" & SRC_DATA_SHEET & ")"
+    If loD Is Nothing Then Err.Raise vbObjectError + 14, , "Hi√°nyz√≥ t√°bla: " & SRC_DATA_TABLE & " (" & SRC_DATA_SHEET & ")"
 
     RequireColSafe loR, KEY_COL, SRC_RANGSOR_TABLE
     RequireColSafe loR, ACCEPT_COL, SRC_RANGSOR_TABLE
@@ -174,7 +174,7 @@ Public Sub Frissites_Felvettek_DiakLista_OktazonAlapjan()
     Set loDst = CreateTable(wsDst, DST_TABLE, DST_TOPLEFT, colS)
     If nKeep = 0 Then GoTo SafeExit
 
-    ' rangsz·mok a felvettek kˆzˆtt (Ìr·s/bizi/p_mindossz)
+    ' rangsz√°mok a felvettek k√∂z√∂tt (√≠r√°s/bizi/p_mindossz)
     ReDim tmpIras(1 To nKeep, 1 To 1)
     ReDim tmpBizi(1 To nKeep, 1 To 1)
     ReDim tmpPmind(1 To nKeep, 1 To 1)
@@ -222,11 +222,11 @@ SafeExit:
 ErrHandler:
     Application.EnableEvents = True
     Application.ScreenUpdating = True
-    MsgBox "Hiba a FRISSÕT…S sor·n: " & Err.Description, vbExclamation
+    MsgBox "Hiba a FRISS√çT√âS sor√°n: " & Err.Description, vbExclamation
 End Sub
 
 ' ======================================================================
-' 2) N…ZZ‹K ñ elutasÌtottak kˆz¸l kik vannak kˆzel (Ìr·s + bizi + szÛbeli)
+' 2) N√âZZ√úK ‚Äì elutas√≠tottak k√∂z√ºl kik vannak k√∂zel (√≠r√°s + bizi + sz√≥beli)
 ' ======================================================================
 Public Sub Nezzuk_Elutasitottak_IrasbeliEsely()
 
@@ -248,14 +248,14 @@ Public Sub Nezzuk_Elutasitottak_IrasbeliEsely()
     On Error GoTo ErrHandler
 
     Set wsR = GetSheetOrNothing(SRC_RANGSOR_SHEET)
-    If wsR Is Nothing Then Err.Raise vbObjectError + 21, , "Hi·nyzÛ munkalap: " & SRC_RANGSOR_SHEET
+    If wsR Is Nothing Then Err.Raise vbObjectError + 21, , "Hi√°nyz√≥ munkalap: " & SRC_RANGSOR_SHEET
     Set loR = GetTableOrNothing(wsR, SRC_RANGSOR_TABLE)
-    If loR Is Nothing Then Err.Raise vbObjectError + 22, , "Hi·nyzÛ t·bla: " & SRC_RANGSOR_TABLE & " (" & SRC_RANGSOR_SHEET & ")"
+    If loR Is Nothing Then Err.Raise vbObjectError + 22, , "Hi√°nyz√≥ t√°bla: " & SRC_RANGSOR_TABLE & " (" & SRC_RANGSOR_SHEET & ")"
 
     Set wsD = GetSheetOrNothing(SRC_DATA_SHEET)
-    If wsD Is Nothing Then Err.Raise vbObjectError + 23, , "Hi·nyzÛ munkalap: " & SRC_DATA_SHEET
+    If wsD Is Nothing Then Err.Raise vbObjectError + 23, , "Hi√°nyz√≥ munkalap: " & SRC_DATA_SHEET
     Set loD = GetTableOrNothing(wsD, SRC_DATA_TABLE)
-    If loD Is Nothing Then Err.Raise vbObjectError + 24, , "Hi·nyzÛ t·bla: " & SRC_DATA_TABLE & " (" & SRC_DATA_SHEET & ")"
+    If loD Is Nothing Then Err.Raise vbObjectError + 24, , "Hi√°nyz√≥ t√°bla: " & SRC_DATA_TABLE & " (" & SRC_DATA_SHEET & ")"
 
     RequireColSafe loR, KEY_COL, SRC_RANGSOR_TABLE
     RequireColSafe loR, ACCEPT_COL, SRC_RANGSOR_TABLE
@@ -270,8 +270,8 @@ Public Sub Nezzuk_Elutasitottak_IrasbeliEsely()
     Application.ScreenUpdating = False
     Application.EnableEvents = False
 
-    If loD.DataBodyRange Is Nothing Then Err.Raise vbObjectError + 25, , "A '" & SRC_DATA_TABLE & "' t·bla ¸res."
-    If loR.DataBodyRange Is Nothing Then Err.Raise vbObjectError + 26, , "A '" & SRC_RANGSOR_TABLE & "' t·bla ¸res."
+    If loD.DataBodyRange Is Nothing Then Err.Raise vbObjectError + 25, , "A '" & SRC_DATA_TABLE & "' t√°bla √ºres."
+    If loR.DataBodyRange Is Nothing Then Err.Raise vbObjectError + 26, , "A '" & SRC_RANGSOR_TABLE & "' t√°bla √ºres."
 
     ' diakadat arrays
     vKeyD = loD.ListColumns(KEY_COL).DataBodyRange.value
@@ -304,7 +304,7 @@ Public Sub Nezzuk_Elutasitottak_IrasbeliEsely()
     ReDim accSzob(1 To UBound(vKeyR, 1))
     nAcc = 0
 
-    ' k¸szˆbˆk: felvettek 10. legalacsonyabb (k¸lˆn-k¸lˆn oszlop)
+    ' k√ºsz√∂b√∂k: felvettek 10. legalacsonyabb (k√ºl√∂n-k√ºl√∂n oszlop)
     For i = 1 To UBound(vKeyR, 1)
         Dim kR As String
         kR = Trim$(CStr(vKeyR(i, 1)))
@@ -326,7 +326,7 @@ NextAcc:
     Next i
 
     If nAcc = 0 Then
-        MsgBox "Nincs felvett / vagy hi·nyzik pont (Ìr·s+bizi+szÛbeli) a felvettekhez a diakadat t·bl·ban.", vbInformation
+        MsgBox "Nincs felvett / vagy hi√°nyzik pont (√≠r√°s+bizi+sz√≥beli) a felvettekhez a diakadat t√°bl√°ban.", vbInformation
         GoTo SafeExit
     End If
 
@@ -342,7 +342,7 @@ NextAcc:
     cutB = IIf(nAcc >= 10, accBizi(10), accBizi(1))
     cutS = IIf(nAcc >= 10, accSzob(10), accSzob(1))
 
-    ' elutasÌtottak, akik kˆzel vannak b·rmelyik k¸szˆbhˆz
+    ' elutas√≠tottak, akik k√∂zel vannak b√°rmelyik k√ºsz√∂bh√∂z
     ReDim outKeys(1 To UBound(vKeyR, 1))
     nOut = 0
 
@@ -372,7 +372,7 @@ NextAcc:
 NextRej:
     Next i
 
-    ' kiÌr·s
+    ' ki√≠r√°s
     colS = OutCols_Eselyesek()
     Set wsC = GetOrCreateSheet(CAN_SHEET)
 
@@ -381,7 +381,7 @@ NextRej:
     Set loC = CreateTable(wsC, CAN_TABLE, CAN_TOPLEFT, colS)
 
     If nOut = 0 Then
-        MsgBox "Nincs olyan elutasÌtott, aki " & MAX_HIANY & " ponton bel¸l lenne (Ìr·s/bizi/szÛbeli k¸szˆbhˆz).", vbInformation
+        MsgBox "Nincs olyan elutas√≠tott, aki " & MAX_HIANY & " ponton bel√ºl lenne (√≠r√°s/bizi/sz√≥beli k√ºsz√∂bh√∂z).", vbInformation
         GoTo SafeExit
     End If
 
@@ -425,25 +425,25 @@ SafeExit:
 ErrHandler:
     Application.EnableEvents = True
     Application.ScreenUpdating = True
-    MsgBox "Hiba a N…ZZ‹K sor·n: " & Err.Description, vbExclamation
+    MsgBox "Hiba a N√âZZ√úK sor√°n: " & Err.Description, vbExclamation
 End Sub
 
 ' ======================================================================
-' 3) EXPORT ñ Felvettek
+' 3) EXPORT ‚Äì Felvettek
 ' ======================================================================
 Public Sub Export_Felvettek_UjMunkafuzetbe()
     ExportTableToNewWorkbook DST_SHEET, DST_TABLE, "felvettek", "felvettek_export.xlsx"
 End Sub
 
 ' ======================================================================
-' 4) EXPORT ñ EsÈlyek
+' 4) EXPORT ‚Äì Es√©lyek
 ' ======================================================================
 Public Sub Export_Eselyek_UjMunkafuzetbe()
     ExportTableToNewWorkbook CAN_SHEET, CAN_TABLE, "eselyesek", "eselyesek_export.xlsx"
 End Sub
 
 ' ======================================================================
-' KOMPATIBILIT¡SI MAKR”NEVEK (ha a gombok rÈgi nevekre mutatnak)
+' KOMPATIBILIT√ÅSI MAKR√ìNEVEK (ha a gombok r√©gi nevekre mutatnak)
 ' ======================================================================
 Public Sub Frissites_Felvettek_DiakLista()
     Frissites_Felvettek_DiakLista_OktazonAlapjan
@@ -462,7 +462,7 @@ Public Sub Export_eselyek()
 End Sub
 
 ' ======================================================================
-' EXPORT SEG…D
+' EXPORT SEG√âD
 ' ======================================================================
 Private Sub ExportTableToNewWorkbook(sheetName As String, tableName As String, outSheetName As String, defaultFileName As String)
     Dim ws As Worksheet, lo As ListObject
@@ -473,18 +473,18 @@ Private Sub ExportTableToNewWorkbook(sheetName As String, tableName As String, o
 
     Set ws = GetSheetOrNothing(sheetName)
     If ws Is Nothing Then
-        MsgBox "Nem tal·lom a munkalapot: '" & sheetName & "'.", vbExclamation
+        MsgBox "Nem tal√°lom a munkalapot: '" & sheetName & "'.", vbExclamation
         Exit Sub
     End If
 
     Set lo = GetTableOrNothing(ws, tableName)
     If lo Is Nothing Then
-        MsgBox "Nem tal·lom a t·bl·t: '" & tableName & "'.", vbExclamation
+        MsgBox "Nem tal√°lom a t√°bl√°t: '" & tableName & "'.", vbExclamation
         Exit Sub
     End If
 
     If lo.DataBodyRange Is Nothing Then
-        MsgBox "A t·bla ¸res, nincs export·lhatÛ adat.", vbInformation
+        MsgBox "A t√°bla √ºres, nincs export√°lhat√≥ adat.", vbInformation
         Exit Sub
     End If
 
@@ -503,14 +503,14 @@ Private Sub ExportTableToNewWorkbook(sheetName As String, tableName As String, o
     Application.CutCopyMode = False
     wsNew.UsedRange.Columns.AutoFit
 
-    savePath = Application.GetSaveAsFilename(InitialFileName:=defaultFileName, FileFilter:="Excel munkaf¸zet (*.xlsx), *.xlsx")
+    savePath = Application.GetSaveAsFilename(InitialFileName:=defaultFileName, FileFilter:="Excel munkaf√ºzet (*.xlsx), *.xlsx")
     If savePath <> False Then
         Application.DisplayAlerts = False
         wbNew.SaveAs fileName:=CStr(savePath), FileFormat:=xlOpenXMLWorkbook
         Application.DisplayAlerts = True
-        MsgBox "Export kÈsz:" & vbCrLf & CStr(savePath), vbInformation
+        MsgBox "Export k√©sz:" & vbCrLf & CStr(savePath), vbInformation
     Else
-        MsgBox "MentÈs megszakÌtva. Az export munkaf¸zet megnyitva maradt.", vbInformation
+        MsgBox "Ment√©s megszak√≠tva. Az export munkaf√ºzet megnyitva maradt.", vbInformation
     End If
 
     Application.ScreenUpdating = True
@@ -518,11 +518,11 @@ Private Sub ExportTableToNewWorkbook(sheetName As String, tableName As String, o
 
 ErrHandler:
     Application.ScreenUpdating = True
-    MsgBox "Hiba export kˆzben: " & Err.Description, vbExclamation
+    MsgBox "Hiba export k√∂zben: " & Err.Description, vbExclamation
 End Sub
 
 ' ======================================================================
-' SEG…DEK: lap/t·bla/ellenırzÈs
+' SEG√âDEK: lap/t√°bla/ellen≈ërz√©s
 ' ======================================================================
 Private Function GetSheetOrNothing(sheetName As String) As Worksheet
     On Error Resume Next
@@ -548,7 +548,7 @@ End Function
 
 Private Sub RequireColSafe(lo As ListObject, colName As String, tableName As String)
     If Not HasListColumn(lo, colName) Then
-        Err.Raise vbObjectError + 501, , "Hi·nyzÛ oszlop: '" & colName & "' a(z) '" & tableName & "' t·bl·ban."
+        Err.Raise vbObjectError + 501, , "Hi√°nyz√≥ oszlop: '" & colName & "' a(z) '" & tableName & "' t√°bl√°ban."
     End If
 End Sub
 
@@ -592,7 +592,7 @@ Private Sub WriteArrayToTable(lo As ListObject, arr As Variant)
 End Sub
 
 ' ======================================================================
-' RANG ñ holtverseny: azonos ÈrtÈk azonos rang; csˆkkenı (jobb a nagyobb)
+' RANG ‚Äì holtverseny: azonos √©rt√©k azonos rang; cs√∂kken≈ë (jobb a nagyobb)
 ' ======================================================================
 Private Function BuildRankDictFromValues(vCol As Variant, keepIdx() As Long, nKeep As Long) As Object
     Dim dictCount As Object, dictRank As Object

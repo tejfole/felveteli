@@ -9,16 +9,16 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 Option Explicit
 
-' Re-entrancy vÈdelem: egy Save hÌv·s alatt ne fusson kÈtszer a backup
+' Re-entrancy v√©delem: egy Save h√≠v√°s alatt ne fusson k√©tszer a backup
 Private savingBackup As Boolean
 
 Private Sub Workbook_SheetChange(ByVal sh As Object, ByVal Target As Range)
     On Error GoTo Vege
 
-    ' Csak akkor reag·ljunk, ha az esemÈnyek engedÈlyezve vannak
+    ' Csak akkor reag√°ljunk, ha az esem√©nyek enged√©lyezve vannak
     If Not Application.EnableEvents Then GoTo Vege
 
-    ' Ha a lista munkalap B1 cell·ja v·ltozik
+    ' Ha a lista munkalap B1 cell√°ja v√°ltozik
     If sh.Name = "lista" Then
         If Not Application.Intersect(Target, sh.Range("B1")) Is Nothing Then
             Dim hadEvents As Boolean
@@ -40,13 +40,13 @@ Private Sub Workbook_BeforeSave(ByVal SaveAsUI As Boolean, Cancel As Boolean)
     If savingBackup Then GoTo Vege
     savingBackup = True
 
-    ' Ne csin·ljunk backupot read-only megnyit·sn·l
+    ' Ne csin√°ljunk backupot read-only megnyit√°sn√°l
     If ThisWorkbook.ReadOnly Then GoTo Vege
 
-    ' Ha nincs elmentÈsi helye (˙j f·jl), nincs hova menteni m·solatot
+    ' Ha nincs elment√©si helye (√∫j f√°jl), nincs hova menteni m√°solatot
     If ThisWorkbook.path = "" Then GoTo Vege
 
-    ' Csak ha tÈnylegesen mÛdosult
+    ' Csak ha t√©nylegesen m√≥dosult
     If Not ThisWorkbook.Saved Then
         SaveVersionedCopy_Logged
     End If

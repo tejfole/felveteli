@@ -8,19 +8,19 @@ Public Sub UjEvInditasa(Optional control As IRibbonControl)
 
     Dim resp As VbMsgBoxResult
     resp = MsgBox( _
-        "Új év indítása:" & vbCrLf & _
-        " - törli a nem megtartandó munkalapokat" & vbCrLf & _
-        " - kiüríti a diakadat és rangsor táblákat" & vbCrLf & _
-        " - 1 üres sort bennhagy a táblákban" & vbCrLf & vbCrLf & _
+        "Ãšj Ã©v indÃ­tÃ¡sa:" & vbCrLf & _
+        " - tÃ¶rli a nem megtartandÃ³ munkalapokat" & vbCrLf & _
+        " - kiÃ¼rÃ­ti a diakadat Ã©s rangsor tÃ¡blÃ¡kat" & vbCrLf & _
+        " - 1 Ã¼res sort bennhagy a tÃ¡blÃ¡kban" & vbCrLf & vbCrLf & _
         "Biztosan folytatod?", _
-        vbYesNo + vbExclamation, "Új év indítása")
+        vbYesNo + vbExclamation, "Ãšj Ã©v indÃ­tÃ¡sa")
     If resp <> vbYes Then Exit Sub
 
     Dim keep As Object
     Set keep = CreateObject("Scripting.Dictionary")
     keep.CompareMode = 1 ' textcompare
 
-    ' --- megtartandó lapok ---
+    ' --- megtartandÃ³ lapok ---
     keep("adatok") = True
     keep("diakadat") = True
     keep("rangsor") = True
@@ -28,7 +28,7 @@ Public Sub UjEvInditasa(Optional control As IRibbonControl)
     keep("tagozat") = True
     keep("TanteremLista") = True
 
-    ' IDE tudsz még hozzáírni:
+    ' IDE tudsz mÃ©g hozzÃ¡Ã­rni:
     ' keep("valami") = True
     ' keep("masiklap") = True
 
@@ -36,7 +36,7 @@ Public Sub UjEvInditasa(Optional control As IRibbonControl)
     prevAlerts = Application.DisplayAlerts
     Application.DisplayAlerts = False
 
-    ' Visszafelé törlünk, ez biztonságosabb
+    ' VisszafelÃ© tÃ¶rlÃ¼nk, ez biztonsÃ¡gosabb
     Dim i As Long
     For i = wb.Worksheets.Count To 1 Step -1
         Dim ws As Worksheet
@@ -49,12 +49,12 @@ Public Sub UjEvInditasa(Optional control As IRibbonControl)
 
     Application.DisplayAlerts = prevAlerts
 
-    ' Táblák ürítése, 1 üres sor bennhagyásával
+    ' TÃ¡blÃ¡k Ã¼rÃ­tÃ©se, 1 Ã¼res sor bennhagyÃ¡sÃ¡val
     ResetTableToSingleEmptyRow wb, "diakadat"
     ResetTableToSingleEmptyRow wb, "rangsor"
 
-    MsgBox "Kész. A felesleges lapok törölve, a táblák kiürítve." & vbCrLf & _
-           "Most mentsd el új néven, pl.: Felveteli_" & Year(Date) & ".xlsm", vbInformation
+    MsgBox "KÃ©sz. A felesleges lapok tÃ¶rÃ¶lve, a tÃ¡blÃ¡k kiÃ¼rÃ­tve." & vbCrLf & _
+           "Most mentsd el Ãºj nÃ©ven, pl.: Felveteli_" & Year(Date) & ".xlsm", vbInformation
     Exit Sub
 
 EH:
@@ -69,17 +69,17 @@ Private Sub ResetTableToSingleEmptyRow(ByVal wb As Workbook, ByVal tableName As 
 
     Application.ScreenUpdating = False
 
-    ' Ha nincs sor, adjunk hozzá egyet
+    ' Ha nincs sor, adjunk hozzÃ¡ egyet
     If lo.ListRows.Count = 0 Then
         lo.ListRows.add
     End If
 
-    ' Ha több sor van, töröljük az elsõ után következõket
+    ' Ha tÃ¶bb sor van, tÃ¶rÃ¶ljÃ¼k az elsÅ‘ utÃ¡n kÃ¶vetkezÅ‘ket
     Do While lo.ListRows.Count > 1
         lo.ListRows(lo.ListRows.Count).Delete
     Loop
 
-    ' Az egyetlen megmaradt sor tartalmának ürítése
+    ' Az egyetlen megmaradt sor tartalmÃ¡nak Ã¼rÃ­tÃ©se
     If Not lo.DataBodyRange Is Nothing Then
         lo.DataBodyRange.rows(1).ClearContents
     End If

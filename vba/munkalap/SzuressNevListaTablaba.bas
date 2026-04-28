@@ -82,7 +82,7 @@ Private Function BuildNevekLista(ByVal Valasztas As String, ByVal KeresettErtek 
         nev = Trim$(CStr(d(i, cNev)))
         If Len(nev) = 0 Then GoTo NextI
 
-        ' v·laszt·sf¸ggı kiz·r·sok
+        ' v√°laszt√°sf√ºgg≈ë kiz√°r√°sok
         Dim skipRow As Boolean
         skipRow = False
 
@@ -95,10 +95,10 @@ Private Function BuildNevekLista(ByVal Valasztas As String, ByVal KeresettErtek 
                 If IsX(d(i, cVissza)) Then skipRow = True
 
             Case "visszalep", "visszalepett"
-                ' nincs kiz·r·s
+                ' nincs kiz√°r√°s
 
             Case Else
-                ' ismeretlen v·laszt·s
+                ' ismeretlen v√°laszt√°s
                 skipRow = True
         End Select
 
@@ -106,7 +106,7 @@ Private Function BuildNevekLista(ByVal Valasztas As String, ByVal KeresettErtek 
 
         Select Case Valasztas
             Case "elut", "elutkevespont"
-                ' kevÈspont (<55)
+                ' kev√©spont (<55)
                 If IsNumeric(d(i, cIras)) And CDbl(d(i, cIras)) < 55 Then
                     n = n + 1
                     out(n) = nev
@@ -189,7 +189,7 @@ Private Function GetRequiredColIndex(ByVal tbl As ListObject, ByVal colName As S
     GetRequiredColIndex = tbl.ListColumns(colName).Index
     Exit Function
 NemTalalhato:
-    Err.Raise vbObjectError + 513, "SzuressNev", "Hi·nyzÛ oszlop: " & colName
+    Err.Raise vbObjectError + 513, "SzuressNev", "Hi√°nyz√≥ oszlop: " & colName
 End Function
 
 Private Function NormText(ByVal v As Variant) As String

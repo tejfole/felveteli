@@ -15,16 +15,16 @@ Public Sub IDOPONT_Test_Assign_ActiveRow()
     Dim lo As ListObject: Set lo = ws.ListObjects("diakadat")
 
     If lo.DataBodyRange Is Nothing Then
-        MsgBox "A diakadat t·bla ¸res.", vbExclamation
+        MsgBox "A diakadat t√°bla √ºres.", vbExclamation
         Exit Sub
     End If
 
-    ' AktÌv cella sor·bÛl sz·moljuk a t·bl·n bel¸li rowIdx-t
+    ' Akt√≠v cella sor√°b√≥l sz√°moljuk a t√°bl√°n bel√ºli rowIdx-t
     Dim rowIdx As Long
     rowIdx = ActiveCell.Row - lo.DataBodyRange.Row + 1
 
     If rowIdx < 1 Or rowIdx > lo.ListRows.Count Then
-        MsgBox "Kattints a diakadat t·bla egyik adat sor·ra (a t·bl·n bel¸l) Ès futtasd ˙jra.", vbExclamation
+        MsgBox "Kattints a diakadat t√°bla egyik adat sor√°ra (a t√°bl√°n bel√ºl) √©s futtasd √∫jra.", vbExclamation
         Exit Sub
     End If
 
@@ -35,22 +35,22 @@ Public Sub IDOPONT_Test_Assign_ActiveRow()
     biz = CLng(val(lo.DataBodyRange.Cells(rowIdx, iBiz).value))
 
     If biz < 1 Or biz > 10 Then
-        MsgBox "Ezen a soron nincs 1ñ10 kˆzˆtti bizotts·g sz·m a 'bizottsag' oszlopban.", vbExclamation
+        MsgBox "Ezen a soron nincs 1‚Äì10 k√∂z√∂tti bizotts√°g sz√°m a 'bizottsag' oszlopban.", vbExclamation
         Exit Sub
     End If
 
-    ' Ha m·r van datum_nap, ne Ìrjuk fel¸l
+    ' Ha m√°r van datum_nap, ne √≠rjuk fel√ºl
     If Trim$(CStr(lo.DataBodyRange.Cells(rowIdx, iDt).value)) <> "" Then
-        MsgBox "Ezen a soron m·r van datum_nap. (Nem Ìrjuk fel¸l.)", vbInformation
+        MsgBox "Ezen a soron m√°r van datum_nap. (Nem √≠rjuk fel√ºl.)", vbInformation
         Exit Sub
     End If
 
-    ' Itt der¸l ki, hogy a kiosztÛ sub elÈrhetı-e Ès m˚kˆdik-e
+    ' Itt der√ºl ki, hogy a kioszt√≥ sub el√©rhet≈ë-e √©s m≈±k√∂dik-e
     AssignDatumNap_FromIdopontTabla lo, rowIdx, biz, 4
 
-    MsgBox "Kioszt·s lefutott (ha volt szabad idıpont).", vbInformation
+    MsgBox "Kioszt√°s lefutott (ha volt szabad id≈ëpont).", vbInformation
     Exit Sub
 
 EH:
-    MsgBox "Hiba a kÈzi tesztben: " & Err.Number & vbCrLf & Err.Description, vbCritical
+    MsgBox "Hiba a k√©zi tesztben: " & Err.Number & vbCrLf & Err.Description, vbCritical
 End Sub

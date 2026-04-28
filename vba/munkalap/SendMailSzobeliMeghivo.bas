@@ -1,8 +1,8 @@
 Attribute VB_Name = "SendMailSzobeliMeghivo"
 Option Explicit
 
-' (Ujrav·gott) Feldolgoz·s batch-ekben, haszn·lja a ListRow.Index-et a pontos sorazonosÌt·shoz.
-' A tov·bbi m˚kˆdÈs: iktsz feltˆltÈs, mentÈs, batch feldolgoz·s, helyi sablonm·solat, retry, StepLog, MailErrors.
+' (Ujrav√°gott) Feldolgoz√°s batch-ekben, haszn√°lja a ListRow.Index-et a pontos sorazonos√≠t√°shoz.
+' A tov√°bbi m≈±k√∂d√©s: iktsz felt√∂lt√©s, ment√©s, batch feldolgoz√°s, helyi sablonm√°solat, retry, StepLog, MailErrors.
 
 Const DEFAULT_BATCH_SIZE As Long = 20
 Const MAX_RETRIES As Long = 3
@@ -25,13 +25,13 @@ Sub PrepareIktatoAndSendBatch()
     
     Dim startInput As String
     Dim startIktato As Long
-    startInput = InputBox("KÈrem a kezdı iktatÛsz·mot (egÈsz sz·m). ‹res: folytatja a meglÈvı iktsz-ek alapj·n:", "Kezdı iktatÛsz·m", "")
+    startInput = InputBox("K√©rem a kezd≈ë iktat√≥sz√°mot (eg√©sz sz√°m). √úres: folytatja a megl√©v≈ë iktsz-ek alapj√°n:", "Kezd≈ë iktat√≥sz√°m", "")
     If Trim(startInput) = "" Then
         startIktato = 0
     ElseIf IsNumeric(startInput) Then
         startIktato = CLng(startInput)
     Else
-        MsgBox "A megadott ÈrtÈk nem sz·m. M˚velet megszakÌtva.", vbExclamation
+        MsgBox "A megadott √©rt√©k nem sz√°m. M≈±velet megszak√≠tva.", vbExclamation
         Exit Sub
     End If
     
@@ -48,14 +48,14 @@ Sub PrepareIktatoAndSendBatch()
     
     Call ProcessNextBatch(wsName, loName, templatePath, batchSize, sendAutomatically)
     
-    MsgBox "KÈsz. NÈzd meg a MailErrors Ès StepLog lapokat.", vbInformation
+    MsgBox "K√©sz. N√©zd meg a MailErrors √©s StepLog lapokat.", vbInformation
 End Sub
 
 Private Sub FillIktszColumn(wsName As String, loName As String, startIktato As Long)
     On Error GoTo ErrHandler
     Dim ws As Worksheet: Set ws = ThisWorkbook.Worksheets(wsName)
     Dim lo As ListObject: Set lo = ws.ListObjects(loName)
-    If lo Is Nothing Then MsgBox "T·bla nem tal·lhatÛ.", vbExclamation: Exit Sub
+    If lo Is Nothing Then MsgBox "T√°bla nem tal√°lhat√≥.", vbExclamation: Exit Sub
     
     Dim hdrBizottsag As String: hdrBizottsag = "bizottsag"
     Dim hdrDatum As String: hdrDatum = "datum_nap"
@@ -83,7 +83,7 @@ Private Sub FillIktszColumn(wsName As String, loName As String, startIktato As L
     If Not dict.Exists(LCase(hdrDatum)) Then missing = missing & hdrDatum & vbCrLf
     If Not dict.Exists(LCase(hdrMail)) Then missing = missing & hdrMail & vbCrLf
     If Not dict.Exists(LCase(hdrIdopontKiadva)) Then missing = missing & hdrIdopontKiadva & vbCrLf
-    If missing <> "" Then MsgBox "Hi·nyzÛ fejlÈc(ek):" & vbCrLf & missing, vbExclamation: Exit Sub
+    If missing <> "" Then MsgBox "Hi√°nyz√≥ fejl√©c(ek):" & vbCrLf & missing, vbExclamation: Exit Sub
     
     Dim currentNum As Long
     If startIktato > 0 Then
@@ -120,10 +120,10 @@ Private Sub FillIktszColumn(wsName As String, loName As String, startIktato As L
         End If
     Next lr2
     
-    MsgBox "Iktsz kitˆltÈs kÈsz. ⁄j iktsz: " & filled, vbInformation
+    MsgBox "Iktsz kit√∂lt√©s k√©sz. √öj iktsz: " & filled, vbInformation
     Exit Sub
 ErrHandler:
-    MsgBox "Hiba a FillIktszColumn sor·n: " & Err.Number & " - " & Err.Description, vbCritical
+    MsgBox "Hiba a FillIktszColumn sor√°n: " & Err.Number & " - " & Err.Description, vbCritical
 End Sub
 
 Private Sub ProcessNextBatch(wsName As String, loName As String, templatePath As String, batchSize As Long, sendAutomatically As Boolean)
@@ -167,7 +167,7 @@ Private Sub ProcessNextBatch(wsName As String, loName As String, templatePath As
         End If
     Next lr
     
-    If rowsToProcess.Count = 0 Then MsgBox "Nincs feldolgozhatÛ sor.", vbInformation: Exit Sub
+    If rowsToProcess.Count = 0 Then MsgBox "Nincs feldolgozhat√≥ sor.", vbInformation: Exit Sub
     
     Dim arr() As String
     ReDim arr(1 To rowsToProcess.Count)
@@ -211,7 +211,7 @@ Private Sub ProcessNextBatch(wsName As String, loName As String, templatePath As
         Set lr = lo.ListRows(listRowIndex)
         Dim rowRange As Range: Set rowRange = lr.Range
         
-        ' V·ltozÛk a sorhoz
+        ' V√°ltoz√≥k a sorhoz
         Dim iktVal As String, bizottsagValRow As String, rawDatumRow As Variant
         Dim fnevVal As String, toAddr As String, alreadyGiven As String
         Dim datumVal As String, bizottsagLabel As String, iktatoStr As String
@@ -241,7 +241,7 @@ Private Sub ProcessNextBatch(wsName As String, loName As String, templatePath As
         
         iktatoStr = iktVal
         
-        ' Debug: t·roljuk mind a ListRow.Index-et Ès a Worksheet-row-t
+        ' Debug: t√°roljuk mind a ListRow.Index-et √©s a Worksheet-row-t
         LogStep worksheetRowNum, toAddr, iktatoStr, "DebugValues", "ListRowIndex=" & listRowIndex & "; wsRow=" & worksheetRowNum & "; fnev=" & fnevVal & "; iktsz=" & iktVal & "; datum=" & datumVal
         
         ' Create item (with retries)
@@ -279,7 +279,7 @@ Private Sub ProcessNextBatch(wsName As String, loName As String, templatePath As
                 bodyHTML = "<html><body><div style='font-family:Arial,Helvetica,sans-serif;'>" & Replace(Replace(plainBody, vbCrLf, "<br/>"), vbTab, "&nbsp;&nbsp;") & "</div></body></html>"
                 LogStep worksheetRowNum, toAddr, iktatoStr, "Body", "Used plain Body fallback"
             Else
-                bodyHTML = "<html><body><div style='font-family:Arial,Helvetica,sans-serif;'><p>Kedves {{F_NEV}},</p><p>…rtesÌtÈs: {{BIZOTTSAG}} - {{DATUM_NAP}}</p><p>‹dvˆzlettel,</p></div></body></html>"
+                bodyHTML = "<html><body><div style='font-family:Arial,Helvetica,sans-serif;'><p>Kedves {{F_NEV}},</p><p>√ârtes√≠t√©s: {{BIZOTTSAG}} - {{DATUM_NAP}}</p><p>√údv√∂zlettel,</p></div></body></html>"
                 LogStep worksheetRowNum, toAddr, iktatoStr, "Body", "Used default fallback"
             End If
         Else
@@ -292,7 +292,7 @@ Private Sub ProcessNextBatch(wsName As String, loName As String, templatePath As
         bodyHTML = Replace(bodyHTML, "{{F_NEV}}", fnevVal)
         
         Dim stamp As String
-        stamp = "<div style='font-size:10px;color:#666;margin-top:12px;'>K¸ldve: " & Format(Now, "yyyy-mm-dd HH:nn") & "</div>"
+        stamp = "<div style='font-size:10px;color:#666;margin-top:12px;'>K√ºldve: " & Format(Now, "yyyy-mm-dd HH:nn") & "</div>"
         If InStr(1, LCase(bodyHTML), "</body>") > 0 Then
             bodyHTML = Replace(bodyHTML, "</body>", stamp & "</body>")
         Else
@@ -319,7 +319,7 @@ Private Sub ProcessNextBatch(wsName As String, loName As String, templatePath As
         If Not createdOK Then LogMailError worksheetRowNum, toAddr, iktatoStr, -2, "Set HTMLBody failed": errCount = errCount + 1: GoTo NextInBatch
         
         On Error Resume Next
-        OutMail.Subject = "…rtesÌtÈs szÛbeli idıpontrÛl - " & datumVal
+        OutMail.Subject = "√ârtes√≠t√©s sz√≥beli id≈ëpontr√≥l - " & datumVal
         If Err.Number <> 0 Then LogStep worksheetRowNum, toAddr, iktatoStr, "Subject", "Err: " & Err.Number & " - " & Err.Description: Err.clear Else LogStep worksheetRowNum, toAddr, iktatoStr, "Subject", "OK"
         On Error GoTo ErrHandler
         
@@ -369,16 +369,16 @@ NextInBatch:
     If Len(localTemplate) > 0 And InStr(1, localTemplate, Environ("Temp"), vbTextCompare) > 0 Then Kill localTemplate
     On Error GoTo ErrHandler
     
-    MsgBox "Batch feldolgoz·s kÈsz. Sikeres: " & sentCount & ", Hib·k: " & errCount, vbInformation
+    MsgBox "Batch feldolgoz√°s k√©sz. Sikeres: " & sentCount & ", Hib√°k: " & errCount, vbInformation
     Exit Sub
 ErrHandler:
-    MsgBox "V·ratlan hiba: " & Err.Number & " - " & Err.Description, vbCritical
+    MsgBox "V√°ratlan hiba: " & Err.Number & " - " & Err.Description, vbCritical
     On Error Resume Next
     LogMailError 0, "", "", Err.Number, Err.Description
 End Sub
 
 ' -----------------------
-' NaplÛzÛ, segÈdf¸ggvÈnyek
+' Napl√≥z√≥, seg√©df√ºggv√©nyek
 ' -----------------------
 Private Sub InitErrorLog()
     On Error Resume Next
@@ -426,7 +426,7 @@ Private Sub LogStep(rowNum As Long, mailTo As String, iktato As String, stepName
 End Sub
 
 Private Function NzString(v As Variant) As String
-    ' Visszaad egy ¸res stringet, ha hib·s vagy Null az ÈrtÈk, k¸lˆnben trimelt string
+    ' Visszaad egy √ºres stringet, ha hib√°s vagy Null az √©rt√©k, k√ºl√∂nben trimelt string
     On Error Resume Next
     If IsError(v) Then
         NzString = ""
@@ -442,7 +442,7 @@ Function Toldalek2(szam As Integer) As String
     Select Case szam
         Case 1, 2, 4, 7, 9, 10: Toldalek2 = szam & "-es"
         Case 8, 3: Toldalek2 = szam & "-as"
-        Case 5: Toldalek2 = szam & "-ˆs"
+        Case 5: Toldalek2 = szam & "-√∂s"
         Case 6: Toldalek2 = szam & "-os"
         Case Else: Toldalek2 = szam & "-"
     End Select

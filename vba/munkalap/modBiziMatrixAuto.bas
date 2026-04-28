@@ -4,11 +4,11 @@ Option Explicit
 Public NextBiziCommit As Date
 Public BiziCommitScheduled As Boolean
 
-' Mátrix lap hívja: 1 másodpercen belül "összevonva" commitol
+' MÃ¡trix lap hÃ­vja: 1 mÃ¡sodpercen belÃ¼l "Ã¶sszevonva" commitol
 Public Sub ScheduleBiziMatrixCommit(Optional ByVal secondsDelay As Double = 1)
     On Error Resume Next
 
-    ' ha már be van ütemezve, töröljük és újraütemezzük (debounce)
+    ' ha mÃ¡r be van Ã¼temezve, tÃ¶rÃ¶ljÃ¼k Ã©s ÃºjraÃ¼temezzÃ¼k (debounce)
     If BiziCommitScheduled Then
         Application.OnTime EarliestTime:=NextBiziCommit, Procedure:="BiziMatrix_AutoCommit", Schedule:=False
     End If
@@ -18,7 +18,7 @@ Public Sub ScheduleBiziMatrixCommit(Optional ByVal secondsDelay As Double = 1)
     Application.OnTime EarliestTime:=NextBiziCommit, Procedure:="BiziMatrix_AutoCommit", Schedule:=True
 End Sub
 
-' Tényleges commit: csak akkor érdemes, ha vannak dirty sorok
+' TÃ©nyleges commit: csak akkor Ã©rdemes, ha vannak dirty sorok
 Public Sub BiziMatrix_AutoCommit()
     Dim prevEvents As Boolean, prevCalc As XlCalculation, prevScreen As Boolean
     On Error GoTo SafeExit
@@ -33,10 +33,10 @@ Public Sub BiziMatrix_AutoCommit()
     Application.ScreenUpdating = False
     Application.Calculation = xlCalculationManual
 
-    ' 1) Bizonyítvány pont frissítés a mátrixból a diakadatba (csak dirty sorok)
+    ' 1) BizonyÃ­tvÃ¡ny pont frissÃ­tÃ©s a mÃ¡trixbÃ³l a diakadatba (csak dirty sorok)
     BiziMatrix_UpdateTarget_ChangedOnly
 
-    ' 2) Teljes pontok újraszámolása
+    ' 2) Teljes pontok ÃºjraszÃ¡molÃ¡sa
     RecalcPontok_Automatikus
 
 SafeExit:

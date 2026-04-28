@@ -2,39 +2,39 @@ Attribute VB_Name = "modBiziMatrixImport"
 Option Explicit
 
 ' =========================
-' Be·llÌt·sok
+' Be√°ll√≠t√°sok
 ' =========================
 Private Const MATRIX_SHEET As String = "bizonyitvany_matrix"
 Private Const DIRTY_COL As Long = 26              ' Z
-Private Const SRC_HDR_SUBJECT As Long = 1         ' Tant·rgy (ˆsszevont is lehet)
-Private Const SRC_HDR_YEAR As Long = 2            ' 1-4 Èvf.
+Private Const SRC_HDR_SUBJECT As Long = 1         ' Tant√°rgy (√∂sszevont is lehet)
+Private Const SRC_HDR_YEAR As Long = 2            ' 1-4 √©vf.
 Private Const SRC_FIRST_DATA_ROW As Long = 3
 
-' M·trix oszlopok
+' M√°trix oszlopok
 Private Const MAT_COL_OKTAZON As Long = 1         ' A
 Private Const MAT_COL_NEV As Long = 2             ' B
 Private Const MAT_FIRST_SUBJ_COL As Long = 3      ' C...
 
-' automatikus commit a m·trix szerkesztÈse ut·n (debounce)
+' automatikus commit a m√°trix szerkeszt√©se ut√°n (debounce)
 Public Const MATRIX_AUTO_COMMIT As Boolean = True
 Public NextBiziCommit As Date
 Public BiziCommitScheduled As Boolean
 
 ' =========================================================
-' RIBBON / PUBLIC belÈpÈsi pontok (a te Ribbon kÛdodhoz)
+' RIBBON / PUBLIC bel√©p√©si pontok (a te Ribbon k√≥dodhoz)
 ' =========================================================
 
-' 1) M·trix betˆltÈs (forr·sbÛl)
+' 1) M√°trix bet√∂lt√©s (forr√°sb√≥l)
 Public Sub BiziMatrix_Build(Optional control As IRibbonControl)
     Import_Bizonyitvany_Matrix_Teljes
 End Sub
 
-' 2) Csak mÛdosult (dirty) sorok alapj·n frissÌtÈs diakadat[p_bizonyitvany]-ba
+' 2) Csak m√≥dosult (dirty) sorok alapj√°n friss√≠t√©s diakadat[p_bizonyitvany]-ba
 Public Sub BiziMatrix_UpdateTarget_ChangedOnly(Optional control As IRibbonControl)
     BiziMatrix_UpdateTarget_ChangedOnly_Impl False
 End Sub
 
-' belsı: silent mÛdban is tudjon futni
+' bels≈ë: silent m√≥dban is tudjon futni
 Private Sub BiziMatrix_UpdateTarget_ChangedOnly_Impl(ByVal silent As Boolean)
     On Error GoTo EH
 
@@ -44,7 +44,7 @@ Private Sub BiziMatrix_UpdateTarget_ChangedOnly_Impl(ByVal silent As Boolean)
     Dim loD As ListObject: Set loD = wsD.ListObjects("diakadat")
 
     If loD.ListRows.Count = 0 Then
-        If Not silent Then MsgBox "A diakadat t·bla ¸res.", vbExclamation
+        If Not silent Then MsgBox "A diakadat t√°bla √ºres.", vbExclamation
         Exit Sub
     End If
 
@@ -52,33 +52,33 @@ Private Sub BiziMatrix_UpdateTarget_ChangedOnly_Impl(ByVal silent As Boolean)
     colOktD = GetLoCol(loD, "oktazon")
     colPBiziD = GetLoCol(loD, "p_bizonyitvany")
     If colOktD = 0 Or colPBiziD = 0 Then
-        If Not silent Then MsgBox "Hi·nyzÛ oszlop a diakadat t·bl·ban: oktazon / p_bizonyitvany", vbCritical
+        If Not silent Then MsgBox "Hi√°nyz√≥ oszlop a diakadat t√°bl√°ban: oktazon / p_bizonyitvany", vbCritical
         Exit Sub
     End If
 
     Dim wsM As Worksheet
     Set wsM = GetSheetIfExists(wbD, MATRIX_SHEET)
     If wsM Is Nothing Then
-        If Not silent Then MsgBox "Nincs bizonyitvany_matrix lap. Elıbb tˆltsd be a m·trixot.", vbExclamation
+        If Not silent Then MsgBox "Nincs bizonyitvany_matrix lap. El≈ëbb t√∂ltsd be a m√°trixot.", vbExclamation
         Exit Sub
     End If
 
     Dim lastRowM As Long
     lastRowM = wsM.Cells(wsM.rows.Count, MAT_COL_OKTAZON).End(xlUp).Row
     If lastRowM < 2 Then
-        If Not silent Then MsgBox "A bizonyitvany_matrix ¸res.", vbExclamation
+        If Not silent Then MsgBox "A bizonyitvany_matrix √ºres.", vbExclamation
         Exit Sub
     End If
 
     Dim lastColM As Long
     lastColM = wsM.Cells(1, wsM.Columns.Count).End(xlToLeft).Column
     If lastColM < MAT_FIRST_SUBJ_COL Then
-        If Not silent Then MsgBox "Nincs tant·rgy oszlop a m·trixban.", vbExclamation
+        If Not silent Then MsgBox "Nincs tant√°rgy oszlop a m√°trixban.", vbExclamation
         Exit Sub
     End If
     If lastColM < DIRTY_COL Then lastColM = DIRTY_COL
 
-    ' diakadat tˆmb + index
+    ' diakadat t√∂mb + index
     Dim arrD As Variant: arrD = loD.DataBodyRange.value
     Dim idxD As Object: Set idxD = CreateObject("Scripting.Dictionary")
     idxD.CompareMode = 1
@@ -91,7 +91,7 @@ Private Sub BiziMatrix_UpdateTarget_ChangedOnly_Impl(ByVal silent As Boolean)
         End If
     Next r
 
-    ' frissÌtÈs (csak dirty=1)
+    ' friss√≠t√©s (csak dirty=1)
     Dim updated As Long, skipped As Long, missing As Long
     updated = 0: skipped = 0: missing = 0
 
@@ -136,39 +136,39 @@ NextM:
     loD.DataBodyRange.value = arrD
 
     If Not silent Then
-        MsgBox "BizonyÌtv·ny frissÌtÈs kÈsz." & vbCrLf & _
-               "V·ltozott (Ìrtuk): " & updated & vbCrLf & _
-               "Nem v·ltozott: " & skipped & vbCrLf & _
-               "CÈlban nem tal·lt oktazon: " & missing, vbInformation
+        MsgBox "Bizony√≠tv√°ny friss√≠t√©s k√©sz." & vbCrLf & _
+               "V√°ltozott (√≠rtuk): " & updated & vbCrLf & _
+               "Nem v√°ltozott: " & skipped & vbCrLf & _
+               "C√©lban nem tal√°lt oktazon: " & missing, vbInformation
     End If
 
     Exit Sub
 
 EH:
-    If Not silent Then MsgBox "Bizi frissÌtÈsi hiba: " & Err.Description, vbCritical
+    If Not silent Then MsgBox "Bizi friss√≠t√©si hiba: " & Err.Description, vbCritical
 End Sub
 
-' 3) TELJES import: forr·sbÛl m·trix + azonnali p_bizonyitvany kitˆltÈs + AñZ rendezÈs + pont ˙jrasz·mol·s
+' 3) TELJES import: forr√°sb√≥l m√°trix + azonnali p_bizonyitvany kit√∂lt√©s + A‚ÄìZ rendez√©s + pont √∫jrasz√°mol√°s
 Public Sub Import_Bizonyitvany_Matrix_Teljes(Optional control As IRibbonControl)
     On Error GoTo EH
 
     Dim srcPath As String
-    srcPath = PickExcelFile("V·laszd ki a BIZONYÕTV¡NYOS (forr·s) Excel f·jlt")
+    srcPath = PickExcelFile("V√°laszd ki a BIZONY√çTV√ÅNYOS (forr√°s) Excel f√°jlt")
     If srcPath = "" Then Exit Sub
 
     Dim srcSheetName As String
-    srcSheetName = InputBox("Forr·s munkalap neve:", "Forr·s munkalap", "Export")
+    srcSheetName = InputBox("Forr√°s munkalap neve:", "Forr√°s munkalap", "Export")
     If Trim$(srcSheetName) = "" Then Exit Sub
 
     Dim keyHeader As String
-    keyHeader = InputBox("Oktazon oszlop FEJL…CE (a 2. fejlÈc sorban):", "Kulcs oszlop", "Oktat·si azonosÌtÛ")
+    keyHeader = InputBox("Oktazon oszlop FEJL√âCE (a 2. fejl√©c sorban):", "Kulcs oszlop", "Oktat√°si azonos√≠t√≥")
     If Trim$(keyHeader) = "" Then Exit Sub
 
     Dim wbD As Workbook: Set wbD = ThisWorkbook
     Dim wsD As Worksheet: Set wsD = wbD.Worksheets("diakadat")
     Dim loD As ListObject: Set loD = wsD.ListObjects("diakadat")
     If loD.ListRows.Count = 0 Then
-        MsgBox "A diakadat t·bla ¸res.", vbExclamation
+        MsgBox "A diakadat t√°bla √ºres.", vbExclamation
         Exit Sub
     End If
 
@@ -178,11 +178,11 @@ Public Sub Import_Bizonyitvany_Matrix_Teljes(Optional control As IRibbonControl)
     If colNevD = 0 Then colNevD = GetLoCol(loD, "i_nev")
 
     If colOktD = 0 Then
-        MsgBox "A diakadat t·bl·ban nincs 'oktazon' oszlop.", vbCritical
+        MsgBox "A diakadat t√°bl√°ban nincs 'oktazon' oszlop.", vbCritical
         Exit Sub
     End If
 
-    ' Forr·s megnyit·s
+    ' Forr√°s megnyit√°s
     Application.ScreenUpdating = False
 
     Dim wbS As Workbook, wsS As Worksheet
@@ -192,28 +192,28 @@ Public Sub Import_Bizonyitvany_Matrix_Teljes(Optional control As IRibbonControl)
     Set wsS = wbS.Worksheets(srcSheetName)
     On Error GoTo EH
     If wsS Is Nothing Then
-        MsgBox "Nem tal·lom a forr·s munkalapot: " & srcSheetName, vbExclamation
+        MsgBox "Nem tal√°lom a forr√°s munkalapot: " & srcSheetName, vbExclamation
         GoTo CleanExit
     End If
 
-    ' Kulcs oszlop a forr·sban (2. fejlÈc sor)
+    ' Kulcs oszlop a forr√°sban (2. fejl√©c sor)
     Dim colKeyS As Long
     colKeyS = FindSubHeaderCol(wsS, SRC_HDR_YEAR, keyHeader)
     If colKeyS = 0 Then
-        MsgBox "Nem tal·lom a kulcs oszlopot a 2. fejlÈc sorban: " & keyHeader, vbCritical
+        MsgBox "Nem tal√°lom a kulcs oszlopot a 2. fejl√©c sorban: " & keyHeader, vbCritical
         GoTo CleanExit
     End If
 
-    ' Tant·rgy oszlopok: csak 4. Èvf.
+    ' Tant√°rgy oszlopok: csak 4. √©vf.
     Dim subjMap As Object
     Set subjMap = BuildSubjectToColMap_Year4(wsS, SRC_HDR_SUBJECT, SRC_HDR_YEAR)
 
     If subjMap.Count = 0 Then
-        MsgBox "Nem tal·lok 4. Èvf. oszlopokat. (Lehet: '4. Èvf.', 'IV. Èvf.', '4 Èvfolyam' stb.)", vbCritical
+        MsgBox "Nem tal√°lok 4. √©vf. oszlopokat. (Lehet: '4. √©vf.', 'IV. √©vf.', '4 √©vfolyam' stb.)", vbCritical
         GoTo CleanExit
     End If
 
-    ' Forr·s index: oktazon -> sor (elsıt vessz¸k)
+    ' Forr√°s index: oktazon -> sor (els≈ët vessz√ºk)
     Dim srcIdx As Object: Set srcIdx = CreateObject("Scripting.Dictionary")
     srcIdx.CompareMode = 1
 
@@ -228,16 +228,16 @@ Public Sub Import_Bizonyitvany_Matrix_Teljes(Optional control As IRibbonControl)
         End If
     Next rr
 
-    ' M·trix lap elıkÈszÌtÈs
+    ' M√°trix lap el≈ëk√©sz√≠t√©s
     Dim wsM As Worksheet
     Set wsM = EnsureSheet(wbD, MATRIX_SHEET)
     wsM.Cells.clear
 
-    ' Tant·rgyak "szÈp" list·ja ABC sorrendben (Èkezetet megtartjuk!)
+    ' Tant√°rgyak "sz√©p" list√°ja ABC sorrendben (√©kezetet megtartjuk!)
     Dim subjects() As String
     subjects = DictKeysToSortedArray_KeepOriginal(subjMap)
 
-    ' FejlÈc
+    ' Fejl√©c
     wsM.Cells(1, MAT_COL_OKTAZON).value = "oktazon"
     wsM.Cells(1, MAT_COL_NEV).value = "f_nev"
 
@@ -248,10 +248,10 @@ Public Sub Import_Bizonyitvany_Matrix_Teljes(Optional control As IRibbonControl)
 
     wsM.Cells(1, DIRTY_COL).value = "dirty"
 
-    ' diakadat tˆmb
+    ' diakadat t√∂mb
     Dim arrD As Variant: arrD = loD.DataBodyRange.value
 
-    ' M·trix feltˆltÈs a diakadat alapj·n (teh·t biztosan ugyanaz a kˆr)
+    ' M√°trix felt√∂lt√©s a diakadat alapj√°n (teh√°t biztosan ugyanaz a k√∂r)
     Dim outRow As Long: outRow = 2
     Dim missInSource As Long: missInSource = 0
 
@@ -276,7 +276,7 @@ Public Sub Import_Bizonyitvany_Matrix_Teljes(Optional control As IRibbonControl)
                 Dim v As Variant
                 v = wsS.Cells(srcRow, colS).value
 
-                ' 2 tizedes a m·trixban is
+                ' 2 tizedes a m√°trixban is
                 If IsNumeric(v) And Not IsEmpty(v) Then
                     wsM.Cells(outRow, MAT_FIRST_SUBJ_COL + i).value = WorksheetFunction.Round(CDbl(v), 2)
                 Else
@@ -287,7 +287,7 @@ Public Sub Import_Bizonyitvany_Matrix_Teljes(Optional control As IRibbonControl)
             missInSource = missInSource + 1
         End If
 
-        ' Build ut·n azonnal szeretnÈd p_bizonyitvany-t tˆlteni -> jelˆlj¸k dirty-re
+        ' Build ut√°n azonnal szeretn√©d p_bizonyitvany-t t√∂lteni -> jel√∂lj√ºk dirty-re
         wsM.Cells(outRow, DIRTY_COL).value = 1
 
         outRow = outRow + 1
@@ -295,12 +295,12 @@ Public Sub Import_Bizonyitvany_Matrix_Teljes(Optional control As IRibbonControl)
 NextStudent:
     Next dRow
 
-    ' Form·z·s + rendezÈs AñZ (nÈv)
+    ' Form√°z√°s + rendez√©s A‚ÄìZ (n√©v)
     wsM.rows(1).Font.Bold = True
     wsM.Columns.AutoFit
     wsM.Columns(DIRTY_COL).Hidden = True
 
-    ' 2 tizedes form·tum a tant·rgy mezıkre (adat sorok)
+    ' 2 tizedes form√°tum a tant√°rgy mez≈ëkre (adat sorok)
     Dim lastColFmt As Long
     lastColFmt = wsM.Cells(1, wsM.Columns.Count).End(xlToLeft).Column
     If lastColFmt >= MAT_FIRST_SUBJ_COL And outRow > 2 Then
@@ -309,17 +309,17 @@ NextStudent:
 
     BiziMatrix_SortRowsByName wsM, outRow - 1
 
-    ' Azonnali betˆltÈs diakadat[p_bizonyitvany]-ba (dirty=1 sorok alapj·n)
+    ' Azonnali bet√∂lt√©s diakadat[p_bizonyitvany]-ba (dirty=1 sorok alapj√°n)
     BiziMatrix_UpdateTarget_ChangedOnly_Impl True
 
-    ' Pontok ˙jrasz·mol·sa (ha n·lad megvan)
+    ' Pontok √∫jrasz√°mol√°sa (ha n√°lad megvan)
     On Error Resume Next
     RecalcPontok_Automatikus
     On Error GoTo EH
 
-    MsgBox "BizonyÌtv·ny m·trix import kÈsz." & vbCrLf & _
-           "M·trix sorok: " & (outRow - 2) & vbCrLf & _
-           "Forr·sban nem tal·lt oktazon: " & missInSource, vbInformation
+    MsgBox "Bizony√≠tv√°ny m√°trix import k√©sz." & vbCrLf & _
+           "M√°trix sorok: " & (outRow - 2) & vbCrLf & _
+           "Forr√°sban nem tal√°lt oktazon: " & missInSource, vbInformation
 
 CleanExit:
     On Error Resume Next
@@ -328,12 +328,12 @@ CleanExit:
     Exit Sub
 
 EH:
-    MsgBox "BizonyÌtv·ny import hiba: " & Err.Description, vbCritical
+    MsgBox "Bizony√≠tv√°ny import hiba: " & Err.Description, vbCritical
     Resume CleanExit
 End Sub
 
 ' =========================================================
-' M·trix rendezÈs nÈv szerint (AñZ)
+' M√°trix rendez√©s n√©v szerint (A‚ÄìZ)
 ' =========================================================
 Private Sub BiziMatrix_SortRowsByName(ws As Worksheet, ByVal lastDataRow As Long)
     On Error GoTo EH
@@ -353,8 +353,8 @@ EH:
 End Sub
 
 ' =========================================================
-' 4. Èvf oszlopok felderÌtÈse (2 fejlÈc sor, 1. sor tant·rgy merge-elt is lehet)
-' subjMap: original tant·rgy nÈv -> oszlopindex
+' 4. √©vf oszlopok felder√≠t√©se (2 fejl√©c sor, 1. sor tant√°rgy merge-elt is lehet)
+' subjMap: original tant√°rgy n√©v -> oszlopindex
 ' =========================================================
 Private Function BuildSubjectToColMap_Year4(ws As Worksheet, headerRowSubject As Long, headerRowYear As Long) As Object
     Dim d As Object: Set d = CreateObject("Scripting.Dictionary")
@@ -396,7 +396,7 @@ Private Function SubjectHeaderText(ws As Worksheet, headerRowSubject As Long, co
     End If
 End Function
 
-' 2. fejlÈc sorban keres (normaliz·lt egyezÈssel)
+' 2. fejl√©c sorban keres (normaliz√°lt egyez√©ssel)
 Private Function FindSubHeaderCol(ws As Worksheet, headerRowSub As Long, headerText As String) As Long
     Dim lastCol As Long: lastCol = ws.Cells(headerRowSub, ws.Columns.Count).End(xlToLeft).Column
     Dim c As Long
@@ -410,7 +410,7 @@ Private Function FindSubHeaderCol(ws As Worksheet, headerRowSub As Long, headerT
 End Function
 
 ' =========================================================
-' Jegy -> sz·m (szˆveg is lehet)  [DOUBLE, 2 tizedesre]
+' Jegy -> sz√°m (sz√∂veg is lehet)  [DOUBLE, 2 tizedesre]
 ' =========================================================
 Private Function GradeToNumberDbl(ByVal v As Variant) As Double
     On Error GoTo EH
@@ -432,7 +432,7 @@ Private Function GradeToNumberDbl(ByVal v As Variant) As Double
     If InStr(s, "elegseges") > 0 Then GradeToNumberDbl = 2#: Exit Function
     If InStr(s, "elegtelen") > 0 Then GradeToNumberDbl = 1#: Exit Function
 
-    ' Ha valami vegyes szˆveg, megprÛb·ljuk a Val()-t, majd kerekÌt¸nk
+    ' Ha valami vegyes sz√∂veg, megpr√≥b√°ljuk a Val()-t, majd kerek√≠t√ºnk
     GradeToNumberDbl = Round2(CDbl(val(s)))
     Exit Function
 
@@ -445,12 +445,12 @@ Private Function NzDbl(ByVal v As Variant) As Double
 End Function
 
 Private Function Round2(ByVal x As Double) As Double
-    ' Excel/VBA bankers rounding helyett: WorksheetFunction.Round ·ltal·ban a v·rt viselkedÈs
+    ' Excel/VBA bankers rounding helyett: WorksheetFunction.Round √°ltal√°ban a v√°rt viselked√©s
     Round2 = WorksheetFunction.Round(x, 2)
 End Function
 
 ' =========================================================
-' ListObject segÈdek / sheet segÈdek
+' ListObject seg√©dek / sheet seg√©dek
 ' =========================================================
 Private Function GetLoCol(lo As ListObject, ByVal colName As String) As Long
     On Error Resume Next
@@ -475,7 +475,7 @@ Private Function GetSheetIfExists(wb As Workbook, ByVal sheetName As String) As 
 End Function
 
 ' =========================================================
-' Tant·rgy lista ABC ñ az ORIGINAL (Èkezetes) neveket rendezz¸k
+' Tant√°rgy lista ABC ‚Äì az ORIGINAL (√©kezetes) neveket rendezz√ºk
 ' =========================================================
 Private Function DictKeysToSortedArray_KeepOriginal(d As Object) As String()
     Dim keys As Variant: keys = d.keys
@@ -512,7 +512,7 @@ Private Sub QuickSortStr(ByRef a() As String, ByVal first As Long, ByVal last As
 End Sub
 
 ' =========================================================
-' Normaliz·lÛ (Èkezet- Ès NBSP-t˚rı keresÈshez)
+' Normaliz√°l√≥ (√©kezet- √©s NBSP-t≈±r≈ë keres√©shez)
 ' =========================================================
 Private Function NKey2(ByVal s As String) As String
     Dim t As String
@@ -522,15 +522,15 @@ Private Function NKey2(ByVal s As String) As String
     t = Replace(t, vbTab, " ")
     Do While InStr(t, "  ") > 0: t = Replace(t, "  ", " "): Loop
 
-    t = Replace(t, "·", "a")
-    t = Replace(t, "È", "e")
-    t = Replace(t, "Ì", "i")
-    t = Replace(t, "Û", "o")
-    t = Replace(t, "ˆ", "o")
-    t = Replace(t, "ı", "o")
-    t = Replace(t, "˙", "u")
-    t = Replace(t, "¸", "u")
-    t = Replace(t, "˚", "u")
+    t = Replace(t, "√°", "a")
+    t = Replace(t, "√©", "e")
+    t = Replace(t, "√≠", "i")
+    t = Replace(t, "√≥", "o")
+    t = Replace(t, "√∂", "o")
+    t = Replace(t, "≈ë", "o")
+    t = Replace(t, "√∫", "u")
+    t = Replace(t, "√º", "u")
+    t = Replace(t, "≈±", "u")
 
     NKey2 = t
 End Function
@@ -544,7 +544,7 @@ Private Function PickExcelFile(ByVal title As String) As String
     With fd
         .title = title
         .Filters.clear
-        .Filters.add "Excel f·jlok", "*.xlsx;*.xlsm;*.xls"
+        .Filters.add "Excel f√°jlok", "*.xlsx;*.xlsm;*.xls"
         .AllowMultiSelect = False
         If .Show <> -1 Then
             PickExcelFile = ""
