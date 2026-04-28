@@ -3,7 +3,7 @@ Option Explicit
 
 ' Teljes modul — frissítve: az összesítõ dokumentumok fejlécébe is beírjuk
 ' a bizottság nevét és az idõpontot (ahogy a pontozó dokumentumnál).
-' Állítsd be a sablonok útvonalait a modul elején, mentsd .xlsm, majd futtasd az ExportPontozok_Full_WithSummary eljárást.
+' A sablonok és mappák a beallitasok lapon / Beallitasok menüben állíthatók.
 
 ' Word late-binding konstansok
 Private Const wdPageBreak As Long = 7
@@ -13,12 +13,6 @@ Private Const wdFormatXMLDocument As Long = 16
 Private Const wdHeaderFooterPrimary As Long = 1
 Private Const wdAlignParagraphCenter As Long = 1
 
-' === Konfiguráció - állítsd be az útvonalakat ===
-Private Const MAIN_TEMPLATE_PATH As String = "\\NS2\Felvételi\Data\PontozolapTemplate.docx"
-Private Const SUMMARY_TEMPLATE_PATH As String = "\\NS2\Felvételi\Data\OsszesitolapTemplate.docx"
-Private Const OUTPUT_ROOT As String = "\\NS2\Felvételi\Data\Pontozo\"    ' gyökér mappa az eredményeknek
-' ==================================================
-
 ' Fõ eljárás - integrált mûködés
 Sub ExportPontozok_Full_WithSummary()
     On Error GoTo ErrMain
@@ -26,11 +20,14 @@ Sub ExportPontozok_Full_WithSummary()
     Const placeholder As String = "{{DATA_START}}"
     Const EXPORTED_COL_NAME As String = "exported" ' oszlopnév, ami jelöli a feldolgozott sorokat
     Dim fso As Object: Set fso = CreateObject("Scripting.FileSystemObject")
+    Dim mainTemplatePath As String: mainTemplatePath = GetConfiguredPontozolapTemplatePath()
+    Dim summaryTemplatePath As String: summaryTemplatePath = GetConfiguredOsszesitoTemplatePath()
+    Dim outputRoot As String: outputRoot = GetConfiguredPontozoOutputRoot()
     
     ' Ellenõrizzük a mappát
-    If Not fso.FolderExists(OUTPUT_ROOT) Then
+    If Not fso.FolderExists(outputRoot) Then
         On Error Resume Next
-        fso.CreateFolder OUTPUT_ROOT
+        fso.CreateFolder outputRoot
         On Error GoTo 0
     End If
     
@@ -47,7 +44,7 @@ Sub ExportPontozok_Full_WithSummary()
         mergePerCommittee = False
     End If
     If MsgBox("Készítsek per-bizottság Word összesítõ dokumentumot a sablon alapján (" & _
-              fso.GetFileName(SUMMARY_TEMPLATE_PATH) & ")?", vbYesNo + vbQuestion, "Összesítõ") = vbYes Then
+              fso.GetFileName(summaryTemplatePath) & ")?", vbYesNo + vbQuestion, "Összesítõ") = vbYes Then
         createSummaryDocs = True
     Else
         createSummaryDocs = False
@@ -59,26 +56,26 @@ Sub ExportPontozok_Full_WithSummary()
     ' Biztonságos sablonmásolat a Temp-be (fõ sablon)
     Dim localMainTemplate As String: localMainTemplate = Environ("Temp") & "\temp_pontozolap_template.docx"
     Dim mainTemplateUsed As String: mainTemplateUsed = ""
-    If Not fso.FileExists(MAIN_TEMPLATE_PATH) Then
-        MsgBox "A fõ sablon nem található: " & MAIN_TEMPLATE_PATH, vbCritical
+    If Not fso.FileExists(mainTemplatePath) Then
+        MsgBox "A fõ sablon nem található: " & mainTemplatePath, vbCritical
         Exit Sub
     End If
     On Error Resume Next
     If fso.FileExists(localMainTemplate) Then fso.DeleteFile localMainTemplate, True
     Err.clear
-    fso.CopyFile MAIN_TEMPLATE_PATH, localMainTemplate
+    fso.CopyFile mainTemplatePath, localMainTemplate
     If Err.Number = 0 And fso.FileExists(localMainTemplate) Then
         mainTemplateUsed = localMainTemplate
     Else
-        mainTemplateUsed = MAIN_TEMPLATE_PATH
+        mainTemplateUsed = mainTemplatePath
     End If
     On Error GoTo 0
     
     ' Summary sablon ellenõrzése (ha kértük)
     Dim summaryTemplateUsed As String: summaryTemplateUsed = ""
     If createSummaryDocs Then
-        If Not fso.FileExists(SUMMARY_TEMPLATE_PATH) Then
-            MsgBox "Az összesítõ sablon nem található: " & SUMMARY_TEMPLATE_PATH & vbCrLf & "A summary dokumentumok nem készülnek.", vbExclamation
+        If Not fso.FileExists(summaryTemplatePath) Then
+            MsgBox "Az összesítõ sablon nem található: " & summaryTemplatePath & vbCrLf & "A summary dokumentumok nem készülnek.", vbExclamation
             createSummaryDocs = False
         Else
             ' másoljuk tempbe
@@ -86,11 +83,11 @@ Sub ExportPontozok_Full_WithSummary()
             On Error Resume Next
             If fso.FileExists(localSummaryTemplate) Then fso.DeleteFile localSummaryTemplate, True
             Err.clear
-            fso.CopyFile SUMMARY_TEMPLATE_PATH, localSummaryTemplate
+            fso.CopyFile summaryTemplatePath, localSummaryTemplate
             If Err.Number = 0 And fso.FileExists(localSummaryTemplate) Then
                 summaryTemplateUsed = localSummaryTemplate
             Else
-                summaryTemplateUsed = SUMMARY_TEMPLATE_PATH
+                summaryTemplateUsed = summaryTemplatePath
             End If
             On Error GoTo 0
         End If
@@ -206,7 +203,7 @@ NextRowMain:
         If dateLabel = "" Then dateLabel = "no_date"
         
         Dim committeeFolder As String
-        committeeFolder = fso.BuildPath(OUTPUT_ROOT, SafeFileName(bizLabel))
+        committeeFolder = fso.BuildPath(outputRoot, SafeFileName(bizLabel))
         If Not fso.FolderExists(committeeFolder) Then
             On Error Resume Next
             fso.CreateFolder committeeFolder
@@ -416,12 +413,12 @@ NextGroupMain:
     
     ' Merge per committee (ha kértük)
     If mergePerCommittee Then
-        MergeAllCommitteesInFolder OUTPUT_ROOT, wdApp, fso
+        MergeAllCommitteesInFolder outputRoot, wdApp, fso
     End If
     
     wdApp.Visible = True
     wdApp.Activate
-    MsgBox "Kész. Létrehozott dokumentumok száma: " & totalFiles & vbCrLf & "Gyökér mappa: " & OUTPUT_ROOT, vbInformation
+    MsgBox "Kész. Létrehozott dokumentumok száma: " & totalFiles & vbCrLf & "Gyökér mappa: " & outputRoot, vbInformation
     Exit Sub
 
 ErrMain:
