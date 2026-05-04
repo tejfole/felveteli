@@ -22,6 +22,10 @@ Option Explicit
 ' - kevespont / elutkevespont listaba csak az kerul,
 '   akinek irasbeliossz < kevespont_hatar
 ' - kevespont_hatar csak 1..100 kozotti ertekkent ervenyes
+'
+' JAVITAS (2026-05):
+' - Nem transzponalunk 1D tombot 2D-ve (Application.Transpose), mert az elcsuszasokat okoz.
+' - A kevéspont szűrésnél a 0 pontot NEM tekintjük "kevéspont"-nak; inkább "nemteljesített" (nincs írásbeli).
 ' ============================================================
 
 Public Function SzuressNev(Optional ByVal valasztas As String = "", _
@@ -93,15 +97,15 @@ Public Sub FrissitListaTablat(Optional control As IRibbonControl, _
     Set tbl = FindTableByName(ThisWorkbook, "lista")
 
     If tbl Is Nothing Then
-        If Not Csendes Then MsgBox "Nem tal�lhat� a 'lista' nev� t�bla.", vbCritical
+        If Not Csendes Then MsgBox "Nem található a 'lista' nevű tábla.", vbCritical
         Exit Sub
     End If
 
-    Set ws = tbl.parent
-    valasztas = Trim$(CStr(ws.Range("B1").value))
+    Set ws = tbl.Parent
+    valasztas = Trim$(CStr(ws.Range("B1").Value))
 
     If valasztas = "" Then
-        If Not Csendes Then MsgBox "A B1 cell�ban nincs kiv�lasztott sz�r�si felt�tel.", vbExclamation
+        If Not Csendes Then MsgBox "A B1 cellában nincs kiválasztott szűrési feltétel.", vbExclamation
         Exit Sub
     End If
 
@@ -123,7 +127,7 @@ Public Sub FrissitListaTablat(Optional control As IRibbonControl, _
         ClearListaInputColumns tbl
 
         If Not Csendes Then
-            MsgBox "Nincs tal�lat a kiv�lasztott sz�r�sre: " & valasztas, vbInformation
+            MsgBox "Nincs találat a kiválasztott szűrésre: " & valasztas, vbInformation
         End If
 
         GoTo CleanExit
@@ -144,13 +148,13 @@ Public Sub FrissitListaTablat(Optional control As IRibbonControl, _
     Dim i As Long
 
     For i = 1 To darab
-        tbl.DataBodyRange.Cells(i, cNev).value = GetVectorItem(nevek, i)
-        tbl.DataBodyRange.Cells(i, cOktazon).value = GetVectorItem(oktazonok, i)
-        tbl.DataBodyRange.Cells(i, cOk).value = SzuressOk(valasztas, i)
+        tbl.DataBodyRange.Cells(i, cNev).Value = GetVectorItem(nevek, i)
+        tbl.DataBodyRange.Cells(i, cOktazon).Value = GetVectorItem(oktazonok, i)
+        tbl.DataBodyRange.Cells(i, cOk).Value = SzuressOk(valasztas, i)
     Next i
 
     If Not Csendes Then
-        MsgBox "Lista friss�tve. Sorok sz�ma: " & darab, vbInformation
+        MsgBox "Lista frissítve. Sorok száma: " & darab, vbInformation
     End If
 
 CleanExit:
@@ -163,11 +167,13 @@ Hibakezeles:
     Application.ScreenUpdating = True
 
     If Not Csendes Then
-        MsgBox "Hiba a lista friss�t�se k�zben: " & Err.Number & vbCrLf & Err.description, vbCritical
+        MsgBox "Hiba a lista frissítése közben: " & Err.Number & vbCrLf & Err.Description, vbCritical
     End If
 End Sub
 
 Private Function ReturnArrayItemOrTranspose(ByVal arr As Variant, ByVal SorIndex As Long) As Variant
+    ' FONTOS: a retArr/okArr 1D tömbként (1..n) készül a BuildSzuresArrays-ban.
+    ' Itt NEM transzponálunk, mert az 2D tömböt hozhat létre, ami elcsúszást okozhat.
     On Error GoTo Hiba
 
     If IsEmpty(arr) Then
@@ -185,7 +191,7 @@ Private Function ReturnArrayItemOrTranspose(ByVal arr As Variant, ByVal SorIndex
         If ub < lb Then
             ReturnArrayItemOrTranspose = ""
         ElseIf SorIndex <= 0 Then
-            ReturnArrayItemOrTranspose = Application.Transpose(arr)
+            ReturnArrayItemOrTranspose = arr
         ElseIf SorIndex >= lb And SorIndex <= ub Then
             ReturnArrayItemOrTranspose = arr(SorIndex)
         Else
@@ -251,11 +257,11 @@ Private Sub BuildSzuresArrays(ByVal ReturnField As String, _
 
     If tbl.DataBodyRange Is Nothing Then Exit Sub
 
-    d = tbl.DataBodyRange.value
+    d = tbl.DataBodyRange.Value
 
     If Len(valasztas) = 0 Then
         On Error Resume Next
-        valasztas = NormText(Application.Caller.Worksheet.Range("B1").value)
+        valasztas = NormText(Application.Caller.Worksheet.Range("B1").Value)
         On Error GoTo Hibakezeles
     Else
         valasztas = NormText(valasztas)
@@ -337,7 +343,7 @@ Private Sub BuildSzuresArrays(ByVal ReturnField As String, _
                 End If
 
             Case "elutkevespont"
-                ' Ebbe a list�ba CSAK a val�ban kev�spontos tanul�k ker�lhetnek.
+                ' Ebbe a listába CSAK a valóban kevéspontos tanulók kerülhetnek.
                 If IsX(d(i, cVissza)) Then GoTo NextI
                 If IsX(d(i, cFelvesz)) Then GoTo NextI
 
@@ -432,10 +438,11 @@ Private Sub BuildSzuresArrays(ByVal ReturnField As String, _
                 End If
 
             Case "nemteljesitett"
-                ' Visszal�pett tanul� ne legyen nem teljes�tett list�ban.
+                ' Visszalépett tanuló ne legyen nem teljesített listában.
                 If IsX(d(i, cVissza)) Then GoTo NextI
 
-                ' Kev�spontos tanul� se legyen nem teljes�tett list�ban.
+                ' Kevéspontos tanuló se legyen nem teljesített listában.
+                ' FONTOS: 0 pont NEM számít "kevéspont"-nak (az nálatok inkább "nem teljesített": nem adta meg az írásbelit).
                 If IsKevesPontValue(d(i, cIras), kevesPontLimit) Then GoTo NextI
 
                 If keresX Then
@@ -490,25 +497,47 @@ Private Function IsNemTeljesitettValasztas(ByVal s As String) As Boolean
 
     IsNemTeljesitettValasztas = _
         (s = "nem teljesitett") Or _
-        (s = "nem teljes�tett") Or _
+        (s = "nem teljesített") Or _
         (s = "nemteljesitett") Or _
-        (s = "nem teljes�tette") Or _
+        (s = "nem teljesítette") Or _
         (s = "nincs teljesitve") Or _
-        (s = "nincs teljes�tve") Or _
+        (s = "nincs teljesítve") Or _
         (s = "hianyos") Or _
-        (s = "hi�nyos")
+        (s = "hiányos")
 End Function
 
 Private Function IsKevesPontValue(ByVal v As Variant, ByVal limit As Double) As Boolean
+    ' Szigorúbb konverzió: a hibás/üres pontszám ne számítson automatikusan kevés pontnak.
+    ' Üzleti szabály: 0 pont NEM kevéspont, az inkább "nem teljesített".
+    Dim s As String
+
     If IsError(v) Or IsNull(v) Then
         IsKevesPontValue = False
-    ElseIf Trim$(CStr(v & "")) = "" Then
-        IsKevesPontValue = False
-    ElseIf IsNumeric(v) Then
-        IsKevesPontValue = (CDbl(v) < limit)
-    Else
-        IsKevesPontValue = False
+        Exit Function
     End If
+
+    s = Trim$(CStr(v & ""))
+    If s = "" Then
+        IsKevesPontValue = False
+        Exit Function
+    End If
+
+    s = Replace$(s, ",", ".")
+    If Not IsNumeric(s) Then
+        IsKevesPontValue = False
+        Exit Function
+    End If
+
+    Dim num As Double
+    num = CDbl(s)
+
+    ' 0 vagy negatív: nálatok inkább "nem teljesített" / nincs írásbeli
+    If num <= 0 Then
+        IsKevesPontValue = False
+        Exit Function
+    End If
+
+    IsKevesPontValue = (num < limit)
 End Function
 
 Private Function GetKevespontHatarLocal(Optional ByVal defaultValue As Double = 55) As Double
@@ -538,15 +567,15 @@ Private Function GetKevespontHatarLocal(Optional ByVal defaultValue As Double = 
     Dim num As Double
 
     For Each r In tbl.ListRows
-        If NormText(r.Range.Cells(1, cKulcs).value) = "kevespont_hatar" Then
-            v = Trim$(CStr(r.Range.Cells(1, cErtek).value & ""))
+        If NormText(r.Range.Cells(1, cKulcs).Value) = "kevespont_hatar" Then
+            v = Trim$(CStr(r.Range.Cells(1, cErtek).Value & ""))
             v = Replace$(v, ",", ".")
 
             If IsNumeric(v) Then
                 num = CDbl(v)
 
-                ' Az irasbeliossz �r�sbeli pont, ez�rt itt nem fogadunk el
-                ' tagozati teljes ponthat�rt, pl. 140/150/160.
+                ' Az irasbeliossz írásbeli pont, ezért itt nem fogadunk el
+                ' tagozati teljes ponthatárt, pl. 140/150/160.
                 If num > 0 And num <= 100 Then
                     GetKevespontHatarLocal = num
                 Else
@@ -591,7 +620,7 @@ Private Function GetRequiredColIndex(ByVal tbl As ListObject, ByVal colName As S
 
 NemTalalhato:
     Err.Raise vbObjectError + 513, "modListaGeneralas", _
-              "Hi�nyz� oszlop a(z) '" & tbl.Name & "' t�bl�ban: '" & colName & "'"
+              "Hiányzó oszlop a(z) '" & tbl.Name & "' táblában: '" & colName & "'"
 End Function
 
 Private Function NormText(ByVal v As Variant) As String
@@ -641,7 +670,7 @@ Private Sub ResizeListObjectRows(ByVal tbl As ListObject, ByVal targetRows As Lo
 
     ElseIf currentRows < targetRows Then
         For i = currentRows + 1 To targetRows
-            tbl.ListRows.add
+            tbl.ListRows.Add
         Next i
     End If
 End Sub
@@ -670,7 +699,7 @@ Private Function GetVectorCount(ByVal v As Variant) As Long
     End If
 
     If IsArray(v) Then
-        GetVectorCount = UBound(v, 1) - LBound(v, 1) + 1
+        GetVectorCount = UBound(v) - LBound(v) + 1
         Exit Function
     End If
 
@@ -695,26 +724,7 @@ Private Function GetVectorItem(ByVal v As Variant, ByVal index1Based As Long) As
     End If
 
     If IsArray(v) Then
-        On Error Resume Next
-
-        GetVectorItem = CStr(v(index1Based, 1))
-        If Err.Number = 0 Then
-            On Error GoTo Hiba
-            Exit Function
-        End If
-
-        Err.clear
-
         GetVectorItem = CStr(v(index1Based))
-        If Err.Number = 0 Then
-            On Error GoTo Hiba
-            Exit Function
-        End If
-
-        Err.clear
-        On Error GoTo Hiba
-
-        GetVectorItem = ""
         Exit Function
     End If
 
@@ -729,4 +739,3 @@ Private Function GetVectorItem(ByVal v As Variant, ByVal index1Based As Long) As
 Hiba:
     GetVectorItem = ""
 End Function
-
